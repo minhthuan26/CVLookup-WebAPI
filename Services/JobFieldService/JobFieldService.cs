@@ -13,9 +13,12 @@ namespace CVLookup_WebAPI.Services.JobFieldService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<JobField>> WorkFieldList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<JobField>> JobFieldList()
+		{
+			throw new NotImplementedException();
+		}
 
-		public Task<JobField> Add(JobField workField)
+		public Task<JobField> Add(JobField jobField)
 		{
 			throw new NotImplementedException();
 		}
@@ -30,7 +33,7 @@ namespace CVLookup_WebAPI.Services.JobFieldService
 			throw new NotImplementedException();
 		}
 
-		public Task<JobField> Update(string Id, JobField newWorkField)
+		public Task<JobField> Update(string Id, JobField newJobField)
 		{
 			throw new NotImplementedException();
 		}

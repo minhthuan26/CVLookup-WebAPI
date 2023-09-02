@@ -13,9 +13,12 @@ namespace CVLookup_WebAPI.Services.AccountUserService
             _dbContext = dbContext;
             _logger = logger;
         }
-        public Task<List<AccountUser>> AccountUserList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Task<List<AccountUser>> AccountUserList()
+        {
+			throw new NotImplementedException();
+		}
 
-        public Task<AccountUser> Add(Role role)
+		public Task<AccountUser> Add(Role role)
         {
             throw new NotImplementedException();
         }

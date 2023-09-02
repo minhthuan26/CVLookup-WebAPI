@@ -13,7 +13,10 @@ namespace CVLookup_WebAPI.Services.EmployerService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<Employer>> EmployerList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<Employer>> EmployerList()
+		{
+			throw new NotImplementedException();
+		}
 
 		public Task<Employer> Add(Employer employer)
 		{

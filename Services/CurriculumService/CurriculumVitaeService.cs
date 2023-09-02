@@ -13,7 +13,10 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<CurriculumVitae>> CurriculumVitaeList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<CurriculumVitae>> CurriculumVitaeList()
+		{
+			throw new NotImplementedException();
+		}
 
 		public Task<CurriculumVitae> Add(CurriculumVitae curriculumVitae)
 		{

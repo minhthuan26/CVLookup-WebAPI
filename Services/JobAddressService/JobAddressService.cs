@@ -13,9 +13,12 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<JobAddress>> WorkAddressList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<JobAddress>> JobAddressList()
+		{
+			throw new NotImplementedException();
+		}
 
-		public Task<JobAddress> Add(JobAddress workAddress)
+		public Task<JobAddress> Add(JobAddress jobAddress)
 		{
 			throw new NotImplementedException();
 		}
@@ -30,7 +33,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			throw new NotImplementedException();
 		}
 
-		public Task<JobAddress> Update(string Id, JobAddress newWorkAddress)
+		public Task<JobAddress> Update(string Id, JobAddress newJobAddress)
 		{
 			throw new NotImplementedException();
 		}

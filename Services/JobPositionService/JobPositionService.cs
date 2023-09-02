@@ -13,7 +13,10 @@ namespace CVLookup_WebAPI.Services.JobPositionService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<JobPosition>> JobPositionList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<JobPosition>> JobPositionList()
+		{
+			throw new NotImplementedException();
+		}
 
 		public Task<JobPosition> Add(JobPosition jobPosition)
 		{

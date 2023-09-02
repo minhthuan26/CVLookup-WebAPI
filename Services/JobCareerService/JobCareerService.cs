@@ -13,9 +13,12 @@ namespace CVLookup_WebAPI.Services.JobCareerService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<JobCareer>> WorkCareerList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<JobCareer>> JobCareerList()
+		{
+			throw new NotImplementedException();
+		}
 
-		public Task<JobCareer> Add(JobCareer workCareer)
+		public Task<JobCareer> Add(JobCareer jobCareer)
 		{
 			throw new NotImplementedException();
 		}
@@ -30,7 +33,7 @@ namespace CVLookup_WebAPI.Services.JobCareerService
 			throw new NotImplementedException();
 		}
 
-		public Task<JobCareer> Update(string Id, JobCareer newWorkCareer)
+		public Task<JobCareer> Update(string Id, JobCareer newJobCareer)
 		{
 			throw new NotImplementedException();
 		}

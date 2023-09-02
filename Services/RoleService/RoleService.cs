@@ -13,7 +13,10 @@ namespace CVLookup_WebAPI.Services.RoleService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<Role>> RoleList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<Role>> RoleList()
+		{
+			throw new NotImplementedException();
+		}
 
 		public Task<Role> Add(Role role)
 		{

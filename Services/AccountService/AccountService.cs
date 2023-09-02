@@ -14,7 +14,10 @@ namespace CVLookup_WebAPI.Services.AccountService
             _logger = logger;
         }
 
-        public Task<List<Account>> AccountList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Task<List<Account>> AccountList()
+        {
+			throw new NotImplementedException();
+		}
 
         public Task<Account> Add(Account account)
         {

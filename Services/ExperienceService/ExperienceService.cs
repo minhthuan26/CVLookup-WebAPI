@@ -13,7 +13,10 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<Experience>> ExperienceList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<Experience>> ExperienceList()
+		{
+			throw new NotImplementedException();
+		}
 
 		public Task<Experience> Add(Experience experience)
 		{

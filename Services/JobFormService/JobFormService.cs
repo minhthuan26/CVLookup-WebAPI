@@ -13,9 +13,12 @@ namespace CVLookup_WebAPI.Services.JobFormService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<JobForm>> WorkFormList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<JobForm>> JobFormList()
+		{
+			throw new NotImplementedException();
+		}
 
-		public Task<JobForm> Add(JobForm workForm)
+		public Task<JobForm> Add(JobForm jobForm)
 		{
 			throw new NotImplementedException();
 		}
@@ -30,7 +33,7 @@ namespace CVLookup_WebAPI.Services.JobFormService
 			throw new NotImplementedException();
 		}
 
-		public Task<JobForm> Update(string Id, JobForm newWorkForm)
+		public Task<JobForm> Update(string Id, JobForm newJobForm)
 		{
 			throw new NotImplementedException();
 		}

@@ -4,10 +4,10 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 {
     public interface IJobAddressService
     {
-        public Task<List<JobAddress>> WorkAddressList { get; set; }
-        public Task<JobAddress> GetAccountById(int id);
-        public Task<JobAddress> Add(JobAddress workAddress);
-        public Task<JobAddress> Update(string Id, JobAddress newWorkAddress);
+        public Task<List<JobAddress>> JobAddressList();
+		public Task<JobAddress> GetAccountById(int id);
+        public Task<JobAddress> Add(JobAddress jobAddress);
+        public Task<JobAddress> Update(string Id, JobAddress newJobAddress);
         public Task<JobAddress> Delete(string Id);
     }
 }

@@ -13,7 +13,10 @@ namespace CVLookup_WebAPI.Services.UserService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<User>> UserList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<User>> UserList()
+		{
+			throw new NotImplementedException();
+		}
 
 		public Task<User> Add(User user)
 		{

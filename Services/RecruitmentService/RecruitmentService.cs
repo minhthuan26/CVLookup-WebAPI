@@ -13,7 +13,10 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 			_logger = logger;
 			_dbContext = dbContext;
 		}
-		public Task<List<Recruitment>> RecruitmentList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public Task<List<Recruitment>> RecruitmentList()
+		{
+			throw new NotImplementedException();
+		}
 
 		public Task<Recruitment> Add(Recruitment recruitment)
 		{
