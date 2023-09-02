@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.JobPositionService
 {
 	public class JobPositionService : IJobPositionService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public JobPositionService(ILogger logger, AppDBContext dbContext)
+		public JobPositionService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<JobPosition>> JobPositionList()

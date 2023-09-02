@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 {
 	public class CurriculumVitaeService : ICurriculumViateService
 	{
-		private ILogger _logger;
 		private AppDBContext _dbContext;
 
-		public CurriculumVitaeService(ILogger logger, AppDBContext dbContext)
+		public CurriculumVitaeService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<CurriculumVitae>> CurriculumVitaeList()

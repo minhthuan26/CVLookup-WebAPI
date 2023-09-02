@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.CandidateService
 {
 	public class CandidateService : ICandidateService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public CandidateService(ILogger logger, AppDBContext dbContext)
+		public CandidateService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<Candidate>> CandidateList() 

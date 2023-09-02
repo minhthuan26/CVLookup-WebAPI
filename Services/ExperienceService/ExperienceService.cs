@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 {
 	public class ExperienceService : IExperienceService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public ExperienceService(ILogger logger, AppDBContext dbContext)
+		public ExperienceService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<Experience>> ExperienceList()

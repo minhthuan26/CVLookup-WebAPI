@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 {
 	public class RecruitmentCVService : IRecruitmentCVService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public RecruitmentCVService(ILogger logger, AppDBContext dbContext)
+		public RecruitmentCVService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<RecruitmentCV>> RecruitmentCVList()

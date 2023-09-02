@@ -32,7 +32,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //Add service
 builder.Services.AddScoped<IAccountUserService, AccountUserService>();
-builder.Services.AddScoped<IAcountService, AccountService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICandidateService, CandidateService>();
 builder.Services.AddScoped<ICurriculumViateService, CurriculumVitaeService>();
 builder.Services.AddScoped<IEmployerService, EmployerService>();

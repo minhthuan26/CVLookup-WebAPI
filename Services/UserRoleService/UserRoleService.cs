@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.UserRoleService
 {
 	public class UserRoleService : IUserRoleService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public UserRoleService(ILogger logger, AppDBContext dbContext)
+		public UserRoleService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<UserRole>> UserRoleList()

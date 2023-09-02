@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.UserService
 {
 	public class UserService : IUserService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public UserService(ILogger logger, AppDBContext dbContext)
+		public UserService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<User>> UserList()

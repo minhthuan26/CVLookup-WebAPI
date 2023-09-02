@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 {
 	public class JobAddressService : IJobAddressService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public JobAddressService(ILogger logger, AppDBContext dbContext)
+		public JobAddressService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<JobAddress>> JobAddressList()

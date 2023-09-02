@@ -6,12 +6,10 @@ namespace CVLookup_WebAPI.Services.AccountUserService
     public class AccountUserService : IAccountUserService
     {
         private readonly AppDBContext _dbContext;
-        private readonly ILogger _logger;
 
-        public AccountUserService(ILogger logger, AppDBContext dbContext)
+        public AccountUserService(AppDBContext dbContext)
         {
             _dbContext = dbContext;
-            _logger = logger;
         }
         public Task<List<AccountUser>> AccountUserList()
         {

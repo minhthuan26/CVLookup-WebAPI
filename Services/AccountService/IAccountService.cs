@@ -2,7 +2,7 @@
 
 namespace CVLookup_WebAPI.Services.AccountService
 {
-    public interface IAcountService
+    public interface IAccountService
     {
         public Task<List<Account>> AccountList();
         public Task<Account> GetAccountById(int id);

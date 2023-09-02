@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.JobFormService
 {
 	public class JobFormService : IJobFormService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public JobFormService(ILogger logger, AppDBContext dbContext)
+		public JobFormService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<JobForm>> JobFormList()

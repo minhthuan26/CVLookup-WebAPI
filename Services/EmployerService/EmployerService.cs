@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.EmployerService
 {
 	public class EmployerService : IEmployerService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public EmployerService(ILogger logger, AppDBContext dbContext)
+		public EmployerService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<Employer>> EmployerList()

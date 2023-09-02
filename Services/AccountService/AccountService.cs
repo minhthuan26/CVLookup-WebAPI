@@ -1,22 +1,29 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using FirstWebApi.Models.Database;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CVLookup_WebAPI.Services.AccountService
 {
-    public class AccountService : IAcountService
+    public class AccountService : IAccountService
     {
         private readonly AppDBContext _dbContext;
-        private readonly ILogger _logger;
 
-        public AccountService(ILogger logger, AppDBContext dbContext)
+        public AccountService(AppDBContext dbContext)
         {
             _dbContext = dbContext;
-            _logger = logger;
         }
 
-        public Task<List<Account>> AccountList()
+        public async Task<List<Account>> AccountList()
         {
-			throw new NotImplementedException();
+			try
+            {
+                var accountList = await _dbContext.Account.ToListAsync();
+                return accountList;
+			} catch (Exception e)
+            {
+                throw new Exception("Somethings went wrong", e);
+            }
 		}
 
         public Task<Account> Add(Account account)

@@ -5,12 +5,10 @@ namespace CVLookup_WebAPI.Services.JobCareerService
 {
 	public class JobCareerService : IJobCareerService
 	{
-		private readonly ILogger _logger;
 		private readonly AppDBContext _dbContext;
 
-		public JobCareerService(ILogger logger, AppDBContext dbContext)
+		public JobCareerService(AppDBContext dbContext)
 		{
-			_logger = logger;
 			_dbContext = dbContext;
 		}
 		public Task<List<JobCareer>> JobCareerList()
