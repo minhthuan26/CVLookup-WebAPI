@@ -1,3 +1,4 @@
+﻿using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Services.AccountService;
 using CVLookup_WebAPI.Services.AccountUserService;
 using CVLookup_WebAPI.Services.CandidateService;
@@ -14,8 +15,13 @@ using CVLookup_WebAPI.Services.RecruitmentService;
 using CVLookup_WebAPI.Services.RoleService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
+using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using Microsoft.VisualBasic;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +54,31 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddControllers();
+//Add custom data validate error
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var messages = context.ModelState.Keys.Select(key =>
+            {
+                return new
+                {
+                    field = key,
+                    message = context.ModelState[key]?.Errors.Select(error => error.ErrorMessage)
+                };
+			});
+
+			var response = new ApiResponse
+            {
+                Success = false,
+                Code = context.HttpContext.Response.StatusCode,
+                Message = messages
+            };
+            return new OkObjectResult(response);
+        };
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
