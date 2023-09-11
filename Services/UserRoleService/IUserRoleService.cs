@@ -1,13 +1,13 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 
 namespace CVLookup_WebAPI.Services.UserRoleService
 {
     public interface IUserRoleService
     {
-        public Task<List<UserRole>> UserRoleList();
-		public Task<UserRole> GetAccountById(int id);
-        public Task<UserRole> Add(UserRole userRole);
-        public Task<UserRole> Update(string Id, UserRole newUserRole);
-        public Task<UserRole> Delete(string Id);
+        public Task<List<UserRoleVM>> UserRoleList();
+		public Task<UserRoleVM> GetAccountById(int id);
+        public Task<UserRoleVM> Add(UserRoleVM userRole);
+        public Task<UserRoleVM> Update(string Id, UserRoleVM newUserRole);
+        public Task<UserRoleVM> Delete(string Id);
     }
 }

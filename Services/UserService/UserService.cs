@@ -1,5 +1,6 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using FirstWebApi.Models.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace CVLookup_WebAPI.Services.UserService
 {
@@ -11,27 +12,33 @@ namespace CVLookup_WebAPI.Services.UserService
 		{
 			_dbContext = dbContext;
 		}
-		public Task<List<User>> UserList()
+
+		public Task<UserVM> Add(UserVM user)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<User> Add(User user)
+		public Task<UserVM> Delete(string Id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<User> Delete(string Id)
+		public Task<UserVM> GetAccountByEmail(string email)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<User> GetAccountById(int id)
+		public Task<UserVM> GetAccountById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<User> Update(string Id, User newUser)
+		public Task<UserVM> Update(string Id, UserVM newUser)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<List<UserVM>> UserList()
 		{
 			throw new NotImplementedException();
 		}

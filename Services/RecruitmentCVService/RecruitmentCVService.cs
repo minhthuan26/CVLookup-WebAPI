@@ -1,4 +1,4 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using FirstWebApi.Models.Database;
 
 namespace CVLookup_WebAPI.Services.RecruitmentCVService
@@ -11,27 +11,28 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 		{
 			_dbContext = dbContext;
 		}
-		public Task<List<RecruitmentCV>> RecruitmentCVList()
+
+		public Task<RecruitmentCVVM> Add(RecruitmentCVVM recruitmentCV)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<RecruitmentCV> Add(RecruitmentCV recruitmentCV)
+		public Task<RecruitmentCVVM> Delete(string Id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<RecruitmentCV> Delete(string Id)
+		public Task<RecruitmentCVVM> GetAccountById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<RecruitmentCV> GetAccountById(int id)
+		public Task<List<RecruitmentCVVM>> RecruitmentCVList()
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<RecruitmentCV> Update(string Id, RecruitmentCV newRecruitmentCV)
+		public Task<RecruitmentCVVM> Update(string Id, RecruitmentCVVM newRecruitmentCV)
 		{
 			throw new NotImplementedException();
 		}

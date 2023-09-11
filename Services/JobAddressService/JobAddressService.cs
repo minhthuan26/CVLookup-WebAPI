@@ -1,4 +1,4 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using FirstWebApi.Models.Database;
 
 namespace CVLookup_WebAPI.Services.JobAddressService
@@ -11,27 +11,28 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 		{
 			_dbContext = dbContext;
 		}
-		public Task<List<JobAddress>> JobAddressList()
+
+		public Task<JobAddressVM> Add(JobAddressVM jobAddress)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<JobAddress> Add(JobAddress jobAddress)
+		public Task<JobAddressVM> Delete(string Id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<JobAddress> Delete(string Id)
+		public Task<JobAddressVM> GetAccountById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<JobAddress> GetAccountById(int id)
+		public Task<List<JobAddressVM>> JobAddressList()
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<JobAddress> Update(string Id, JobAddress newJobAddress)
+		public Task<JobAddressVM> Update(string Id, JobAddressVM newJobAddress)
 		{
 			throw new NotImplementedException();
 		}
