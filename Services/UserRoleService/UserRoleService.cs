@@ -1,4 +1,4 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using FirstWebApi.Models.Database;
 
 namespace CVLookup_WebAPI.Services.UserRoleService
@@ -11,27 +11,28 @@ namespace CVLookup_WebAPI.Services.UserRoleService
 		{
 			_dbContext = dbContext;
 		}
-		public Task<List<UserRole>> UserRoleList()
+
+		public Task<UserRoleVM> Add(UserRoleVM userRole)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<UserRole> Add(UserRole userRole)
+		public Task<UserRoleVM> Delete(string Id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<UserRole> Delete(string Id)
+		public Task<UserRoleVM> GetAccountById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<UserRole> GetAccountById(int id)
+		public Task<UserRoleVM> Update(string Id, UserRoleVM newUserRole)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<UserRole> Update(string Id, UserRole newUserRole)
+		public Task<List<UserRoleVM>> UserRoleList()
 		{
 			throw new NotImplementedException();
 		}

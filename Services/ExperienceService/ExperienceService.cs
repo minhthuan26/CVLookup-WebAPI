@@ -1,4 +1,4 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using FirstWebApi.Models.Database;
 
 namespace CVLookup_WebAPI.Services.ExperienceService
@@ -11,27 +11,28 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 		{
 			_dbContext = dbContext;
 		}
-		public Task<List<Experience>> ExperienceList()
+
+		public Task<ExperienceVM> Add(ExperienceVM experience)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<Experience> Add(Experience experience)
+		public Task<ExperienceVM> Delete(string Id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<Experience> Delete(string Id)
+		public Task<List<ExperienceVM>> ExperienceList()
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<Experience> GetAccountById(int id)
+		public Task<ExperienceVM> GetAccountById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<Experience> Update(string Id, Experience newExperience)
+		public Task<ExperienceVM> Update(string Id, ExperienceVM newExperience)
 		{
 			throw new NotImplementedException();
 		}

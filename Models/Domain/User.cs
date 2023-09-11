@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace CVLookup_WebAPI.Models.Domain
 {
@@ -10,6 +11,7 @@ namespace CVLookup_WebAPI.Models.Domain
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Email")]
 		[DataType(DataType.EmailAddress, ErrorMessage = "Yêu cầu nhập đúng email")]
+		[Remote(action: "UserEmailIsUsed", controller: "Validation")]
 		public string Email { get; set; }
 
 		[Display(Name = "Số điện thoại")]

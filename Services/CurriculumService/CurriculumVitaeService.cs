@@ -1,4 +1,4 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using FirstWebApi.Models.Database;
 
 namespace CVLookup_WebAPI.Services.CurriculumService
@@ -11,27 +11,28 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 		{
 			_dbContext = dbContext;
 		}
-		public Task<List<CurriculumVitae>> CurriculumVitaeList()
+
+		public Task<CurriculumVitaeVM> Add(CurriculumVitaeVM curriculumVitae)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<CurriculumVitae> Add(CurriculumVitae curriculumVitae)
+		public Task<List<CurriculumVitaeVM>> CurriculumVitaeList()
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<CurriculumVitae> Delete(string Id)
+		public Task<CurriculumVitaeVM> Delete(string Id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<CurriculumVitae> GetAccountById(int id)
+		public Task<CurriculumVitaeVM> GetAccountById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<CurriculumVitae> Update(string Id, CurriculumVitae newCurriculumVitae)
+		public Task<CurriculumVitaeVM> Update(string Id, CurriculumVitaeVM newCurriculumVitae)
 		{
 			throw new NotImplementedException();
 		}

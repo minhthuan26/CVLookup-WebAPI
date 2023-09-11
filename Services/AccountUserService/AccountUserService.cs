@@ -1,4 +1,4 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using FirstWebApi.Models.Database;
 
 namespace CVLookup_WebAPI.Services.AccountUserService
@@ -11,27 +11,28 @@ namespace CVLookup_WebAPI.Services.AccountUserService
         {
             _dbContext = dbContext;
         }
-        public Task<List<AccountUser>> AccountUserList()
-        {
-			throw new NotImplementedException();
-		}
 
-		public Task<AccountUser> Add(Role role)
+        public Task<List<AccountUserVM>> AccountUserList()
         {
             throw new NotImplementedException();
         }
 
-        public Task<AccountUser> Delete(string accountId, string userId)
+        public Task<AccountUserVM> Add(RoleVM role)
         {
             throw new NotImplementedException();
         }
 
-        public Task<AccountUser> GetAccountById(int id)
+        public Task<AccountUserVM> Delete(string accountId, string userId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<AccountUser> Update(string Id, Role newAccount)
+        public Task<AccountUserVM> GetAccountById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountUserVM> Update(string Id, RoleVM newAccount)
         {
             throw new NotImplementedException();
         }
