@@ -4,6 +4,7 @@ using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace CVLookup_WebAPI.Services.JobAddressService
 {
@@ -52,26 +53,39 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 
 		public async Task<JobAddressVM> Delete(string Id)
 		{
-			//try
-			//{
-			//	if (Id == null)
-			//	{
-			//		throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
-			//	}
+			try
+			{
+				if (Id == null)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+				}
 
-			//	var addressExisted = await _dbContext.JobAddress.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
-			//	if (addressExisted == null)
-			//	{
-			//		throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
-			//	}
+				var jobAddress = await _dbContext.JobAddress.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
+				if (jobAddress == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
 
-			//	var result = await _dbContext.JobAddress.
-			//} 
-			//catch (ExceptionReturn e)
-			//{
-			//	throw new ExceptionReturn(e.Code, e.Message);
-			//}
-			throw new NotImplementedException();
+				var result = _dbContext.JobAddress.Remove(jobAddress);
+				if (result.State.ToString() == "Deleted")
+				{
+					var saveState = await _dbContext.SaveChangesAsync();
+					if (saveState <= 0)
+					{
+						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+					}
+					return _mapper.Map<JobAddressVM>(jobAddress);
+				}
+				else
+				{
+					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+				}
+
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
 
 		public async Task<JobAddressVM> GetJobAddressById(string id)
@@ -131,9 +145,38 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public Task<JobAddressVM> Update(string Id, JobAddressVM newJobAddressVM)
+		public async Task<JobAddressVM> Update(string Id, JobAddressVM newJobAddressVM)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				var jobAddress = await _dbContext.JobAddress.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
+				if (jobAddress == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+
+				jobAddress.Address = newJobAddressVM.Address;
+				var result = _dbContext.JobAddress.Update(jobAddress);
+				if (result.State.ToString() == "Modified")
+				{
+					int saveState = await _dbContext.SaveChangesAsync();
+					if (saveState <= 0)
+					{
+						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+					}
+					return _mapper.Map<JobAddressVM>(jobAddress);
+
+				}
+				else
+				{
+					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+				}
+
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
 	}
 }
