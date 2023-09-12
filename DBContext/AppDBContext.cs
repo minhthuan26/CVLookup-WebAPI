@@ -31,6 +31,9 @@ namespace FirstWebApi.Models.Database
 
 			modelBuilder.Entity<RecruitmentCV>()
 				.HasKey(prop => new { prop.RecruitmentId, prop.CurriculumVitaeId });
+
+			modelBuilder.Entity<RefreshToken>()
+				.HasNoKey();
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder builder)
@@ -56,6 +59,7 @@ namespace FirstWebApi.Models.Database
 		public DbSet<UserRole> UserRole { get; set; }
 		public DbSet<RecruitmentCV> RecruitmentCV { get; set; }
 		public DbSet<User> User { get; set; }
+		public DbSet<RefreshToken> RefreshToken { get; set; }
 		//public DbSet<RecruitmentCV> RecruitmentCV { get; set; }
 		//public DbSet<EmployerAccount> EmployerAccount { get; set; }
 		//public DbSet<CandidateAccount> CandidateAccount { get; set; }

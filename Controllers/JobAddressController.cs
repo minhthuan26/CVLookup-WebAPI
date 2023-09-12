@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Services.JobAddressService;
+﻿using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Services.JobAddressService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace CVLookup_WebAPI.Controllers
 					Code = StatusCodes.Status200OK,
 					Success = true,
 					Data = result,
-					Message = "Get job address list successful"
+					Message = "Hoàn thành"
 				});
 			} catch (Exception e)
 			{
@@ -42,19 +43,80 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
-		//[HttpGet]
-		//public async Task<IActionResult> getJobAddress([FromQuery] String id)
-		//{
-		//	try
-		//	{
+		[HttpGet]
+		public async Task<IActionResult> getJobAddressById([FromQuery] string id)
+		{
+			try
+			{
+				var result = await _jobAddressService.GetJobAddressById(id);
+				return Ok(new ApiResponse
+				{
+					Success = true,
+					Code = StatusCodes.Status200OK,
+					Data = result,
+					Message = "Hoàn thành"
+				});
+			}
+			catch (ExceptionReturn e)
+			{
+				return Ok(new ApiResponse
+				{
+					Success = false,
+					Code = e.Code,
+					Message = e.Message
+				});
+			}
+		}
 
-		//	} catch (Exception e)
-		//	{
-		//		return Ok(new ApiResponse
-		//		{
+		[HttpGet]
+		public async Task<IActionResult> getJobAddressByAddress([FromQuery] string address)
+		{
+			try
+			{
+				var result = await _jobAddressService.GetJobAddressByAddress(address);
+				return Ok(new ApiResponse
+				{
+					Success = true,
+					Code = StatusCodes.Status200OK,
+					Data = result,
+					Message = "Hoàn thành"
+				});
+			}
+			catch (ExceptionReturn e)
+			{
+				return Ok(new ApiResponse
+				{
+					Success = false,
+					Code = e.Code,
+					Message = e.Message
+				});
+			}
+		}
 
-		//		});
-		//	}
-		//}
+		[HttpPost]
+		public async Task<IActionResult> addJobAddress([FromBody] JobAddressVM jobAddress)
+		{
+			try
+			{
+				
+				var result = await _jobAddressService.Add(jobAddress);
+				return Ok(new ApiResponse
+				{
+					Success = true,
+					Code = StatusCodes.Status200OK,
+					Data = result,
+					Message = "Hoàn thành"
+				});
+			}
+			catch (ExceptionReturn e)
+			{
+				return Ok(new ApiResponse
+				{
+					Success = false,
+					Code = e.Code,
+					Message = e.Message
+				});
+			}
+		}
 	}
 }
