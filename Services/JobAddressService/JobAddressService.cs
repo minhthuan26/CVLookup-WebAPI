@@ -4,7 +4,6 @@ using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace CVLookup_WebAPI.Services.JobAddressService
 {
@@ -24,6 +23,11 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			try
 			{
 				var jobAddress = _mapper.Map<JobAddress>(jobAddressVM);
+				var addressExisted = await _dbContext.JobAddress.Where(prop => prop.Address == jobAddress.Address).FirstOrDefaultAsync();
+				if (addressExisted != null)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Tên địa điểm đã tồn tại");
+				}
 				var result = await _dbContext.JobAddress.AddAsync(jobAddress);
 				if (result.State.ToString() == "Added")
 				{
@@ -33,19 +37,40 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
 					return _mapper.Map<JobAddressVM>(jobAddress);
-				} else
+				}
+				else
 				{
 					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
 				}
-				
-			} catch (ExceptionReturn e)
+
+			}
+			catch (ExceptionReturn e)
 			{
 				throw new ExceptionReturn(e.Code, e.Message);
 			}
 		}
 
-		public Task<JobAddressVM> Delete(string Id)
+		public async Task<JobAddressVM> Delete(string Id)
 		{
+			//try
+			//{
+			//	if (Id == null)
+			//	{
+			//		throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+			//	}
+
+			//	var addressExisted = await _dbContext.JobAddress.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
+			//	if (addressExisted == null)
+			//	{
+			//		throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+			//	}
+
+			//	var result = await _dbContext.JobAddress.
+			//} 
+			//catch (ExceptionReturn e)
+			//{
+			//	throw new ExceptionReturn(e.Code, e.Message);
+			//}
 			throw new NotImplementedException();
 		}
 
@@ -61,7 +86,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 				var result = await _dbContext.JobAddress.Where(prop => prop.Id == id).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thê tìm thấy dữ liệu");
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return _mapper.Map<JobAddressVM>(result);
 			}
@@ -83,7 +108,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 				var result = await _dbContext.JobAddress.Where(prop => prop.Address == address).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thê tìm thấy dữ liệu");
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return _mapper.Map<JobAddressVM>(result);
 			}
@@ -106,7 +131,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public Task<JobAddressVM> Update(string Id, JobAddressVM newJobAddress)
+		public Task<JobAddressVM> Update(string Id, JobAddressVM newJobAddressVM)
 		{
 			throw new NotImplementedException();
 		}
