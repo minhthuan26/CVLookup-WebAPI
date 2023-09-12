@@ -9,7 +9,7 @@ namespace CVLookup_WebAPI.Models.Domain
     {
 
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; }
 
         [Required(ErrorMessage = "{0} không được để trống")]
         [Display(Name = "Mật khẩu")]

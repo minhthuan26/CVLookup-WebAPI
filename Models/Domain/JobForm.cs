@@ -6,7 +6,7 @@ namespace CVLookup_WebAPI.Models.Domain
 	public class JobForm
 	{
 		[Key]
-		public string Id { get; set; } = Guid.NewGuid().ToString();
+		public string Id { get; set; }
 
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Hình thức công việc")]

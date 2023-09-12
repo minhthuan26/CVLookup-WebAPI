@@ -72,7 +72,7 @@ builder.Services.AddControllers()
 			var response = new ApiResponse
             {
                 Success = false,
-                Code = context.HttpContext.Response.StatusCode,
+                Code = 400,
                 Message = messages
             };
             return new OkObjectResult(response);
