@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Models.ViewModel;
+﻿using CVLookup_WebAPI.Models.Domain;
+using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.JobAddressService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CVLookup_WebAPI.Controllers
 {
-	[Route("api/v1/[controller]/[action]")]
+	[Route("api/v1/[controller]/")]
 	[ApiController]
 	public class JobAddressController : ControllerBase
 	{
@@ -19,7 +20,7 @@ namespace CVLookup_WebAPI.Controllers
 			_logger = logger;
 		}
 
-		[HttpGet]
+		[HttpGet("get-all-job-address")]
 		public async Task<IActionResult> getAllJobAddress()
 		{
 			try
@@ -32,7 +33,8 @@ namespace CVLookup_WebAPI.Controllers
 					Data = result,
 					Message = "Hoàn thành"
 				});
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				return Ok(new ApiResponse
 				{
@@ -43,7 +45,7 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
-		[HttpGet]
+		[HttpGet("get-job-address-by-id")]
 		public async Task<IActionResult> getJobAddressById([FromQuery] string id)
 		{
 			try
@@ -68,7 +70,7 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
-		[HttpGet]
+		[HttpGet("get-job-address-by-address")]
 		public async Task<IActionResult> getJobAddressByAddress([FromQuery] string address)
 		{
 			try
@@ -93,12 +95,12 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
-		[HttpPost]
+		[HttpPost("add-job-address")]
 		public async Task<IActionResult> addJobAddress([FromBody] JobAddressVM jobAddress)
 		{
 			try
 			{
-				
+
 				var result = await _jobAddressService.Add(jobAddress);
 				return Ok(new ApiResponse
 				{
@@ -118,5 +120,57 @@ namespace CVLookup_WebAPI.Controllers
 				});
 			}
 		}
+
+		[HttpDelete("delete")]
+		public async Task<IActionResult> deleteJobAddress([FromQuery] string id)
+		{
+			try
+			{
+
+				var result = await _jobAddressService.Delete(id);
+				return Ok(new ApiResponse
+				{
+					Success = true,
+					Code = StatusCodes.Status200OK,
+					Data = result,
+					Message = "Hoàn thành"
+				});
+			}
+			catch (ExceptionReturn e)
+			{
+				return Ok(new ApiResponse
+				{
+					Success = false,
+					Code = e.Code,
+					Message = e.Message
+				});
+			}
+		}
+
+		[HttpPatch("update")]
+		public async Task<IActionResult> updateJobAddress([FromQuery] string id, [FromBody] JobAddressVM jobAddressVM)
+		{
+			try
+			{
+				var result = await _jobAddressService.Update(id, jobAddressVM);
+				return Ok(new ApiResponse
+				{
+					Success = true,
+					Code = StatusCodes.Status200OK,
+					Data = result,
+					Message = "Hoàn thành"
+				});
+			}
+			catch (ExceptionReturn e)
+			{
+				return Ok(new ApiResponse
+				{
+					Success = false,
+					Code = e.Code,
+					Message = e.Message
+				});
+			}
+		}
+
 	}
 }
