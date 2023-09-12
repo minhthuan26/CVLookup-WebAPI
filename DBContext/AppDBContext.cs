@@ -1,5 +1,6 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace FirstWebApi.Models.Database
 {
@@ -64,5 +65,16 @@ namespace FirstWebApi.Models.Database
 		//public DbSet<EmployerAccount> EmployerAccount { get; set; }
 		//public DbSet<CandidateAccount> CandidateAccount { get; set; }
 		#endregion
+	}
+
+	public class AppDBContextFactory : IDesignTimeDbContextFactory<AppDBContext>
+	{
+		public AppDBContext CreateDbContext(string[] args)
+		{
+			var optionsBuilder = new DbContextOptionsBuilder<AppDBContext>();
+			optionsBuilder.UseSqlServer("server=localhost,1433;database=CVLookup;uid=cvlookup-admin;pwd=cvlookup-sgu2023;encrypt=true;TrustServerCertificate=true");
+
+			return new AppDBContext(optionsBuilder.Options);
+		}
 	}
 }
