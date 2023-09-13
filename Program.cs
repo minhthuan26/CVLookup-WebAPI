@@ -56,6 +56,9 @@ builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddHttpContextAccessor();
+
+
 //Add custom data validate error
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -113,6 +116,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -140,6 +144,8 @@ if (app.Environment.IsDevelopment())
 
     });
 }
+app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
