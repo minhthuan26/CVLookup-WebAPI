@@ -54,8 +54,8 @@ namespace CVLookup_WebAPI.Services.AuthService
                         var refreshTokenCookieOptions = new CookieOptions
                         {
                             HttpOnly = true,
-                            Secure = true,
-                            SameSite = SameSiteMode.None,
+/*                            Secure = true,
+                            SameSite = SameSiteMode.None,*/
                         };
                         _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", authvm.RefreshToken, refreshTokenCookieOptions);
                     }
