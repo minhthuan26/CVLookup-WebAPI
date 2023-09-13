@@ -25,17 +25,6 @@ namespace CVLookup_WebAPI.Controllers
             try
             {
                 var accounts = await _accountService.AccountList();
-                if (accounts == null)
-                {
-                    return Ok(new ApiResponse
-                    {
-                        Success = false,
-                        Code = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy dữ liệu",
-                    });
-                }
-                else
-                {
                     return Ok(new ApiResponse
                     {
                         Success = true,
@@ -43,7 +32,7 @@ namespace CVLookup_WebAPI.Controllers
                         Message = "Hoàn thành",
                         Data = accounts
                     });
-                }
+                
             }
             catch (ExceptionReturn ex)
             {

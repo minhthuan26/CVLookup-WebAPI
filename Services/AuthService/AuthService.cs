@@ -3,6 +3,7 @@ using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -19,26 +20,27 @@ namespace CVLookup_WebAPI.Services.AuthService
         private readonly AppDBContext _dbContext;
         private readonly IMapper _mapper;
         private readonly Jwt _jwt;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(AppDBContext dbContext, IMapper mapper, IOptionsMonitor<Jwt> monitor)
+        public AuthService(AppDBContext dbContext, IMapper mapper, IOptionsMonitor<Jwt> monitor, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _jwt = monitor.CurrentValue;
+            _httpContextAccessor = httpContextAccessor;
 
         }
-        public async Task<AuthVM> Login(string email, string password)
+        public async Task<AuthVM> Login(LoginVM loginVM)
         {
             try
             {
                 var accountUser = await _dbContext.AccountUser
                     .Include(x => x.Account)
-                    .FirstOrDefaultAsync(x => x.Account.Email == email && x.Account.Password == password);
+                    .FirstOrDefaultAsync(x => x.Account.Email == loginVM.Email && x.Account.Password == loginVM.Password);
 
                 if (accountUser != null)
                 {
                     var role = await _dbContext.UserRole.FirstOrDefaultAsync(x => x.UserId == accountUser.UserId);
-                    _mapper.Map<List<AccountUserVM>>(accountUser);
                     var authvm = new AuthVM
                     {
                         UserId = accountUser.UserId,
@@ -47,13 +49,26 @@ namespace CVLookup_WebAPI.Services.AuthService
                         AccessToken = GenerateAccessToken(accountUser),
                         RefreshToken = GenerateRefreshToken(accountUser)
                     };
+                    if (authvm != null)
+                    {
+                        var refreshTokenCookieOptions = new CookieOptions
+                        {
+                            HttpOnly = true,
+                            Secure = true,
+                            SameSite = SameSiteMode.None,
+                        };
+                        _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", authvm.RefreshToken, refreshTokenCookieOptions);
+                    }
                     return authvm;
                 }
-                return null;
+                else
+                {
+                    throw new ExceptionReturn(404, "Sai mật khẩu hoặc email");
+                }
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message, e);
+                throw new ExceptionReturn(500, e.Message);
             }
         }
         #region AccessToken
@@ -86,8 +101,7 @@ namespace CVLookup_WebAPI.Services.AuthService
             }
             catch (Exception e)
             {
-
-                throw new Exception(e.Message);
+                throw new ExceptionReturn(500,"Không Generate được token.");
             }
 
         }
@@ -122,8 +136,6 @@ namespace CVLookup_WebAPI.Services.AuthService
             //chưa tồn tại -> tạo user = new candidate hoặc new employer tuỳ vào role
             throw new NotImplementedException();
         }
-
-
 
     }
 }
