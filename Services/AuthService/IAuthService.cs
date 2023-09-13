@@ -4,7 +4,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 {
 	public interface IAuthService
 	{
-		public Task<AuthVM> Login(string email, string password);
+		public Task<AuthVM> Login(LoginVM loginVM);
 		public Task<AccountUserVM> Register(UserVM user, AccountVM account, string role);
 	}
 }

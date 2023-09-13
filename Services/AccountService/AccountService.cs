@@ -7,37 +7,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CVLookup_WebAPI.Services.AccountService
 {
-	public class AccountService : IAccountService
-	{
-		private readonly AppDBContext _dbContext;
+    public class AccountService : IAccountService
+    {
+        private readonly AppDBContext _dbContext;
         private readonly IMapper _mapper;
 
         public AccountService(AppDBContext dbContext, IMapper mapper)
-		{
-			_dbContext = dbContext;
-			_mapper = mapper;
-		}
+        {
+            _dbContext = dbContext;
+            _mapper = mapper;
+        }
 
-		public async Task<List<AccountVM>> AccountList()
-		{
-			try
-			{
-				var result = await _dbContext.Account.ToListAsync();
-				if (result != null)
-				{
+        public async Task<List<AccountVM>> AccountList()
+        {
+            try
+            {
+                var result = await _dbContext.Account.ToListAsync();
+                if (result != null)
+                {
                     return _mapper.Map<List<AccountVM>>(result);
-
                 }
-                return null;
-			}
-			catch (Exception e)
-			{
+                else
+                {
+                    throw new ExceptionReturn(404, "Không có danh sách.");
+                }
+            }
+            catch (Exception e)
+            {
                 throw new ExceptionReturn(500, e.Message);
             }
-		}
+        }
 
-		public async Task<AccountVM> Add(AccountVM accountVM)
-		{
+        public async Task<AccountVM> Add(AccountVM accountVM)
+        {
             try
             {
                 var account = _mapper.Map<Account>(accountVM);
@@ -68,8 +70,8 @@ namespace CVLookup_WebAPI.Services.AccountService
             }
         }
 
-		public async Task<AccountVM> Delete(string Id)
-		{
+        public async Task<AccountVM> Delete(string Id)
+        {
             try
             {
                 if (Id == null)
@@ -105,8 +107,8 @@ namespace CVLookup_WebAPI.Services.AccountService
             }
         }
 
-		public async Task<AccountVM> GetAccountByEmail(string email)
-		{
+        public async Task<AccountVM> GetAccountByEmail(string email)
+        {
             try
             {
                 if (email == null)
@@ -127,8 +129,8 @@ namespace CVLookup_WebAPI.Services.AccountService
             }
         }
 
-		public async Task<AccountVM> GetAccountById(string id)
-		{
+        public async Task<AccountVM> GetAccountById(string id)
+        {
             try
             {
                 if (id == null)
@@ -148,10 +150,10 @@ namespace CVLookup_WebAPI.Services.AccountService
                 throw new ExceptionReturn(e.Code, e.Message);
             }
             throw new NotImplementedException();
-		}
+        }
 
-		public async Task<AccountVM> Update(string Id, AccountVM newAccount)
-		{
+        public async Task<AccountVM> Update(string Id, AccountVM newAccount)
+        {
             try
             {
                 var account = await _dbContext.Account.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
@@ -186,5 +188,5 @@ namespace CVLookup_WebAPI.Services.AccountService
                 throw new ExceptionReturn(e.Code, e.Message);
             }
         }
-	}
+    }
 }
