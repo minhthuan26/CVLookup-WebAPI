@@ -5,9 +5,9 @@ namespace CVLookup_WebAPI.Models.Domain
 	public class CurriculumVitae
 	{
 		[Key]
-		public string Id { get; set; }
+		public string Id { get; set; } = Guid.NewGuid().ToString();
 
-		[Required(ErrorMessage = "{0} không được để trống")]
+        [Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Họ và tên")]
 		public string FullName { get; set; }
 

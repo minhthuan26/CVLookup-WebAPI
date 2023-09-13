@@ -5,7 +5,6 @@ namespace CVLookup_WebAPI.Models.ViewModel
 {
 	public class JobPositionVM
 	{
-		public string Id { get; set; } = Guid.NewGuid().ToString();
 
 		public string Position { get; set; }
 	}

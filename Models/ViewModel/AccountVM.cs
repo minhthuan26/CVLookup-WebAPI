@@ -7,8 +7,6 @@ namespace CVLookup_WebAPI.Models.ViewModel
 {
     public class AccountVM
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-
 		public string Password { get; set; }
 
         public string Email { get; set; }

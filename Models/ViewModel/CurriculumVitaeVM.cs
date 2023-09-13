@@ -4,8 +4,6 @@ namespace CVLookup_WebAPI.Models.ViewModel
 {
 	public class CurriculumVitaeVM
 	{
-		public string Id { get; set; } = Guid.NewGuid().ToString();
-
 		public string FullName { get; set; }
 
 		public string PhoneNumber { get; set; }

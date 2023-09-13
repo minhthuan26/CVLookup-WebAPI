@@ -6,9 +6,9 @@ namespace CVLookup_WebAPI.Models.Domain
 	public class JobField
 	{
 		[Key]
-		public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
-		[Required(ErrorMessage = "{0} không được để trống")]
+        [Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Lĩnh vực cọng việc")]
 		public string Field { get; set; }
 	}

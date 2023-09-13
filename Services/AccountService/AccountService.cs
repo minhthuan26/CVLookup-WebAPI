@@ -18,14 +18,14 @@ namespace CVLookup_WebAPI.Services.AccountService
             _mapper = mapper;
         }
 
-        public async Task<List<AccountVM>> AccountList()
+        public async Task<List<Account>> AccountList()
         {
             try
             {
                 var result = await _dbContext.Account.ToListAsync();
                 if (result != null)
                 {
-                    return _mapper.Map<List<AccountVM>>(result);
+                    return result;
                 }
                 else
                 {
@@ -38,7 +38,7 @@ namespace CVLookup_WebAPI.Services.AccountService
             }
         }
 
-        public async Task<AccountVM> Add(AccountVM accountVM)
+        public async Task<Account> Add(AccountVM accountVM)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace CVLookup_WebAPI.Services.AccountService
                     {
                         throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
-                    return _mapper.Map<AccountVM>(account);
+                    return account;
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace CVLookup_WebAPI.Services.AccountService
             }
         }
 
-        public async Task<AccountVM> Delete(string Id)
+        public async Task<Account> Delete(string Id)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace CVLookup_WebAPI.Services.AccountService
                     {
                         throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
-                    return _mapper.Map<AccountVM>(account);
+                    return account;
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CVLookup_WebAPI.Services.AccountService
             }
         }
 
-        public async Task<AccountVM> GetAccountByEmail(string email)
+        public async Task<Account> GetAccountByEmail(string email)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace CVLookup_WebAPI.Services.AccountService
                 {
                     throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
-                return _mapper.Map<AccountVM>(result);
+                return result;
             }
             catch (ExceptionReturn e)
             {
@@ -129,7 +129,7 @@ namespace CVLookup_WebAPI.Services.AccountService
             }
         }
 
-        public async Task<AccountVM> GetAccountById(string id)
+        public async Task<Account> GetAccountById(string id)
         {
             try
             {
@@ -143,7 +143,7 @@ namespace CVLookup_WebAPI.Services.AccountService
                 {
                     throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
-                return _mapper.Map<AccountVM>(result);
+                return result;
             }
             catch (ExceptionReturn e)
             {
@@ -152,7 +152,7 @@ namespace CVLookup_WebAPI.Services.AccountService
             throw new NotImplementedException();
         }
 
-        public async Task<AccountVM> Update(string Id, AccountVM newAccount)
+        public async Task<Account> Update(string Id, AccountVM newAccount)
         {
             try
             {
@@ -175,7 +175,7 @@ namespace CVLookup_WebAPI.Services.AccountService
                     {
                         throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
-                    return _mapper.Map<AccountVM>(account);
+                    return account;
                 }
                 else
                 {
