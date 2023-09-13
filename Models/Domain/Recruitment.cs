@@ -5,9 +5,9 @@ namespace CVLookup_WebAPI.Models.Domain
 	public class Recruitment
 	{
 		[Key]
-		public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
-		public User User { get; set; }
+        public User User { get; set; }
 
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Tiêu đề")]

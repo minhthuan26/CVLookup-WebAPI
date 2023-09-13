@@ -5,7 +5,6 @@ namespace CVLookup_WebAPI.Models.ViewModel
 {
 	public abstract class UserVM
 	{
-		public string Id { get; set; } = Guid.NewGuid().ToString();
 
 		public string Email { get; set; }
 
