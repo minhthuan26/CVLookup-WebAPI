@@ -1,6 +1,6 @@
-﻿using CVLookup_WebAPI.Models.Domain;
-using CVLookup_WebAPI.Services.AccountService;
+﻿using CVLookup_WebAPI.Services.AccountService;
 using CVLookup_WebAPI.Services.AccountUserService;
+using CVLookup_WebAPI.Services.AuthService;
 using CVLookup_WebAPI.Services.CandidateService;
 using CVLookup_WebAPI.Services.CurriculumService;
 using CVLookup_WebAPI.Services.EmployerService;
@@ -17,11 +17,12 @@ using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
-using Microsoft.VisualBasic;
-using System;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,7 @@ builder.Services.AddScoped<IRecruitmentService, RecruitmentService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 //Add custom data validate error
 builder.Services.AddControllers()
@@ -67,9 +69,9 @@ builder.Services.AddControllers()
                     field = key,
                     message = context.ModelState[key]?.Errors.Select(error => error.ErrorMessage)
                 };
-			});
+            });
 
-			var response = new ApiResponse
+            var response = new ApiResponse
             {
                 Success = false,
                 Code = 400,
@@ -79,9 +81,52 @@ builder.Services.AddControllers()
         };
     });
 
+// Authentication with Json Web Token
+builder.Services.Configure<Jwt>(builder.Configuration.GetSection("JWT"));
+var secretKey = builder.Configuration["JWT:SecretKey"];
+var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        //Tự ký token
+        ValidateIssuer = false,
+        ValidateAudience = false,
+
+        //Ký vào token
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+//Add Cors
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CVLooup API", Version = "v1" });
+
+    // Sử dụng XML Comments
+    var dir = new DirectoryInfo(AppContext.BaseDirectory);
+    foreach (var fi in dir.EnumerateFiles("*.xml"))
+    {
+        c.IncludeXmlComments(fi.FullName);
+    }
+
+});
 
 var app = builder.Build();
 
@@ -89,9 +134,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CVLookup API V1");
 
+    });
+}
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
