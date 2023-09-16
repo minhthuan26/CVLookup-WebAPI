@@ -3,7 +3,7 @@ using CVLookup_WebAPI.Models.ViewModel;
 
 namespace CVLookup_WebAPI.Services.JobAddressService
 {
-    public interface IJobFieldService
+    public interface IJobAddressService
     {
         public Task<List<JobAddress>> JobAddressList();
 		public Task<JobAddress> GetJobAddressById(string id);
