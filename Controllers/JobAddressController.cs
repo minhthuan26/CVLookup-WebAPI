@@ -11,10 +11,10 @@ namespace CVLookup_WebAPI.Controllers
 	[ApiController]
 	public class JobAddressController : ControllerBase
 	{
-		private readonly IJobFieldService _jobAddressService;
+		private readonly IJobAddressService _jobAddressService;
 		private readonly ILogger<JobAddressController> _logger;
 
-		public JobAddressController(ILogger<JobAddressController> logger, IJobFieldService jobAddressService)
+		public JobAddressController(ILogger<JobAddressController> logger, IJobAddressService jobAddressService)
 		{
 			_jobAddressService = jobAddressService;
 			_logger = logger;

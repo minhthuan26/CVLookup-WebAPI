@@ -8,7 +8,7 @@ using System.Net;
 
 namespace CVLookup_WebAPI.Services.JobAddressService
 {
-	public class JobAddressService : IJobFieldService
+	public class JobAddressService : IJobAddressService
 	{
 		private readonly AppDBContext _dbContext;
 		private readonly IMapper _mapper;
