@@ -8,7 +8,7 @@ using System.Net;
 
 namespace CVLookup_WebAPI.Services.JobAddressService
 {
-	public class JobAddressService : IJobAddressService
+	public class JobAddressService : IJobFieldService
 	{
 		private readonly AppDBContext _dbContext;
 		private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			_mapper = mapper;
 		}
 
-		public async Task<JobAddressVM> Add(JobAddressVM jobAddressVM)
+		public async Task<JobAddress> Add(JobAddressVM jobAddressVM)
 		{
 			try
 			{
@@ -37,7 +37,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 					{
 						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
-					return _mapper.Map<JobAddressVM>(jobAddress);
+					return jobAddress;
 				}
 				else
 				{
@@ -51,7 +51,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public async Task<JobAddressVM> Delete(string Id)
+		public async Task<JobAddress> Delete(string Id)
 		{
 			try
 			{
@@ -74,7 +74,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 					{
 						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
-					return _mapper.Map<JobAddressVM>(jobAddress);
+					return jobAddress;
 				}
 				else
 				{
@@ -88,7 +88,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public async Task<JobAddressVM> GetJobAddressById(string id)
+		public async Task<JobAddress> GetJobAddressById(string id)
 		{
 			try
 			{
@@ -102,7 +102,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 				{
 					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
-				return _mapper.Map<JobAddressVM>(result);
+				return result;
 			}
 			catch (ExceptionReturn e)
 			{
@@ -110,7 +110,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public async Task<JobAddressVM> GetJobAddressByAddress(string address)
+		public async Task<JobAddress> GetJobAddressByName(string address)
 		{
 			try
 			{
@@ -124,7 +124,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 				{
 					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
-				return _mapper.Map<JobAddressVM>(result);
+				return result;
 			}
 			catch (ExceptionReturn e)
 			{
@@ -132,12 +132,12 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public async Task<List<JobAddressVM>> JobAddressList()
+		public async Task<List<JobAddress>> JobAddressList()
 		{
 			try
 			{
 				var jobAddressList = await _dbContext.JobAddress.ToListAsync();
-				return _mapper.Map<List<JobAddressVM>>(jobAddressList);
+				return jobAddressList;
 			}
 			catch (ExceptionReturn e)
 			{
@@ -145,7 +145,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public async Task<JobAddressVM> Update(string Id, JobAddressVM newJobAddressVM)
+		public async Task<JobAddress> Update(string Id, JobAddressVM newJobAddressVM)
 		{
 			try
 			{
@@ -164,7 +164,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 					{
 						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
-					return _mapper.Map<JobAddressVM>(jobAddress);
+					return jobAddress;
 
 				}
 				else

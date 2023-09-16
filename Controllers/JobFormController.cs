@@ -1,6 +1,7 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
-using CVLookup_WebAPI.Services.JobAddressService;
+using CVLookup_WebAPI.Services.JobFormService;
+using CVLookup_WebAPI.Services.JobFormService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,26 +10,26 @@ namespace CVLookup_WebAPI.Controllers
 {
 	[Route("api/v1/[controller]/")]
 	[ApiController]
-	public class JobAddressController : ControllerBase
+	public class JobFormController : ControllerBase
 	{
-		private readonly IJobFieldService _jobAddressService;
-		private readonly ILogger<JobAddressController> _logger;
+		private readonly IJobFormService _jobFormService;
+		private readonly ILogger<JobFormController> _logger;
 
-		public JobAddressController(ILogger<JobAddressController> logger, IJobFieldService jobAddressService)
+		public JobFormController(ILogger<JobFormController> logger, IJobFormService jobFormService)
 		{
-			_jobAddressService = jobAddressService;
+			_jobFormService = jobFormService;
 			_logger = logger;
 		}
 		/// <summary>
-		/// Lấy tất cả địa điểm công việc
+		/// Lấy tất cả hình thức công việc
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet("get-all-job-address")]
-		public async Task<IActionResult> getAllJobAddress()
+		[HttpGet("get-all-job-form")]
+		public async Task<IActionResult> getAllJobForm()
 		{
 			try
 			{
-				var result = await _jobAddressService.JobAddressList();
+				var result = await _jobFormService.JobFormList();
 				return Ok(new ApiResponse
 				{
 					Code = StatusCodes.Status200OK,
@@ -49,16 +50,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Tìm kiếm địa điểm bằng id
+		/// Tìm kiếm hình thức bằng id
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		[HttpGet("get-job-address-by-id")]
-		public async Task<IActionResult> getJobAddressById([FromQuery] string id)
+		[HttpGet("get-job-form-by-id")]
+		public async Task<IActionResult> getJobFormById([FromQuery] string id)
 		{
 			try
 			{
-				var result = await _jobAddressService.GetJobAddressById(id);
+				var result = await _jobFormService.GetJobFormById(id);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -79,16 +80,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Tìm kiếm địa điểm bằng tên
+		/// Tìm kiếm hình thức bằng tên
 		/// </summary>
-		/// <param name="address"></param>
+		/// <param name="name"></param>
 		/// <returns></returns>
-		[HttpGet("get-job-address-by-name")]
-		public async Task<IActionResult> getJobAddressByName([FromQuery] string address)
+		[HttpGet("get-job-form-by-name")]
+		public async Task<IActionResult> getJobFormByName([FromQuery] string name)
 		{
 			try
 			{
-				var result = await _jobAddressService.GetJobAddressByName(address);
+				var result = await _jobFormService.GetJobFormByName(name);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -109,16 +110,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Thêm địa điểm công việc mới
+		/// Thêm hình thức công việc mới
 		/// </summary>
-		/// <param name="jobAddress"></param>
+		/// <param name="jobForm"></param>
 		/// <returns></returns>
-		[HttpPost("add-job-address")]
-		public async Task<IActionResult> addJobAddress([FromBody] JobAddressVM jobAddress)
+		[HttpPost("add-job-form")]
+		public async Task<IActionResult> addJobForm([FromBody] JobFormVM jobForm)
 		{
 			try
 			{
-				var result = await _jobAddressService.Add(jobAddress);
+				var result = await _jobFormService.Add(jobForm);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -139,17 +140,17 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Xoá địa điểm công việc
+		/// Xoá hình thức công việc
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("delete")]
-		public async Task<IActionResult> deleteJobAddress([FromQuery] string id)
+		public async Task<IActionResult> deleteJobForm([FromQuery] string id)
 		{
 			try
 			{
 
-				var result = await _jobAddressService.Delete(id);
+				var result = await _jobFormService.Delete(id);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -170,17 +171,17 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Cập nhật địa điểm làm việc
+		/// Cập nhật hình thức làm việc
 		/// </summary>
 		/// <param name="id"></param>
-		/// <param name="jobAddressVM"></param>
+		/// <param name="jobFormVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateJobAddress([FromQuery] string id, [FromBody] JobAddressVM jobAddressVM)
+		public async Task<IActionResult> updateJobForm([FromQuery] string id, [FromBody] JobFormVM jobFormVM)
 		{
 			try
 			{
-				var result = await _jobAddressService.Update(id, jobAddressVM);
+				var result = await _jobFormService.Update(id, jobFormVM);
 				return Ok(new ApiResponse
 				{
 					Success = true,
