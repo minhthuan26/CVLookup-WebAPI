@@ -11,15 +11,18 @@ namespace CVLookup_WebAPI.Controllers
 	[ApiController]
 	public class JobAddressController : ControllerBase
 	{
-		private readonly IJobAddressService _jobAddressService;
+		private readonly IJobFieldService _jobAddressService;
 		private readonly ILogger<JobAddressController> _logger;
 
-		public JobAddressController(ILogger<JobAddressController> logger, IJobAddressService jobAddressService)
+		public JobAddressController(ILogger<JobAddressController> logger, IJobFieldService jobAddressService)
 		{
 			_jobAddressService = jobAddressService;
 			_logger = logger;
 		}
-
+		/// <summary>
+		/// Lấy tất cả địa điểm công việc
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet("get-all-job-address")]
 		public async Task<IActionResult> getAllJobAddress()
 		{
@@ -45,6 +48,11 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Tìm kiếm địa điểm bằng id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[HttpGet("get-job-address-by-id")]
 		public async Task<IActionResult> getJobAddressById([FromQuery] string id)
 		{
@@ -70,12 +78,17 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
-		[HttpGet("get-job-address-by-address")]
-		public async Task<IActionResult> getJobAddressByAddress([FromQuery] string address)
+		/// <summary>
+		/// Tìm kiếm địa điểm bằng tên
+		/// </summary>
+		/// <param name="address"></param>
+		/// <returns></returns>
+		[HttpGet("get-job-address-by-name")]
+		public async Task<IActionResult> getJobAddressByName([FromQuery] string address)
 		{
 			try
 			{
-				var result = await _jobAddressService.GetJobAddressByAddress(address);
+				var result = await _jobAddressService.GetJobAddressByName(address);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -95,12 +108,16 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Thêm địa điểm công việc mới
+		/// </summary>
+		/// <param name="jobAddress"></param>
+		/// <returns></returns>
 		[HttpPost("add-job-address")]
 		public async Task<IActionResult> addJobAddress([FromBody] JobAddressVM jobAddress)
 		{
 			try
 			{
-
 				var result = await _jobAddressService.Add(jobAddress);
 				return Ok(new ApiResponse
 				{
@@ -121,6 +138,11 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Xoá địa điểm công việc
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[HttpDelete("delete")]
 		public async Task<IActionResult> deleteJobAddress([FromQuery] string id)
 		{
@@ -147,6 +169,12 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Cập nhật địa điểm làm việc
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="jobAddressVM"></param>
+		/// <returns></returns>
 		[HttpPatch("update")]
 		public async Task<IActionResult> updateJobAddress([FromQuery] string id, [FromBody] JobAddressVM jobAddressVM)
 		{
