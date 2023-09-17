@@ -1,6 +1,6 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
-using CVLookup_WebAPI.Services.JobFieldService;
+using CVLookup_WebAPI.Services.ExperienceService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,26 +9,26 @@ namespace CVLookup_WebAPI.Controllers
 {
 	[Route("api/v1/[controller]/")]
 	[ApiController]
-	public class JobFieldController : ControllerBase
+	public class ExperienceController : ControllerBase
 	{
-		private readonly IJobFieldService _jobFieldService;
-		private readonly ILogger<JobFieldController> _logger;
+		private readonly IExperienceService _experienceService;
+		private readonly ILogger<ExperienceController> _logger;
 
-		public JobFieldController(ILogger<JobFieldController> logger, IJobFieldService jobFieldService)
+		public ExperienceController(ILogger<ExperienceController> logger, IExperienceService experienceService)
 		{
-			_jobFieldService = jobFieldService;
+			_experienceService = experienceService;
 			_logger = logger;
 		}
 		/// <summary>
-		/// Lấy tất cả lĩnh vực công việc
+		/// Lấy tất cả kinh nghiệm công việc
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet("get-all-job-field")]
-		public async Task<IActionResult> getAllJobField()
+		[HttpGet("get-all-experience")]
+		public async Task<IActionResult> getAllExperience()
 		{
 			try
 			{
-				var result = await _jobFieldService.JobFieldList();
+				var result = await _experienceService.ExperienceList();
 				return Ok(new ApiResponse
 				{
 					Code = StatusCodes.Status200OK,
@@ -49,16 +49,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Tìm kiếm lĩnh vực bằng id
+		/// Tìm kiếm kinh nghiệm bằng id
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		[HttpGet("get-job-field-by-id")]
-		public async Task<IActionResult> getJobFieldById([FromQuery] string id)
+		[HttpGet("get-experience-by-id")]
+		public async Task<IActionResult> getExperienceById([FromQuery] string id)
 		{
 			try
 			{
-				var result = await _jobFieldService.GetJobFieldById(id);
+				var result = await _experienceService.GetExperienceById(id);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -79,16 +79,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Tìm kiếm lĩnh vực bằng tên
+		/// Tìm kiếm kinh nghiệm bằng tên
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="value"></param>
 		/// <returns></returns>
-		[HttpGet("get-job-field-by-address")]
-		public async Task<IActionResult> getJobFieldsByAddress([FromQuery] string name)
+		[HttpGet("get-experience-by-value")]
+		public async Task<IActionResult> getExperienceByValue([FromQuery] string value)
 		{
 			try
 			{
-				var result = await _jobFieldService.GetJobFieldsByName(name);
+				var result = await _experienceService.GetExperiencesByValue(value);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -109,16 +109,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Thêm lĩnh vực công việc mới
+		/// Thêm kinh nghiệm công việc mới
 		/// </summary>
-		/// <param name="jobAddress"></param>
+		/// <param name="experience"></param>
 		/// <returns></returns>
-		[HttpPost("add-job-field")]
-		public async Task<IActionResult> addJobField([FromBody] JobFieldVM jobAddress)
+		[HttpPost("add-experience")]
+		public async Task<IActionResult> addExperience([FromBody] ExperienceVM experience)
 		{
 			try
 			{
-				var result = await _jobFieldService.Add(jobAddress);
+				var result = await _experienceService.Add(experience);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -139,17 +139,17 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Xoá lĩnh vực công việc
+		/// Xoá kinh nghiệm công việc
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("delete")]
-		public async Task<IActionResult> deleteJobField([FromQuery] string id)
+		public async Task<IActionResult> deleteExperience([FromQuery] string id)
 		{
 			try
 			{
 
-				var result = await _jobFieldService.Delete(id);
+				var result = await _experienceService.Delete(id);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -170,17 +170,17 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Cập nhật lĩnh vực làm việc
+		/// Cập nhật kinh nghiệm làm việc
 		/// </summary>
 		/// <param name="id"></param>
-		/// <param name="jobFieldVM"></param>
+		/// <param name="experienceVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateJobField([FromQuery] string id, [FromBody] JobFieldVM jobFieldVM)
+		public async Task<IActionResult> updateExperience([FromQuery] string id, [FromBody] ExperienceVM experienceVM)
 		{
 			try
 			{
-				var result = await _jobFieldService.Update(id, jobFieldVM);
+				var result = await _experienceService.Update(id, experienceVM);
 				return Ok(new ApiResponse
 				{
 					Success = true,

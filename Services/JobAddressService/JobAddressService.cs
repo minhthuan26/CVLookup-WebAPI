@@ -110,7 +110,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public async Task<JobAddress> GetJobAddressByName(string address)
+		public async Task<List<JobAddress>> GetJobAddressesByName(string address)
 		{
 			try
 			{
@@ -119,11 +119,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
-				var result = await _dbContext.JobAddress.Where(prop => prop.Address == address).FirstOrDefaultAsync();
-				if (result == null)
-				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
-				}
+				var result = await _dbContext.JobAddress.Where(prop => prop.Address.Contains(address)).ToListAsync();
 				return result;
 			}
 			catch (ExceptionReturn e)

@@ -26,7 +26,7 @@ namespace CVLookup_WebAPI.Services.JobFieldService
 				var addressExisted = await _dbContext.JobField.Where(prop => prop.Field == jobField.Field).FirstOrDefaultAsync();
 				if (addressExisted != null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Tên địa điểm đã tồn tại");
+					throw new ExceptionReturn(400, "Thất bại. Tên lĩnh vực đã tồn tại");
 				}
 				var result = await _dbContext.JobField.AddAsync(jobField);
 				if (result.State.ToString() == "Added")
@@ -109,7 +109,7 @@ namespace CVLookup_WebAPI.Services.JobFieldService
 			}
 		}
 
-		public async Task<JobField> GetJobFieldByName(string address)
+		public async Task<List<JobField>> GetJobFieldsByName(string address)
 		{
 			try
 			{
@@ -118,11 +118,7 @@ namespace CVLookup_WebAPI.Services.JobFieldService
 					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
-				var result = await _dbContext.JobField.Where(prop => prop.Field == address).FirstOrDefaultAsync();
-				if (result == null)
-				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
-				}
+				var result = await _dbContext.JobField.Where(prop => prop.Field.Contains(address)).ToListAsync();
 				return result;
 			}
 			catch (ExceptionReturn e)

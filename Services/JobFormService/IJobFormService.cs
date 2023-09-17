@@ -7,7 +7,7 @@ namespace CVLookup_WebAPI.Services.JobFormService
     {
         public Task<List<JobForm>> JobFormList();
 		public Task<JobForm> GetJobFormById(string id);
-		public Task<JobForm> GetJobFormByName(string name);
+		public Task<List<JobForm>> GetJobFormsByName(string name);
         public Task<JobForm> Add(JobFormVM jobForm);
         public Task<JobForm> Update(string Id, JobFormVM newJobForm);
         public Task<JobForm> Delete(string Id);

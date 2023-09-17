@@ -26,7 +26,7 @@ namespace CVLookup_WebAPI.Services.JobCareerService
 				var addressExisted = await _dbContext.JobCareer.Where(prop => prop.Career == jobCareer.Career).FirstOrDefaultAsync();
 				if (addressExisted != null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Tên địa điểm đã tồn tại");
+					throw new ExceptionReturn(400, "Thất bại. Tên nghề nghiệp đã tồn tại");
 				}
 				var result = await _dbContext.JobCareer.AddAsync(jobCareer);
 				if (result.State.ToString() == "Added")
@@ -109,7 +109,7 @@ namespace CVLookup_WebAPI.Services.JobCareerService
 			}
 		}
 
-		public async Task<JobCareer> GetJobCareerByName(string career)
+		public async Task<List<JobCareer>> GetJobCareersByName(string career)
 		{
 			try
 			{
@@ -118,11 +118,7 @@ namespace CVLookup_WebAPI.Services.JobCareerService
 					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
-				var result = await _dbContext.JobCareer.Where(prop => prop.Career == career).FirstOrDefaultAsync();
-				if (result == null)
-				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
-				}
+				var result = await _dbContext.JobCareer.Where(prop => prop.Career.Contains(career)).ToListAsync();
 				return result;
 			}
 			catch (ExceptionReturn e)

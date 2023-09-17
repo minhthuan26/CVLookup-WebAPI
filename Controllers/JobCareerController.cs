@@ -84,11 +84,11 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="address"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-career-by-name")]
-		public async Task<IActionResult> getCareerByName([FromQuery] string address)
+		public async Task<IActionResult> getCareersByName([FromQuery] string address)
 		{
 			try
 			{
-				var result = await _jobCareerService.GetJobCareerByName(address);
+				var result = await _jobCareerService.GetJobCareersByName(address);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -173,14 +173,14 @@ namespace CVLookup_WebAPI.Controllers
 		/// Cập nhật ngành nghề làm việc
 		/// </summary>
 		/// <param name="id"></param>
-		/// <param name="jobAddressVM"></param>
+		/// <param name="jobCareerVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateCareer([FromQuery] string id, [FromBody] JobCareerVM jobAddressVM)
+		public async Task<IActionResult> updateCareer([FromQuery] string id, [FromBody] JobCareerVM jobCareerVM)
 		{
 			try
 			{
-				var result = await _jobCareerService.Update(id, jobAddressVM);
+				var result = await _jobCareerService.Update(id, jobCareerVM);
 				return Ok(new ApiResponse
 				{
 					Success = true,

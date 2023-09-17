@@ -4,6 +4,7 @@ using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace CVLookup_WebAPI.Services.JobFormService
 {
@@ -25,7 +26,7 @@ namespace CVLookup_WebAPI.Services.JobFormService
 				var formExisted = await _dbContext.JobForm.Where(prop => prop.Form == jobForm.Form).FirstOrDefaultAsync();
 				if (formExisted != null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Tên địa điểm đã tồn tại");
+					throw new ExceptionReturn(400, "Thất bại. Tên hình thức đã tồn tại");
 				}
 				var result = await _dbContext.JobForm.AddAsync(jobForm);
 				if (result.State.ToString() == "Added")
@@ -108,20 +109,16 @@ namespace CVLookup_WebAPI.Services.JobFormService
 			}
 		}
 
-		public async Task<JobForm> GetJobFormByName(string address)
+		public async Task<List<JobForm>> GetJobFormsByName(string form)
 		{
 			try
 			{
-				if (address == null)
+				if (form == null)
 				{
 					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
-				var result = await _dbContext.JobForm.Where(prop => prop.Form == address).FirstOrDefaultAsync();
-				if (result == null)
-				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
-				}
+				var result = await _dbContext.JobForm.Where(prop => prop.Form.Contains(form)).ToListAsync();
 				return result;
 			}
 			catch (ExceptionReturn e)

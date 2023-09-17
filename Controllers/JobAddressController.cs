@@ -84,11 +84,11 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="address"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-address-by-name")]
-		public async Task<IActionResult> getJobAddressByName([FromQuery] string address)
+		public async Task<IActionResult> getJobAddressesByName([FromQuery] string address)
 		{
 			try
 			{
-				var result = await _jobAddressService.GetJobAddressByName(address);
+				var result = await _jobAddressService.GetJobAddressesByName(address);
 				return Ok(new ApiResponse
 				{
 					Success = true,

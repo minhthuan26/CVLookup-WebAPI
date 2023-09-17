@@ -1,7 +1,6 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.JobFormService;
-using CVLookup_WebAPI.Services.JobFormService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -85,11 +84,11 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="name"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-form-by-name")]
-		public async Task<IActionResult> getJobFormByName([FromQuery] string name)
+		public async Task<IActionResult> getJobFormsByName([FromQuery] string name)
 		{
 			try
 			{
-				var result = await _jobFormService.GetJobFormByName(name);
+				var result = await _jobFormService.GetJobFormsByName(name);
 				return Ok(new ApiResponse
 				{
 					Success = true,

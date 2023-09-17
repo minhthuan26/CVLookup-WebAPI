@@ -1,40 +1,176 @@
-﻿using CVLookup_WebAPI.Models.ViewModel;
+﻿using AutoMapper;
+using CVLookup_WebAPI.Models.Domain;
+using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace CVLookup_WebAPI.Services.JobPositionService
 {
 	public class JobPositionService : IJobPositionService
 	{
 		private readonly AppDBContext _dbContext;
+		private readonly IMapper _mapper;
 
-		public JobPositionService(AppDBContext dbContext)
+		public JobPositionService(AppDBContext dbContext, IMapper mapper)
 		{
 			_dbContext = dbContext;
+			_mapper = mapper;
+		}
+		public async Task<JobPosition> Add(JobPositionVM jobPositionVM)
+		{
+			try
+			{
+				var jobPosition = _mapper.Map<JobPosition>(jobPositionVM);
+				var formExisted = await _dbContext.JobPosition.Where(prop => prop.Position == jobPosition.Position).FirstOrDefaultAsync();
+				if (formExisted != null)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Tên vị trí đã tồn tại");
+				}
+				var result = await _dbContext.JobPosition.AddAsync(jobPosition);
+				if (result.State.ToString() == "Added")
+				{
+					int saveState = await _dbContext.SaveChangesAsync();
+					if (saveState <= 0)
+					{
+						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+					}
+					return jobPosition;
+				}
+				else
+				{
+					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+				}
+
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
 
-		public Task<JobPositionVM> Add(JobPositionVM jobPosition)
+		public async Task<JobPosition> Delete(string Id)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				if (Id == null)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+				}
+
+				var jobPosition = await _dbContext.JobPosition.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
+				if (jobPosition == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+
+				var result = _dbContext.JobPosition.Remove(jobPosition);
+				if (result.State.ToString() == "Deleted")
+				{
+					var saveState = await _dbContext.SaveChangesAsync();
+					if (saveState <= 0)
+					{
+						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+					}
+					return jobPosition;
+				}
+				else
+				{
+					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+				}
+
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
 
-		public Task<JobPositionVM> Delete(string Id)
+		public async Task<JobPosition> GetJobPositionById(string id)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				if (id == null)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+				}
+
+				var result = await _dbContext.JobPosition.Where(prop => prop.Id == id).FirstOrDefaultAsync();
+				if (result == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+				return result;
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
 
-		public Task<JobPositionVM> GetAccountById(int id)
+		public async Task<List<JobPosition>> GetJobPositionsByName(string position)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				if (position == null)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+				}
+
+				var result = await _dbContext.JobPosition.Where(prop => prop.Position.Contains(position)).ToListAsync();
+				return result;
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
 
-		public Task<List<JobPositionVM>> JobPositionList()
+		public async Task<List<JobPosition>> JobPositionList()
 		{
-			throw new NotImplementedException();
+			try
+			{
+				var jobPositionList = await _dbContext.JobPosition.ToListAsync();
+				return jobPositionList;
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(500, e.Message);
+			}
 		}
 
-		public Task<JobPositionVM> Update(string Id, JobPositionVM newJobPosition)
+		public async Task<JobPosition> Update(string Id, JobPositionVM newJobPositionVM)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				var jobPosition = await _dbContext.JobPosition.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
+				if (jobPosition == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+
+				jobPosition.Position = newJobPositionVM.Position;
+				var result = _dbContext.JobPosition.Update(jobPosition);
+				if (result.State.ToString() == "Modified")
+				{
+					int saveState = await _dbContext.SaveChangesAsync();
+					if (saveState <= 0)
+					{
+						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+					}
+					return jobPosition;
+
+				}
+				else
+				{
+					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+				}
+
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
 	}
 }

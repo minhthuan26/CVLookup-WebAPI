@@ -1,6 +1,7 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
-using CVLookup_WebAPI.Services.JobFieldService;
+using CVLookup_WebAPI.Services.JobPositionService;
+using CVLookup_WebAPI.Services.JobPositionService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,26 +10,26 @@ namespace CVLookup_WebAPI.Controllers
 {
 	[Route("api/v1/[controller]/")]
 	[ApiController]
-	public class JobFieldController : ControllerBase
+	public class JobPositionController : ControllerBase
 	{
-		private readonly IJobFieldService _jobFieldService;
-		private readonly ILogger<JobFieldController> _logger;
+		private readonly IJobPositionService _jobPositionService;
+		private readonly ILogger<JobPositionController> _logger;
 
-		public JobFieldController(ILogger<JobFieldController> logger, IJobFieldService jobFieldService)
+		public JobPositionController(ILogger<JobPositionController> logger, IJobPositionService jobPositionService)
 		{
-			_jobFieldService = jobFieldService;
+			_jobPositionService = jobPositionService;
 			_logger = logger;
 		}
 		/// <summary>
-		/// Lấy tất cả lĩnh vực công việc
+		/// Lấy tất cả vị trí công việc
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet("get-all-job-field")]
-		public async Task<IActionResult> getAllJobField()
+		[HttpGet("get-all-job-position")]
+		public async Task<IActionResult> getAllJobPosition()
 		{
 			try
 			{
-				var result = await _jobFieldService.JobFieldList();
+				var result = await _jobPositionService.JobPositionList();
 				return Ok(new ApiResponse
 				{
 					Code = StatusCodes.Status200OK,
@@ -49,16 +50,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Tìm kiếm lĩnh vực bằng id
+		/// Tìm kiếm vị trí bằng id
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		[HttpGet("get-job-field-by-id")]
-		public async Task<IActionResult> getJobFieldById([FromQuery] string id)
+		[HttpGet("get-job-position-by-id")]
+		public async Task<IActionResult> getJobPositionById([FromQuery] string id)
 		{
 			try
 			{
-				var result = await _jobFieldService.GetJobFieldById(id);
+				var result = await _jobPositionService.GetJobPositionById(id);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -79,16 +80,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Tìm kiếm lĩnh vực bằng tên
+		/// Tìm kiếm vị trí bằng tên
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		[HttpGet("get-job-field-by-address")]
-		public async Task<IActionResult> getJobFieldsByAddress([FromQuery] string name)
+		[HttpGet("get-job-position-by-name")]
+		public async Task<IActionResult> getJobPositionsByName([FromQuery] string name)
 		{
 			try
 			{
-				var result = await _jobFieldService.GetJobFieldsByName(name);
+				var result = await _jobPositionService.GetJobPositionsByName(name);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -109,16 +110,16 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Thêm lĩnh vực công việc mới
+		/// Thêm vị trí công việc mới
 		/// </summary>
-		/// <param name="jobAddress"></param>
+		/// <param name="jobPosition"></param>
 		/// <returns></returns>
-		[HttpPost("add-job-field")]
-		public async Task<IActionResult> addJobField([FromBody] JobFieldVM jobAddress)
+		[HttpPost("add-job-position")]
+		public async Task<IActionResult> addJobPosition([FromBody] JobPositionVM jobPosition)
 		{
 			try
 			{
-				var result = await _jobFieldService.Add(jobAddress);
+				var result = await _jobPositionService.Add(jobPosition);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -139,17 +140,17 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Xoá lĩnh vực công việc
+		/// Xoá vị trí công việc
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("delete")]
-		public async Task<IActionResult> deleteJobField([FromQuery] string id)
+		public async Task<IActionResult> deleteJobPosition([FromQuery] string id)
 		{
 			try
 			{
 
-				var result = await _jobFieldService.Delete(id);
+				var result = await _jobPositionService.Delete(id);
 				return Ok(new ApiResponse
 				{
 					Success = true,
@@ -170,17 +171,17 @@ namespace CVLookup_WebAPI.Controllers
 		}
 
 		/// <summary>
-		/// Cập nhật lĩnh vực làm việc
+		/// Cập nhật vị trí làm việc
 		/// </summary>
 		/// <param name="id"></param>
-		/// <param name="jobFieldVM"></param>
+		/// <param name="jobPositionVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateJobField([FromQuery] string id, [FromBody] JobFieldVM jobFieldVM)
+		public async Task<IActionResult> updateJobPosition([FromQuery] string id, [FromBody] JobPositionVM jobPositionVM)
 		{
 			try
 			{
-				var result = await _jobFieldService.Update(id, jobFieldVM);
+				var result = await _jobPositionService.Update(id, jobPositionVM);
 				return Ok(new ApiResponse
 				{
 					Success = true,
