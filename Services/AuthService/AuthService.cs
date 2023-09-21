@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Services.AccountService;
+using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.AspNetCore.Http;
@@ -18,28 +20,46 @@ namespace CVLookup_WebAPI.Services.AuthService
     public class AuthService : IAuthService
     {
         private readonly AppDBContext _dbContext;
+        private readonly IAccountService _accountService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly Jwt _jwt;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(AppDBContext dbContext, IMapper mapper, IOptionsMonitor<Jwt> monitor, IHttpContextAccessor httpContextAccessor)
+        public AuthService(
+            AppDBContext dbContext,
+            IMapper mapper,
+            IOptionsMonitor<Jwt> monitor,
+            IHttpContextAccessor httpContextAccessor,
+            IAccountService accountService, IUserService userService
+            )
         {
             _dbContext = dbContext;
+            _accountService = accountService;
+            _userService = userService;
             _mapper = mapper;
             _jwt = monitor.CurrentValue;
             _httpContextAccessor = httpContextAccessor;
 
         }
-        public async Task<AuthVM> Login(LoginVM loginVM)
+        public async Task<AuthVM> Login(AccountVM loginVM)
         {
             try
             {
                 var accountUser = await _dbContext.AccountUser
                     .Include(x => x.Account)
-                    .FirstOrDefaultAsync(x => x.Account.Email == loginVM.Email && x.Account.Password == loginVM.Password);
+                    .FirstOrDefaultAsync(x => x.Account.Email == loginVM.Email);
 
                 if (accountUser != null)
                 {
+                    if (!VerifyPasswordHash(loginVM.Password, accountUser.Account.Password))
+                    {
+                        throw new ExceptionReturn(400, "Sai mật khẩu vui lòng nhập lại.");
+                    }
+                    if (!accountUser.Account.Status)
+                    {
+                        throw new ExceptionReturn(400, "Tài khoản chưa được kích hoạt");
+                    }
                     var role = await _dbContext.UserRole.FirstOrDefaultAsync(x => x.UserId == accountUser.UserId);
                     var authvm = new AuthVM
                     {
@@ -54,8 +74,8 @@ namespace CVLookup_WebAPI.Services.AuthService
                         var refreshTokenCookieOptions = new CookieOptions
                         {
                             HttpOnly = true,
-/*                            Secure = true,
-                            SameSite = SameSiteMode.None,*/
+                            Secure = true,
+                            SameSite = SameSiteMode.None,
                         };
                         _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", authvm.RefreshToken, refreshTokenCookieOptions);
                     }
@@ -63,7 +83,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                 }
                 else
                 {
-                    throw new ExceptionReturn(404, "Sai mật khẩu hoặc email");
+                    throw new ExceptionReturn(404, "Sai email vui lòng nhập lại.");
                 }
             }
             catch (Exception e)
@@ -101,7 +121,7 @@ namespace CVLookup_WebAPI.Services.AuthService
             }
             catch (Exception e)
             {
-                throw new ExceptionReturn(500,"Không Generate được token.");
+                throw new ExceptionReturn(500, "Không Generate được token.");
             }
 
         }
@@ -130,12 +150,121 @@ namespace CVLookup_WebAPI.Services.AuthService
         }
         #endregion
 
-        public async Task<AccountUserVM> Register(UserVM user, AccountVM account, string role /*nếu là NTD->employer gán cứng từ controller, nếu là UV -> candidate*/)
+        private bool VerifyPasswordHash(string password, string hashedPassword)
         {
-            //check tồn tại
-            //chưa tồn tại -> tạo user = new candidate hoặc new employer tuỳ vào role
-            throw new NotImplementedException();
+            byte[] combinedBytes = Convert.FromBase64String(hashedPassword);
+
+            byte[] saltBytes = new byte[128 / 8];
+            byte[] saltedPassword = new byte[combinedBytes.Length - saltBytes.Length];
+            Buffer.BlockCopy(combinedBytes, 0, saltBytes, 0, saltBytes.Length);
+            Buffer.BlockCopy(combinedBytes, saltBytes.Length, saltedPassword, 0, saltedPassword.Length);
+
+            using (var hmac = new HMACSHA512(saltBytes))
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] computedHash = hmac.ComputeHash(passwordBytes);
+
+                return computedHash.SequenceEqual(saltedPassword);
+            }
         }
+
+        public async Task<AccountUser> RegisterCandidate(CandidateVM candidateVM, AccountVM account)
+        {
+            var accountExist = await _dbContext.Account.Where(prop => account.Email == prop.Email).FirstOrDefaultAsync();
+            var userExist = await _dbContext.User.Where(prop => candidateVM.Email == prop.Email).FirstOrDefaultAsync();
+
+            try
+            {
+                if (candidateVM.Email != account.Email)
+                {
+                    throw new ExceptionReturn(400, "Thất bại. Email không khớp với nhau.");
+                }
+                if (accountExist != null && userExist != null)
+                {
+                    throw new ExceptionReturn(400, "Thất bại. Email đã tồn tại!");
+                }
+                else
+                {
+                    var newAccount = await _accountService.Add(account);
+                    var newCandidate = await _userService.AddCandidate(candidateVM);
+                    var newAccountUser = new AccountUser
+                    {
+                        Account = newAccount,
+                        User = newCandidate,
+                        AccountID = newAccount.Id,
+                        UserId = newCandidate.Id,
+                    };
+                    var result = await _dbContext.AccountUser.AddAsync(newAccountUser);
+                    if (result.State.ToString() == "Added")
+                    {
+                        int saveState = await _dbContext.SaveChangesAsync();
+                        if (saveState <= 0)
+                        {
+                            throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        }
+                        return newAccountUser;
+                    }
+                    else
+                    {
+                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    }
+                }
+            }
+            catch (ExceptionReturn e)
+            {
+                throw new ExceptionReturn(e.Code, e.Message);
+            }
+
+        }
+        public async Task<AccountUser> RegisterEmployer(EmployerVM employerVM, AccountVM account)
+        {
+            var accountExist = await _dbContext.Account.Where(prop => account.Email == prop.Email).FirstOrDefaultAsync();
+            var userExist = await _dbContext.User.Where(prop => employerVM.Email == prop.Email).FirstOrDefaultAsync();
+
+            try
+            {
+                if (employerVM.Email != account.Email)
+                {
+                    throw new ExceptionReturn(400, "Thất bại. Email không khớp với nhau.");
+                }
+                if (accountExist != null && userExist != null)
+                {
+                    throw new ExceptionReturn(400, "Thất bại. Email đã tồn tại!");
+                }
+                else
+                {
+                    var newAccount = await _accountService.Add(account);
+                    var newCandidate = await _userService.AddEmployer(employerVM);
+                    var newAccountUser = new AccountUser
+                    {
+                        Account = newAccount,
+                        User = newCandidate,
+                        AccountID = newAccount.Id,
+                        UserId = newCandidate.Id,
+                    };
+                    var result = await _dbContext.AccountUser.AddAsync(newAccountUser);
+                    if (result.State.ToString() == "Added")
+                    {
+                        int saveState = await _dbContext.SaveChangesAsync();
+                        if (saveState <= 0)
+                        {
+                            throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        }
+                        return newAccountUser;
+                    }
+                    else
+                    {
+                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    }
+                }
+            }
+            catch (ExceptionReturn e)
+            {
+                throw new ExceptionReturn(e.Code, e.Message);
+            }
+
+        }
+
 
     }
 }

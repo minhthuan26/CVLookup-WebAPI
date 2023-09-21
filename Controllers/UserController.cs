@@ -204,7 +204,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		[HttpDelete("get-user-by-id")]
+		[HttpGet("get-user-by-id")]
 		public async Task<IActionResult> getUserById([FromQuery] string? id)
 		{
 			try
@@ -234,7 +234,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// </summary>
 		/// <param name="email"></param>
 		/// <returns></returns>
-		[HttpDelete("get-user-by-email")]
+		[HttpGet("get-user-by-email")]
 		public async Task<IActionResult> getUserByEmail([FromQuery] string? email)
 		{
 			try
@@ -265,7 +265,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <param name="candidateVM"></param>
 		/// <returns></returns>
-		[HttpDelete("update-candidate")]
+		[HttpPut("update-candidate")]
 		public async Task<IActionResult> updateCandidate([FromQuery] string? id, [FromBody] CandidateVM candidateVM)
 		{
 			try
@@ -296,7 +296,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <param name="employerVM"></param>
 		/// <returns></returns>
-		[HttpDelete("update-candidate")]
+		[HttpPut("update-employer")]
 		public async Task<IActionResult> updateEmployer([FromQuery] string? id, [FromBody] EmployerVM employerVM)
 		{
 			try
