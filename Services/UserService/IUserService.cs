@@ -5,7 +5,7 @@ namespace CVLookup_WebAPI.Services.UserService
 {
     public interface IUserService
     {
-        public Task<List<User>> UserList();
+        public Task<UserListVM> UserList();
 		public Task<User> GetUserById(string id);
 		public Task<User> GetUserByEmail(string email);
 		public Task<List<Candidate>> GetCandidatesByName(string name);

@@ -10,14 +10,6 @@ namespace CVLookup_WebAPI.Models.ViewModel
 		public string Password { get; set; }
 
         public string Email { get; set; }
-
-        public bool Status { get; set; } = false;
-
-        public DateTime IssuedAt { get; set; }
-
-        public DateTime ActivedAt { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
 		
 	}
 }

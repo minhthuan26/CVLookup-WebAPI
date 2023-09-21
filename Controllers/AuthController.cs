@@ -24,11 +24,11 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="loginVM"></param>
         /// <returns></returns>
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginVM loginVM)
+        public async Task<IActionResult> Login([FromBody] AccountVM loginVM)
         {
             try
             {
-                var result = _authService.Login(loginVM);
+                var result = await _authService.Login(loginVM);
                     return Ok(new ApiResponse
                     {
                         Success = true,
@@ -47,6 +47,56 @@ namespace CVLookup_WebAPI.Controllers
                     Message = e.Message,
                 });
                 throw;
+            }
+        }
+
+        [HttpPost("register/candidate")]
+        public async Task<IActionResult> RegisterCandidate([FromBody] CandidateRegistrationRequest request)
+        {
+            try
+            {
+                var result = await _authService.RegisterCandidate(request.candidateVM, request.accountVM);
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Code = StatusCodes.Status200OK,
+                    Message = "Đăng ký thành công.",
+                    Data = result
+                });
+            }
+            catch (Exception e)
+            {
+                return Ok(new ApiResponse
+                {
+                    Success = false,
+                    Code = StatusCodes.Status400BadRequest,
+                    Message = e.Message,
+                });
+            }
+        }
+
+        [HttpPost("register/employer")]
+        public async Task<IActionResult> RegisterEmployer([FromBody] EmployerRegistrationRequest request)
+        {
+            try
+            {
+                var result = await _authService.RegisterEmployer(request.employerVM, request.accountVM);
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Code = StatusCodes.Status200OK,
+                    Message = "Đăng ký thành công.",
+                    Data = result
+                });
+            }
+            catch (Exception e)
+            {
+                return Ok(new ApiResponse
+                {
+                    Success = false,
+                    Code = StatusCodes.Status400BadRequest,
+                    Message = e.Message,
+                });
             }
         }
     }

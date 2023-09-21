@@ -4,6 +4,8 @@ using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CVLookup_WebAPI.Services.AccountService
 {
@@ -42,12 +44,18 @@ namespace CVLookup_WebAPI.Services.AccountService
         {
             try
             {
-                var account = _mapper.Map<Account>(accountVM);
-                var accountExisted = await _dbContext.Account.Where(prop => prop.Email == account.Email).FirstOrDefaultAsync();
+                var accountExisted = await _dbContext.Account.Where(prop => prop.Email == accountVM.Email).FirstOrDefaultAsync();
                 if (accountExisted != null)
                 {
                     throw new ExceptionReturn(400, "Thất bại. Email đã tồn tại!");
                 }
+                var passwordHash = HashPassword(accountVM.Password);
+                var newAccount = new AccountVM
+                {
+                    Email = accountVM.Email,
+                    Password = passwordHash
+                };
+                var account = _mapper.Map<Account>(newAccount);
                 var result = await _dbContext.Account.AddAsync(account);
                 if (result.State.ToString() == "Added")
                 {
@@ -163,10 +171,6 @@ namespace CVLookup_WebAPI.Services.AccountService
                 }
                 account.Password = newAccount.Password;
                 account.Email = newAccount.Email;
-                account.Status = newAccount.Status;
-                account.IssuedAt = newAccount.IssuedAt;
-                account.ActivedAt = newAccount.ActivedAt;
-                account.UpdatedAt = newAccount.UpdatedAt;
                 var result = _dbContext.Account.Update(account);
                 if (result.State.ToString() == "Modified")
                 {
@@ -188,5 +192,31 @@ namespace CVLookup_WebAPI.Services.AccountService
                 throw new ExceptionReturn(e.Code, e.Message);
             }
         }
+
+
+        private string HashPassword(string password)
+        {
+            byte[] saltBytes = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(saltBytes);
+            }
+
+            using (var hmac = new HMACSHA512(saltBytes))
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] saltedPassword = hmac.ComputeHash(passwordBytes);
+                byte[] combinedBytes = new byte[saltBytes.Length + saltedPassword.Length];
+                Buffer.BlockCopy(saltBytes, 0, combinedBytes, 0, saltBytes.Length);
+                Buffer.BlockCopy(saltedPassword, 0, combinedBytes, saltBytes.Length, saltedPassword.Length);
+
+                string hashedPassword = Convert.ToBase64String(combinedBytes);
+
+                return hashedPassword;
+            }
+        }
+
+        
     }
 }
+
