@@ -19,7 +19,7 @@ namespace CVLookup_WebAPI.Controllers
             _logger = logger;
         }
         /// <summary>
-        /// Login
+        /// Đăng nhập
         /// </summary>
         /// <param name="loginVM"></param>
         /// <returns></returns>
@@ -50,6 +50,12 @@ namespace CVLookup_WebAPI.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Đăng ký tài khoản ứng viên
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("register/candidate")]
         public async Task<IActionResult> RegisterCandidate([FromBody] CandidateRegistrationRequest request)
         {
@@ -75,6 +81,12 @@ namespace CVLookup_WebAPI.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Đăng ký tài khoản nhà tuyển dụng
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("register/employer")]
         public async Task<IActionResult> RegisterEmployer([FromBody] EmployerRegistrationRequest request)
         {
@@ -86,6 +98,37 @@ namespace CVLookup_WebAPI.Controllers
                     Success = true,
                     Code = StatusCodes.Status200OK,
                     Message = "Đăng ký thành công.",
+                    Data = result
+                });
+            }
+            catch (Exception e)
+            {
+                return Ok(new ApiResponse
+                {
+                    Success = false,
+                    Code = StatusCodes.Status400BadRequest,
+                    Message = e.Message,
+                });
+            }
+        }
+
+
+        /// <summary>
+        /// Tạo mới token
+        /// </summary>
+        /// <param name="tokenVM"></param>
+        /// <returns></returns>
+        [HttpPost("renew-token")]
+       public async Task<IActionResult> RenewToken(TokenVM tokenVM)
+        {
+            try
+            {
+                var result = await _authService.RenewToken(tokenVM);
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Code = StatusCodes.Status200OK,
+                    Message = "Thành công.",
                     Data = result
                 });
             }

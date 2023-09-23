@@ -1,4 +1,7 @@
-﻿using CVLookup_WebAPI.Models.ViewModel;
+﻿using AutoMapper;
+using CVLookup_WebAPI.Models.Domain;
+using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 
 namespace CVLookup_WebAPI.Services.UserRoleService
@@ -6,33 +9,58 @@ namespace CVLookup_WebAPI.Services.UserRoleService
 	public class UserRoleService : IUserRoleService
 	{
 		private readonly AppDBContext _dbContext;
+        private readonly IMapper _mapper;
 
-		public UserRoleService(AppDBContext dbContext)
+        public UserRoleService(AppDBContext dbContext, IMapper mapper)
+        {
+			_dbContext = dbContext; 
+            _mapper = mapper;
+
+        }
+
+        public async Task<UserRole> Add(UserRoleVM userRoleVM)
 		{
-			_dbContext = dbContext;
-		}
+            try
+            {
+                var userRole = _mapper.Map<UserRole>(userRoleVM);
+                var result = await _dbContext.UserRole.AddAsync(userRole);
+                if (result.State.ToString() == "Added")
+                {
+                    int saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return userRole;
+                }
+                else
+                {
+                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                }
 
-		public Task<UserRoleVM> Add(UserRoleVM userRole)
+            }
+            catch (ExceptionReturn e)
+            {
+                throw new ExceptionReturn(e.Code, e.Message);
+            }
+        }
+
+		public Task<UserRole> Delete(string Id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<UserRoleVM> Delete(string Id)
+		public Task<UserRole> GetAccountById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<UserRoleVM> GetAccountById(int id)
+		public Task<UserRole> Update(string Id, UserRoleVM newUserRole)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<UserRoleVM> Update(string Id, UserRoleVM newUserRole)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<List<UserRoleVM>> UserRoleList()
+		public Task<List<UserRole>> UserRoleList()
 		{
 			throw new NotImplementedException();
 		}

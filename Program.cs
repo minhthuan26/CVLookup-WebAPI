@@ -12,6 +12,7 @@ using CVLookup_WebAPI.Services.JobFormService;
 using CVLookup_WebAPI.Services.JobPositionService;
 using CVLookup_WebAPI.Services.RecruitmentCVService;
 using CVLookup_WebAPI.Services.RecruitmentService;
+using CVLookup_WebAPI.Services.RefreshTokenService;
 using CVLookup_WebAPI.Services.RoleService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
@@ -54,6 +55,7 @@ builder.Services.AddScoped<IRecruitmentService, RecruitmentService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddHttpContextAccessor();

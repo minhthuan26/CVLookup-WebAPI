@@ -10,6 +10,7 @@ namespace CVLookup_WebAPI.Models.Mapper
 		{
 			CreateMap<Account, AccountVM>().ReverseMap();
 			CreateMap<User, UserVM>().ReverseMap();
+			CreateMap<UserRole, UserRoleVM>().ReverseMap();
 			CreateMap<JobAddress, JobAddressVM>().ReverseMap();
 			CreateMap<JobField, JobFieldVM>().ReverseMap();
 			CreateMap<JobCareer, JobCareerVM>().ReverseMap();
