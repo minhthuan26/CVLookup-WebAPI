@@ -6,7 +6,8 @@ namespace CVLookup_WebAPI.Services.UserRoleService
     public interface IUserRoleService
     {
         public Task<List<UserRole>> UserRoleList();
-		public Task<UserRole> GetAccountById(int id);
+		public Task<UserRole> GetByUserId(string userId);
+		public Task<UserRole> GetByRoleId(string releId);
         public Task<UserRole> Add(UserRoleVM userRole);
         public Task<UserRole> Update(string Id, UserRoleVM newUserRole);
         public Task<UserRole> Delete(string Id);

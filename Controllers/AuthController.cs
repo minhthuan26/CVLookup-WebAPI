@@ -70,7 +70,7 @@ namespace CVLookup_WebAPI.Controllers
                     Data = result
                 });
             }
-            catch (Exception e)
+            catch (ExceptionReturn e)
             {
                 return Ok(new ApiResponse
                 {
