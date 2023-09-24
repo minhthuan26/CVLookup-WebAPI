@@ -25,7 +25,7 @@ namespace CVLookup_WebAPI.Services.AccountUserService
         {
             try
             {
-                var accountUser = await _dbContext.AccountUser.ToListAsync();
+                var accountUser = await _dbContext.AccountUser.Include(x => x.Account).Include(x => x.User).ToListAsync();
                 if (accountUser == null)
                 {
                     throw new ExceptionReturn(404, "Không tìm thấy dữ liệu.");
@@ -52,12 +52,40 @@ namespace CVLookup_WebAPI.Services.AccountUserService
             throw new NotImplementedException();
         }
 
-        public Task<AccountUser> GetAccountById(int id)
+        public async Task<AccountUser> GetByAccountId(string accountId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _dbContext.AccountUser.Where(prop => prop.AccountID == accountId).FirstOrDefaultAsync();
+                if (result == null)
+                {
+                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                return result;
+            } catch (ExceptionReturn e)
+            {
+                throw new ExceptionReturn(e.Code, e.Message);
+            }
         }
 
-        public Task<AccountUser> Update(string Id, RoleVM newAccount)
+		public async Task<AccountUser> GetByUserId(string userId)
+		{
+			try
+			{
+				var result = await _dbContext.AccountUser.Where(prop => prop.UserId == userId).FirstOrDefaultAsync();
+				if (result == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+				return result;
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
+		}
+
+		public Task<AccountUser> Update(string Id, RoleVM newAccount)
         {
             throw new NotImplementedException();
         }

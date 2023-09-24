@@ -81,19 +81,16 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
             }
         }
 
-        public async Task<RefreshToken> EditRToken(string id, RefreshToken newRefresh)
+        public async Task<RefreshToken> EditRToken(string userId, string accountId, RefreshToken newRefresh)
         {
             try
             {
-                var refresh = await _dbContext.RefreshToken.Where(prop => prop.UserId == id).FirstOrDefaultAsync();
+                var refresh = await _dbContext.RefreshToken.Where(prop => prop.UserId == userId && accountId == prop.AccountId).FirstOrDefaultAsync();
                 if (refresh == null)
                 {
                     throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
 
-                refresh.User = newRefresh.User;
-                refresh.Account = newRefresh.Account;
-                refresh.AccountId = newRefresh.Account.Id;
                 refresh.Token = newRefresh.Token;
                 refresh.CreateAt = newRefresh.CreateAt;
                 refresh.ExpiredAt = newRefresh.ExpiredAt;

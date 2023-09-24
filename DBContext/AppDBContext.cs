@@ -35,14 +35,6 @@ namespace FirstWebApi.Models.Database
 
             modelBuilder.Entity<RefreshToken>()
                 .HasKey(prop => new { prop.UserId, prop.AccountId });
-            modelBuilder.Entity<RefreshToken>()
-                .HasOne(rt => rt.User)
-                .WithMany()
-                .HasForeignKey(rt => rt.UserId);            
-            modelBuilder.Entity<RefreshToken>()
-                .HasOne(rt => rt.Account)
-                .WithMany()
-                .HasForeignKey(rt => rt.AccountId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)

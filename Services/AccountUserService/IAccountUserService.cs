@@ -6,7 +6,8 @@ namespace CVLookup_WebAPI.Services.AccountUserService
     public interface IAccountUserService
     {
         public Task<List<AccountUser>> AccountUserList();
-        public Task<AccountUser> GetAccountById(int id);
+        public Task<AccountUser> GetByAccountId(string accountId);
+        public Task<AccountUser> GetByUserId(string accountId);
         public Task<AccountUser> Add(AccountUserVM accountUserVM);
         public Task<AccountUser> Update(string Id, RoleVM newAccount);
         public Task<AccountUser> Delete(string accountId, string userId);

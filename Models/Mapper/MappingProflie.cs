@@ -22,6 +22,7 @@ namespace CVLookup_WebAPI.Models.Mapper
 			CreateMap<Role, RoleVM>().ReverseMap();
 			CreateMap<JobForm, JobFormVM>().ReverseMap();
 			CreateMap<JobAddress, JobAddressVM>().ReverseMap();
+			CreateMap<RefreshToken, RefreshTokenVM>().ReverseMap();
 		}
 	}
 }

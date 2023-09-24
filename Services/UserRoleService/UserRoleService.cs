@@ -3,6 +3,7 @@ using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace CVLookup_WebAPI.Services.UserRoleService
 {
@@ -50,9 +51,38 @@ namespace CVLookup_WebAPI.Services.UserRoleService
 			throw new NotImplementedException();
 		}
 
-		public Task<UserRole> GetAccountById(int id)
+		public async Task<UserRole> GetByUserId(string userId)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				var result = await _dbContext.UserRole.Where(prop => prop.UserId == userId).Include(prop => prop.User).FirstOrDefaultAsync();
+				if (result == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+				return result;
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
+		}
+
+		public async Task<UserRole> GetByRoleId(string roleId)
+		{
+			try
+			{
+				var result = await _dbContext.UserRole.Where(prop => prop.RoleId == roleId).Include(prop => prop.User).FirstOrDefaultAsync();
+				if (result == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+				return result;
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
 
 		public Task<UserRole> Update(string Id, UserRoleVM newUserRole)
