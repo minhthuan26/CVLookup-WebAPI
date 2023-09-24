@@ -22,6 +22,11 @@ namespace CVLookup_WebAPI.Controllers
             _accountUserService = accountUserService;
             _logger = logger;
         }
+
+        /// <summary>
+        /// Lấy tất cả thông tin tài khoản
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("get-all-account-users")]
         public async Task<IActionResult> GetAccountUserList()
         {
