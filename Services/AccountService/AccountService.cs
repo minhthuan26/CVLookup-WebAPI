@@ -25,18 +25,11 @@ namespace CVLookup_WebAPI.Services.AccountService
             try
             {
                 var result = await _dbContext.Account.ToListAsync();
-                if (result != null)
-                {
-                    return result;
-                }
-                else
-                {
-                    throw new ExceptionReturn(404, "Không có danh sách.");
-                }
+                return result;
             }
-            catch (Exception e)
+            catch (ExceptionReturn e)
             {
-                throw new ExceptionReturn(500, e.Message);
+                throw new ExceptionReturn(e.Code, e.Message);
             }
         }
 
