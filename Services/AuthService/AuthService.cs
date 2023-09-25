@@ -99,7 +99,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 							await _refreshTokenService.AddRToken(_mapper.Map<RefreshToken>(refreshTokenVM));
 
-						} else
+						}
+						else
 						{
 							oldRefreshInDB.Token = refreshToken;
 							oldRefreshInDB.CreateAt = DateTime.Now;
@@ -114,12 +115,12 @@ namespace CVLookup_WebAPI.Services.AuthService
 						};
 						_httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
 						return authReturn;
+					}
+					else
+					{
+						throw new ExceptionReturn(400, "Thất bại. Email hoặc mật khẩu không đúng");
+					}
 				}
-				else
-				{
-					throw new ExceptionReturn(400, "Thất bại. Email hoặc mật khẩu không đúng");
-				}
-			}
 				else
 				{
 					throw new ExceptionReturn(404, "Thất bại. Email hoặc mật khẩu không đúng");
@@ -148,7 +149,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 					return computedHash.SequenceEqual(saltedPassword);
 				}
-			} catch (ExceptionReturn e)
+			}
+			catch (ExceptionReturn e)
 			{
 				throw new ExceptionReturn(e.Code, e.Message);
 			}

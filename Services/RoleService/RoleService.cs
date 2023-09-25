@@ -47,7 +47,7 @@ namespace CVLookup_WebAPI.Services.RoleService
                 var roleExisted = await _dbContext.Role.Where(prop => prop.RoleName == roleVM.RoleName).FirstOrDefaultAsync();
                 if (roleExisted != null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Email đã tồn tại!");
+                    throw new ExceptionReturn(400, "Thất bại. Phân quyền đã tồn tại!");
                 }
                 var result = await _dbContext.Role.AddAsync(role);
                 if (result.State.ToString() == "Added")
@@ -130,7 +130,24 @@ namespace CVLookup_WebAPI.Services.RoleService
             }
         }
 
-        public async Task<Role> Update(string Id, RoleVM newRole)
+		public async Task<Role> GetRoleByValue(string value)
+		{
+			try
+			{
+				var result = await _dbContext.Role.Where(prop => prop.RoleName == value).FirstOrDefaultAsync();
+				if (result == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+				return result;
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
+		}
+
+		public async Task<Role> Update(string Id, RoleVM newRole)
         {
             try
             {

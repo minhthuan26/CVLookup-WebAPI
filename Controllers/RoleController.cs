@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CVLookup_WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
     {
@@ -76,7 +76,7 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <param name="updatedRole"></param>
         /// <returns></returns>
-        [HttpPut("edit-role/{id}")]
+        [HttpPut("edit-role/{role}")]
         public async Task<IActionResult> UpdateRole(string id, [FromBody] RoleVM updatedRole)
         {
             try
@@ -100,7 +100,7 @@ namespace CVLookup_WebAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("delete-role/{id}")]
+        [HttpDelete("delete-role/{role}")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             try
@@ -113,5 +113,64 @@ namespace CVLookup_WebAPI.Controllers
                 return Ok(new ApiResponse { Success = false, Message = ex.Message, Code = StatusCodes.Status500InternalServerError });
             }
         }
-    }
+
+		/// <summary>
+		/// Lấy phân quyền theo role
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpGet("get-role-by-id")]
+		public async Task<IActionResult> getRoleById([FromQuery] string id)
+        {
+            try
+            {
+                var result = await _roleService.GetRoleById(id);
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Code = StatusCodes.Status200OK,
+                    Data = result,
+                    Message = "Hoàn thành"
+                });
+            } catch (ExceptionReturn e)
+            {
+                return Ok(new ApiResponse
+                {
+                    Success = false,
+                    Code = e.Code,
+                    Message = e.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Lấy phân quyền theo tên
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        [HttpGet("get-role-by-value")]
+		public async Task<IActionResult> getRoleByValue([FromQuery] string role)
+		{
+			try
+			{
+				var result = await _roleService.GetRoleByValue(role);
+				return Ok(new ApiResponse
+				{
+					Success = true,
+					Code = StatusCodes.Status200OK,
+					Data = result,
+					Message = "Hoàn thành"
+				});
+			}
+			catch (ExceptionReturn e)
+			{
+				return Ok(new ApiResponse
+				{
+					Success = false,
+					Code = e.Code,
+					Message = e.Message
+				});
+			}
+		}
+	}
 }
