@@ -119,11 +119,11 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="tokenVM"></param>
         /// <returns></returns>
         [HttpPost("renew-token")]
-       public async Task<IActionResult> RenewToken(TokenVM tokenVM)
+       public async Task<IActionResult> RenewToken()
         {
             try
             {
-                var result = await _authService.RenewToken(tokenVM);
+                var result = await _authService.RenewToken();
                 return Ok(new ApiResponse
                 {
                     Success = true,

@@ -118,11 +118,11 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
         }
 
 
-        public RefreshToken GetToken()
+        public async Task< RefreshToken> GetToken()
         {
             try
             {
-                var result =  _dbContext.RefreshToken.FirstOrDefault();
+                var result = await  _dbContext.RefreshToken.FirstOrDefaultAsync();
                 if (result == null)
                 {
                     throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");

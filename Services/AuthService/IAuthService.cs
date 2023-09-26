@@ -8,6 +8,6 @@ namespace CVLookup_WebAPI.Services.AuthService
 		public Task<AuthVM> Login(AccountVM loginVM);
 		public Task<AccountUser> RegisterCandidate(CandidateVM candidateVM, AccountVM account);
 		public Task<AccountUser> RegisterEmployer(EmployerVM employerVM, AccountVM account);
-		public Task<object> RenewToken(TokenVM tokenVM);
+		public Task<object> RenewToken();
 	}
 }

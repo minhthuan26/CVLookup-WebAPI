@@ -68,7 +68,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 					if (checkPassword)
 					{
 						var accessToken = GenerateAccessToken(account);
-						var refreshToken = GenerateRefreshToken(account);
+						var refreshToken = GenerateRefreshToken();
 
 						var accountUser = await _accountUserService.GetByAccountId(account.Id);
 						var userRole = await _userRoleService.GetByUserId(accountUser.UserId);
@@ -202,7 +202,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 		}
 
 
-		private string GenerateRefreshToken(Account account)
+		private string GenerateRefreshToken()
 		{
 			//Tạo ngẫu nhiên bộ refresh token
 			var random = new byte[32];
@@ -218,7 +218,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 
 		#region RenewToken
-		public async Task<object> RenewToken(TokenVM tokenVM)
+		public async Task<object> RenewToken()
 		{
 			var jwtTokenHandler = new JwtSecurityTokenHandler();
 			var secretKeyBytes = Encoding.UTF8.GetBytes(_jwt.SecretKey);
@@ -237,48 +237,61 @@ namespace CVLookup_WebAPI.Services.AuthService
 			};
 			try
 			{
-				//check 1 Check Accesstoken valid format
-				var tokenInVerification = jwtTokenHandler.ValidateToken(tokenVM.AccessToken, tokenValidateParam, out var validatedToken);
+                string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
 
-				//check 2 check alg
-				if (validatedToken is JwtSecurityToken jwtSecurityToken)
-				{
-					var result = jwtSecurityToken.Header.Alg.Equals
-						(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase);
-					if (!result)
-					{
-						throw new ExceptionReturn(400, "Sai Token.");
-					}
-				}
+                if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer "))
+                {
+                    accessToken = accessToken.Substring("Bearer ".Length).Trim();
+                }
+                else
+                {
+                    throw new ExceptionReturn(400, "Token không hợp lệ hoặc không tồn tại.");
+                }
 
-				//check 3 check AccessToken expire???
-				var utcExpireDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-				var expireDate = ConvertUnixTimeToDateTime(utcExpireDate);
-				if (expireDate > DateTime.UtcNow)
-				{
-					throw new ExceptionReturn(403, "Token hết   hiệu lực.");
-				}
 
-				//check 4 check RF exist in DB
-				var getToken = _refreshTokenService.GetToken();
-				if (getToken.Token != tokenVM.RefreshToken)
+                //check 1 Check Accesstoken valid format
+                var tokenInVerification = jwtTokenHandler.ValidateToken(accessToken, tokenValidateParam, out var validatedToken);
+
+                //check 2 check alg
+                if (validatedToken is JwtSecurityToken jwtSecurityToken)
+                {
+                    var result = jwtSecurityToken.Header.Alg.Equals
+                        (SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase);
+                    if (!result)
+                    {
+                        throw new ExceptionReturn(400, "Sai Token.");
+                    }
+                }
+
+                //check 3 check AccessToken expire???
+                var utcExpireDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+                var expireDate = ConvertUnixTimeToDateTime(utcExpireDate);
+                if (expireDate > DateTime.UtcNow)
+                {
+                    throw new ExceptionReturn(403, "Token hết   hiệu lực.");
+                }
+
+                //check 4 check RF exist in DB
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.ReadJwtToken(accessToken);
+                var userIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "UserId").Value;
+                var refreshTokenInDB = _dbContext.RefreshToken.FirstOrDefault(x => x.UserId == userIdClaim);
+                string cookieValue = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
+				if (refreshTokenInDB.Token != cookieValue)
 				{
 					throw new ExceptionReturn(403, "RToken không đúng.");
 				}
-				//var storedToken = await _dbContext.RefreshToken.FirstOrDefaultAsync(x => x.Token == tokenVM.RefreshToken);
-				//if (storedToken == null)
-				//{
-				//    throw new ExceptionReturn(403, "RToken không đúng.");
-				//}
 
 				//CREATE NEW TOKEN
-				var acc = await _dbContext.
-					Account.SingleOrDefaultAsync(u => u.Id == getToken.AccountId);
-				if (acc != null)
+				var accountIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "AccountId").Value;
+                var account = await _dbContext.
+					Account.SingleOrDefaultAsync(acc => acc.Id == accountIdClaim);
+				if (account != null)
 				{
 					var newToken = new
 					{
-						NewToken = GenerateAccessToken(acc)
+						NewToken = GenerateAccessToken(account)
 					};
 					return newToken;
 				}
@@ -286,7 +299,6 @@ namespace CVLookup_WebAPI.Services.AuthService
 				{
 					throw new ExceptionReturn(400, "Không renew được token.");
 				}
-
 			}
 			catch (ExceptionReturn e)
 			{
