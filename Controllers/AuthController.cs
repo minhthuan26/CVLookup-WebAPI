@@ -142,6 +142,37 @@ namespace CVLookup_WebAPI.Controllers
                 });
             }
         }
+
+
+        /// <summary>
+        /// Đăng xuất
+        /// </summary>
+        /// <param name="tokenVM"></param>
+        /// <returns></returns>
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                 await _authService.Logout();
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Code = StatusCodes.Status200OK,
+                    Message = "Thành công.",
+                });
+            }
+            catch (Exception e)
+            {
+                return Ok(new ApiResponse
+                {
+                    Success = false,
+                    Code = StatusCodes.Status400BadRequest,
+                    Message = e.Message,
+                });
+            }
+        }
+
     }
     
 }

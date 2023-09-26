@@ -433,9 +433,43 @@ namespace CVLookup_WebAPI.Services.AuthService
 			}
 
 		}
-		#endregion
+        #endregion
 
 
+        public async Task Logout()
+        {
+            try
+            {
+                string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
 
-	}
+                if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer "))
+                {
+                    accessToken = accessToken.Substring("Bearer ".Length).Trim();
+                }
+                else
+                {
+                    throw new ExceptionReturn(400, "Token không hợp lệ hoặc không tồn tại.");
+                }
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.ReadJwtToken(accessToken);
+                var userIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "UserId").Value;
+                var accountIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "AccountId").Value;
+                if (userIdClaim == null || accountIdClaim == null)
+				{
+					throw new ExceptionReturn(400, "Có lỗi xảy ra trong quá trình xử lýs");
+				}
+				await _refreshTokenService.DeleteRToken(userIdClaim, accountIdClaim);
+
+                _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
+
+                return;
+            }
+            catch (ExceptionReturn e)
+            {
+                throw new ExceptionReturn(e.Code, e.Message);
+            }
+        }
+
+    }
 }
