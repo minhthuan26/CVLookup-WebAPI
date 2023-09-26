@@ -44,16 +44,16 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
             }
         }
 
-       public async Task<RefreshToken> DeleteRToken(string id)
+        public async Task<RefreshToken> DeleteRToken(string userId, string accountId)
         {
             try
             {
-                if (id == null)
+                if (userId == null || accountId ==null)
                 {
                     throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
-                var refresh = await _dbContext.RefreshToken.Where(prop => prop.UserId == id).FirstOrDefaultAsync();
+                var refresh = await _dbContext.RefreshToken.Where(prop => prop.UserId == userId && prop.AccountId == accountId).FirstOrDefaultAsync();
                 if (refresh == null)
                 {
                     throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
@@ -118,11 +118,11 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
         }
 
 
-        public RefreshToken GetToken()
+        public async Task< RefreshToken> GetToken()
         {
             try
             {
-                var result =  _dbContext.RefreshToken.FirstOrDefault();
+                var result = await  _dbContext.RefreshToken.FirstOrDefaultAsync();
                 if (result == null)
                 {
                     throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");

@@ -6,7 +6,7 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
     {
         public Task<RefreshToken> AddRToken(RefreshToken r);
         public Task<RefreshToken> EditRToken(string userId, string accountId, RefreshToken refreshToken );
-        public Task<RefreshToken> DeleteRToken(string id );
-        public RefreshToken GetToken();
+        public Task<RefreshToken> DeleteRToken(string userId, string accountId);
+        public Task<RefreshToken> GetToken();
     }
 }
