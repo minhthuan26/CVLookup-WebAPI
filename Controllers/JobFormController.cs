@@ -24,7 +24,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("get-all-job-form")]
-		public async Task<IActionResult> getAllJobForm()
+		public async Task<IActionResult> GetAllJobForm()
 		{
 			try
 			{
@@ -54,7 +54,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-form-by-id")]
-		public async Task<IActionResult> getJobFormById([FromQuery] string id)
+		public async Task<IActionResult> GetJobFormById([FromQuery] string id)
 		{
 			try
 			{
@@ -84,7 +84,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="name"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-form-by-name")]
-		public async Task<IActionResult> getJobFormsByName([FromQuery] string name)
+		public async Task<IActionResult> GetJobFormsByName([FromQuery] string name)
 		{
 			try
 			{
@@ -114,7 +114,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="jobForm"></param>
 		/// <returns></returns>
 		[HttpPost("add-job-form")]
-		public async Task<IActionResult> addJobForm([FromBody] JobFormVM jobForm)
+		public async Task<IActionResult> AddJobForm([FromBody] JobFormVM jobForm)
 		{
 			try
 			{
@@ -144,7 +144,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("delete")]
-		public async Task<IActionResult> deleteJobForm([FromQuery] string id)
+		public async Task<IActionResult> DeleteJobForm([FromQuery] string id)
 		{
 			try
 			{
@@ -176,7 +176,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="jobFormVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateJobForm([FromQuery] string id, [FromBody] JobFormVM jobFormVM)
+		public async Task<IActionResult> UpdateJobForm([FromQuery] string id, [FromBody] JobFormVM jobFormVM)
 		{
 			try
 			{

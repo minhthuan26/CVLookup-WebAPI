@@ -24,7 +24,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("get-all-job-address")]
-		public async Task<IActionResult> getAllJobAddress()
+		public async Task<IActionResult> GetAllJobAddress()
 		{
 			try
 			{
@@ -54,7 +54,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-address-by-id")]
-		public async Task<IActionResult> getJobAddressById([FromQuery] string id)
+		public async Task<IActionResult> GetJobAddressById([FromQuery] string id)
 		{
 			try
 			{
@@ -84,7 +84,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="address"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-address-by-name")]
-		public async Task<IActionResult> getJobAddressesByName([FromQuery] string address)
+		public async Task<IActionResult> GetJobAddressesByName([FromQuery] string address)
 		{
 			try
 			{
@@ -114,7 +114,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="jobAddress"></param>
 		/// <returns></returns>
 		[HttpPost("add-job-address")]
-		public async Task<IActionResult> addJobAddress([FromBody] JobAddressVM jobAddress)
+		public async Task<IActionResult> AddJobAddress([FromBody] JobAddressVM jobAddress)
 		{
 			try
 			{
@@ -144,7 +144,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("delete")]
-		public async Task<IActionResult> deleteJobAddress([FromQuery] string id)
+		public async Task<IActionResult> DeleteJobAddress([FromQuery] string id)
 		{
 			try
 			{
@@ -176,7 +176,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="jobAddressVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateJobAddress([FromQuery] string id, [FromBody] JobAddressVM jobAddressVM)
+		public async Task<IActionResult> UpdateJobAddress([FromQuery] string id, [FromBody] JobAddressVM jobAddressVM)
 		{
 			try
 			{

@@ -24,7 +24,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("get-all-experience")]
-		public async Task<IActionResult> getAllExperience()
+		public async Task<IActionResult> GetAllExperience()
 		{
 			try
 			{
@@ -54,7 +54,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("get-experience-by-id")]
-		public async Task<IActionResult> getExperienceById([FromQuery] string id)
+		public async Task<IActionResult> GetExperienceById([FromQuery] string id)
 		{
 			try
 			{
@@ -84,7 +84,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="value"></param>
 		/// <returns></returns>
 		[HttpGet("get-experience-by-value")]
-		public async Task<IActionResult> getExperienceByValue([FromQuery] string value)
+		public async Task<IActionResult> GetExperienceByValue([FromQuery] string value)
 		{
 			try
 			{
@@ -114,7 +114,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="experience"></param>
 		/// <returns></returns>
 		[HttpPost("add-experience")]
-		public async Task<IActionResult> addExperience([FromBody] ExperienceVM experience)
+		public async Task<IActionResult> AddExperience([FromBody] ExperienceVM experience)
 		{
 			try
 			{
@@ -144,7 +144,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("delete")]
-		public async Task<IActionResult> deleteExperience([FromQuery] string id)
+		public async Task<IActionResult> DeleteExperience([FromQuery] string id)
 		{
 			try
 			{
@@ -176,7 +176,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="experienceVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateExperience([FromQuery] string id, [FromBody] ExperienceVM experienceVM)
+		public async Task<IActionResult> UpdateExperience([FromQuery] string id, [FromBody] ExperienceVM experienceVM)
 		{
 			try
 			{

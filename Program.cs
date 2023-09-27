@@ -56,7 +56,7 @@ builder.Services.AddScoped<IRecruitmentService, RecruitmentService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMailService, MailService>();
 
@@ -88,9 +88,9 @@ builder.Services.AddControllers()
         };
     });
 
-// Authentication with Json Web Token
-builder.Services.Configure<Jwt>(builder.Configuration.GetSection("JWT"));
-var secretKey = builder.Configuration["JWT:SecretKey"];
+// Authentication with Json Web RefreshToken
+builder.Services.Configure<Jwt>(builder.Configuration.GetSection("JwtConfig"));
+var secretKey = builder.Configuration["JwtConfig:SECRET_KEY"];
 var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
 {

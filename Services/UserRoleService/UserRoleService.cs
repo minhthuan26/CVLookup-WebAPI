@@ -55,7 +55,10 @@ namespace CVLookup_WebAPI.Services.UserRoleService
 		{
 			try
 			{
-				var result = await _dbContext.UserRole.Where(prop => prop.UserId == userId).Include(prop => prop.User).FirstOrDefaultAsync();
+				var result = await _dbContext.UserRole.Where(prop => prop.UserId == userId)
+					.Include(prop => prop.User)
+					//.Include(prop => prop.Role)
+					.FirstOrDefaultAsync();
 				if (result == null)
 				{
 					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");

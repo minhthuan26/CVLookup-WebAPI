@@ -1,8 +1,6 @@
-﻿using CVLookup_WebAPI.Models.Domain;
-using CVLookup_WebAPI.Models.ViewModel;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.RecruitmentService;
 using CVLookup_WebAPI.Utilities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CVLookup_WebAPI.Controllers
@@ -24,7 +22,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("get-all-recruitment")]
-		public async Task<IActionResult> getAllRecruitment()
+		public async Task<IActionResult> GetAllRecruitment()
 		{
 			try
 			{
@@ -54,7 +52,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("get-recruitment-by-id")]
-		public async Task<IActionResult> getRecruitmentById([FromQuery] string id)
+		public async Task<IActionResult> GetRecruitmentById([FromQuery] string id)
 		{
 			try
 			{
@@ -84,7 +82,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="name"></param>
 		/// <returns></returns>
 		[HttpGet("get-recruitment-by-title")]
-		public async Task<IActionResult> getRecruitmentByTitle([FromQuery] string name)
+		public async Task<IActionResult> GetRecruitmentByTitle([FromQuery] string name)
 		{
 			try
 			{
@@ -114,7 +112,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="recruiment"></param>
 		/// <returns></returns>
 		[HttpPost("add-recruitment")]
-		public async Task<IActionResult> addRecruitment([FromBody] RecruitmentVM recruiment)
+		public async Task<IActionResult> AddRecruitment([FromBody] RecruitmentVM recruiment)
 		{
 			try
 			{
@@ -144,7 +142,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("delete")]
-		public async Task<IActionResult> deleteRecruitment([FromQuery] string id)
+		public async Task<IActionResult> DeleteRecruitment([FromQuery] string id)
 		{
 			try
 			{
@@ -176,7 +174,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="recruimentVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateRecruitment([FromQuery] string id, [FromBody] RecruitmentVM recruimentVM)
+		public async Task<IActionResult> UpdateRecruitment([FromQuery] string id, [FromBody] RecruitmentVM recruimentVM)
 		{
 			try
 			{
