@@ -3,7 +3,9 @@ using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AccountService;
 using CVLookup_WebAPI.Services.AccountUserService;
+using CVLookup_WebAPI.Services.MailService;
 using CVLookup_WebAPI.Services.RefreshTokenService;
+using CVLookup_WebAPI.Services.RoleService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
@@ -12,12 +14,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
+using System.Collections;
+using System.Collections.Specialized;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Text;
-using System.Threading;
 
 namespace CVLookup_WebAPI.Services.AuthService
 {
@@ -30,8 +33,12 @@ namespace CVLookup_WebAPI.Services.AuthService
 		private readonly Jwt _jwt;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IUserRoleService _userRoleService;
-		private readonly IRefreshTokenService _refreshTokenService;
+		private readonly ITokenService _tokenService;
 		private readonly IAccountUserService _accountUserService;
+		private readonly IConfiguration _configuration;
+		private readonly IRoleService _roleService;
+		private readonly IMailService _mailService;
+		private readonly IWebHostEnvironment _env;
 
 		public AuthService(
 			AppDBContext dbContext,
@@ -41,8 +48,12 @@ namespace CVLookup_WebAPI.Services.AuthService
 			IAccountService accountService,
 			IUserService userService,
 			IUserRoleService userRoleService,
-			IRefreshTokenService refreshTokenService,
-			IAccountUserService accountUserService
+			ITokenService tokenService,
+			IAccountUserService accountUserService,
+			IConfiguration configuration,
+			IRoleService roleService,
+			IMailService mailService,
+			IWebHostEnvironment env
 			)
 		{
 			_dbContext = dbContext;
@@ -52,60 +63,82 @@ namespace CVLookup_WebAPI.Services.AuthService
 			_jwt = monitor.CurrentValue;
 			_httpContextAccessor = httpContextAccessor;
 			_userRoleService = userRoleService;
-			_refreshTokenService = refreshTokenService;
+			_tokenService = tokenService;
 			_accountUserService = accountUserService;
+			_configuration = configuration;
+			_roleService = roleService;
+			_mailService = mailService;
+			_env = env;
+		}
+
+		private string GetSecretKey()
+		{
+			return _configuration.GetValue<string>("JwtConfig:SECRET_KEY");
+		}
+
+		private string GetRefreshKey()
+		{
+			return _configuration.GetValue<string>("JwtConfig:REFRESH_KEY");
+		}
+		private string GetMailKey()
+		{
+			return _configuration.GetValue<string>("MailConfig:MAIL_KEY");
 		}
 
 		#region Login
-		public async Task<AuthVM> Login(AccountVM loginVM)
+		public async Task<object> Login(AccountVM accountVM)
 		{
 			try
 			{
-				var account = await _dbContext.Account.Where(prop => prop.Email == loginVM.Email).FirstOrDefaultAsync();
+				var account = await _dbContext.Account.Where(prop => prop.Email == accountVM.Email).FirstOrDefaultAsync();
 				if (account != null)
 				{
-					bool checkPassword = VerifyPasswordHash(loginVM.Password, account.Password);
+					bool checkPassword = VerifyPasswordHash(accountVM.Password, account.Password);
 					if (checkPassword)
 					{
-						var accessToken = GenerateAccessToken(account);
-						var refreshToken = GenerateRefreshToken();
-
 						var accountUser = await _accountUserService.GetByAccountId(account.Id);
 						var userRole = await _userRoleService.GetByUserId(accountUser.UserId);
 
-						var authReturn = new AuthVM
+						var claims = new ListDictionary();
+						claims.Add("accountId", account.Id);
+						claims.Add("userId", userRole.UserId);
+						claims.Add("roleId", userRole.RoleId);
+
+						string accessToken = await GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
+						string refreshToken = await GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddMinutes(10));
+
+						var authReturn = new
 						{
-							AccountId = account.Id,
-							RoleId = userRole.RoleId,
-							UserId = accountUser.UserId,
-							TokenVM = new TokenVM
-							{
-								AccessToken = accessToken,
-								RefreshToken = refreshToken
-							}
+							AccessToken = accessToken,
+							RefreshToken = refreshToken
 						};
 
-						var oldRefreshInDB = await _dbContext.RefreshToken
+						var oldRefreshInDB = await _dbContext.Token
 							.Where(prop => prop.AccountId == account.Id && accountUser.UserId == prop.UserId)
 							.FirstOrDefaultAsync();
 						if (oldRefreshInDB == null)
 						{
-							var refreshTokenVM = new RefreshTokenVM
+							var tokenVM = new TokenVM
 							{
 								UserId = accountUser.UserId,
 								AccountId = account.Id,
-								Token = refreshToken
+								RoleId = userRole.RoleId,
+								RefreshToken = refreshToken
 							};
 
-							await _refreshTokenService.AddRToken(_mapper.Map<RefreshToken>(refreshTokenVM));
+							await _tokenService.AddRefreshToken(tokenVM);
 
 						}
 						else
 						{
-							oldRefreshInDB.Token = refreshToken;
-							oldRefreshInDB.CreateAt = DateTime.Now;
-							oldRefreshInDB.ExpiredAt = DateTime.Now.AddDays(7);
-							await _refreshTokenService.EditRToken(oldRefreshInDB.UserId, oldRefreshInDB.AccountId, oldRefreshInDB);
+							var tokenVM = new TokenVM
+							{
+								UserId = oldRefreshInDB.UserId,
+								AccountId = oldRefreshInDB.AccountId,
+								RoleId = oldRefreshInDB.Role.Id,
+								RefreshToken = refreshToken
+							};
+							await _tokenService.EditRefreshToken(tokenVM);
 						}
 						var cookieOptions = new CookieOptions
 						{
@@ -157,217 +190,162 @@ namespace CVLookup_WebAPI.Services.AuthService
 		}
 		#endregion
 
-		#region AToken-RToken
-		private string GenerateAccessToken(Account account)
+		public async Task<string> GenerateToken(string key, ListDictionary data, DateTime expires)
 		{
 			try
 			{
-				var jwtTokenHandler = new JwtSecurityTokenHandler();
-				var secretKeyBytes = Encoding.UTF8.GetBytes(_jwt.SecretKey);
-				var user = _dbContext.AccountUser.SingleOrDefault(prop => prop.AccountID == account.Id);
-				string userID = user.UserId.ToString();
-				var tokenDesc = new SecurityTokenDescriptor
+				var signingCredential = new SigningCredentials(
+					new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+					SecurityAlgorithms.HmacSha512Signature
+				);
+				var claims = new List<Claim>();
+				if (data.Count > 0)
 				{
-					Subject = new ClaimsIdentity(new[]
+					foreach (DictionaryEntry entry in data)
 					{
-					new Claim("Status", account.Status.ToString()),
-					new Claim("IssuedAt", account.IssuedAt.ToString()),
-					new Claim("ActivedAt", account.ActivedAt.ToString()),
-					new Claim("UpdatedAt", account.UpdatedAt.ToString()),
-					new Claim("AccountId", account.Id.ToString()),
-					new Claim("UserId", userID),
-					new Claim(JwtRegisteredClaimNames.Email, account.Email),
-					new Claim(JwtRegisteredClaimNames.Sub, account.Email),
-				}),
-					Expires = DateTime.UtcNow.AddSeconds(30),
-					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)
-				};
-				var token = jwtTokenHandler.CreateToken(tokenDesc);
+						claims.Add(new(entry.Key.ToString(), entry.Value.ToString()));
+					}
+				}
+
+				var tokenDescript = new JwtSecurityToken(
+					claims: claims,
+					expires: expires,
+					signingCredentials: signingCredential
+				);
+
+				var token = new JwtSecurityTokenHandler().WriteToken(tokenDescript);
 				if (token == null)
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình tạo access token");
+					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình ghi token");
 				}
-				var accessToken = jwtTokenHandler.WriteToken(token);
-				if (accessToken == null)
-				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình ghi access token");
-				}
-				return accessToken;
+				return token;
 			}
-			catch (ExceptionReturn e)
+			catch (ArgumentOutOfRangeException e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionReturn(500, "Thất bại. Độ dài khoá không hợp lệ. " + e.Message);
+			}
+			catch (Exception e)
+			{
+				throw new ExceptionReturn(500, e.Message);
 			}
 
 		}
 
-
-		private string GenerateRefreshToken()
+		public async Task<JwtSecurityToken> ValidateToken(string token, string key)
 		{
-			//Tạo ngẫu nhiên bộ refresh token
-			var random = new byte[32];
-			using (var rng = RandomNumberGenerator.Create())
-			{
-				rng.GetBytes(random);
-				var refreshToken = Convert.ToBase64String(random);
-
-				return refreshToken;
-			}
-		}
-		#endregion
-
-
-		#region RenewToken
-		public async Task<object> RenewToken()
-		{
-			var jwtTokenHandler = new JwtSecurityTokenHandler();
-			var secretKeyBytes = Encoding.UTF8.GetBytes(_jwt.SecretKey);
-			var tokenValidateParam = new TokenValidationParameters
-			{
-				//Tự ký token
-				ValidateIssuer = false,
-				ValidateAudience = false,
-
-				//Ký vào token
-				ValidateIssuerSigningKey = true,
-				IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
-
-				ClockSkew = TimeSpan.Zero,
-				ValidateLifetime = false
-			};
 			try
 			{
-                string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+				var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
-                if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer "))
-                {
-                    accessToken = accessToken.Substring("Bearer ".Length).Trim();
-                }
-                else
-                {
-                    throw new ExceptionReturn(400, "Token không hợp lệ hoặc không tồn tại.");
-                }
-
-
-                //check 1 Check Accesstoken valid format
-                var tokenInVerification = jwtTokenHandler.ValidateToken(accessToken, tokenValidateParam, out var validatedToken);
-
-                //check 2 check alg
-                if (validatedToken is JwtSecurityToken jwtSecurityToken)
-                {
-                    var result = jwtSecurityToken.Header.Alg.Equals
-                        (SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase);
-                    if (!result)
-                    {
-                        throw new ExceptionReturn(400, "Sai Token.");
-                    }
-                }
-
-                //check 3 check AccessToken expire???
-                var utcExpireDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-                var expireDate = ConvertUnixTimeToDateTime(utcExpireDate);
-                if (expireDate > DateTime.UtcNow)
-                {
-                    throw new ExceptionReturn(403, "Token hết   hiệu lực.");
-                }
-
-                //check 4 check RF exist in DB
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.ReadJwtToken(accessToken);
-                var userIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "UserId").Value;
-                var refreshTokenInDB = _dbContext.RefreshToken.FirstOrDefault(x => x.UserId == userIdClaim);
-                string cookieValue = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
-				if (refreshTokenInDB.Token != cookieValue)
+				var validationParameters = new TokenValidationParameters
 				{
-					throw new ExceptionReturn(403, "RToken không đúng.");
-				}
+					ValidateIssuer = false,
+					ValidateAudience = false,
 
-				//CREATE NEW TOKEN
-				var accountIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "AccountId").Value;
-                var account = await _dbContext.
-					Account.SingleOrDefaultAsync(acc => acc.Id == accountIdClaim);
-				if (account != null)
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKeys = new List<SecurityKey> { signingKey },
+					ValidateLifetime = true
+				};
+
+
+				var tokenHandler = new JwtSecurityTokenHandler();
+				tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+				var jwt = (JwtSecurityToken)validatedToken;
+
+				return jwt;
+			}
+			catch (SecurityTokenValidationException e)
+			{
+				throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+			}
+		}
+
+		private async Task<bool> CheckTokenExpired(string token, string key)
+		{
+			try
+			{
+				JwtSecurityToken result = await ValidateToken(token, key);
+				if (!(result.ValidTo < DateTime.Now))
 				{
-					var newToken = new
-					{
-						NewToken = GenerateAccessToken(account)
-					};
-					return newToken;
-				}
-				else
-				{
-					throw new ExceptionReturn(400, "Không renew được token.");
+					return true;
 				}
 			}
 			catch (ExceptionReturn e)
 			{
 				throw new ExceptionReturn(e.Code, e.Message);
 			}
+			return false;
 		}
 
-		private DateTime ConvertUnixTimeToDateTime(long utcExpireDate)
+		public async Task<object> RenewToken()
 		{
-			var dateTimeInterval = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			dateTimeInterval.AddSeconds(utcExpireDate).ToUniversalTime();
-			return dateTimeInterval;
+			try
+			{
+				string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+				string refreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
+
+				if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
+				{
+					throw new ExceptionReturn(400, "Thất bại. Không tìm thấy token");
+				}
+
+				accessToken = accessToken.Split(" ")[1];
+				if (!await CheckTokenExpired(accessToken, GetSecretKey()))
+				{
+					throw new ExceptionReturn(400, "Thất bại. Không thể tạo mới access token vì token chưa hết hạn");
+				}
+
+				var tokenInDB = await _tokenService.GetTokenByValue(refreshToken);
+				if (await CheckTokenExpired(tokenInDB.RefreshToken, GetRefreshKey()))
+				{
+					throw new ExceptionReturn(400, "Thất bại. Không thể tạo mới access token vì refresh token hết hạn");
+				}
+
+				var claims = new ListDictionary();
+				claims.Add("accountId", tokenInDB.AccountId);
+				claims.Add("userId", tokenInDB.UserId);
+				claims.Add("roleId", tokenInDB.Role.Id);
+
+				var newAccessToken = await GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
+				var newRefreshToken = await GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
+				return new
+				{
+					AccessToken = newAccessToken,
+					RefreshToken = newRefreshToken
+				};
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
 		}
-		#endregion
-
-
 
 
 		#region Register 
 		public async Task<AccountUser> RegisterCandidate(CandidateVM candidateVM, AccountVM accountVM)
 		{
-			var accountExist = await _dbContext.Account.Where(prop => accountVM.Email == prop.Email).FirstOrDefaultAsync();
-			var userExist = await _dbContext.User.Where(prop => candidateVM.Email == prop.Email).FirstOrDefaultAsync();
-
 			try
 			{
-				if (candidateVM.Email != accountVM.Email)
+				var newAccount = await _accountService.Add(accountVM);
+				var newCandidate = await _userService.AddCandidate(candidateVM);
+
+				var role = await _roleService.GetRoleByValue("Candidate");
+				var userRoleVM = new UserRoleVM
 				{
-					throw new ExceptionReturn(400, "Thất bại. Email không khớp với nhau.");
-				}
-				if (accountExist != null && userExist != null)
+					RoleId = role.Id,
+					UserId = newCandidate.Id
+				};
+				await _userRoleService.Add(userRoleVM);
+
+				var newAccountUserVM = new AccountUserVM
 				{
-					throw new ExceptionReturn(400, "Thất bại. Email đã tồn tại!");
-				}
-				else
-				{
-					var newAccount = await _accountService.Add(accountVM);
-					var newCandidate = await _userService.AddCandidate(candidateVM);
-					var newAccountUser = new AccountUser
-					{
-						Account = newAccount,
-						User = newCandidate,
-						AccountID = newAccount.Id,
-						UserId = newCandidate.Id,
-					};
-					var role = await _dbContext.Role.SingleOrDefaultAsync(prop => prop.RoleName == "Candidate");
-					var userRoleVM = new UserRoleVM
-					{
-						RoleId = role.Id,
-						UserId = newCandidate.Id,
-						Role = role,
-						User = newCandidate,
-					};
-					await _userRoleService.Add(userRoleVM);
-					var result = await _dbContext.AccountUser.AddAsync(newAccountUser);
-					if (result.State.ToString() == "Added")
-					{
-						int saveState = await _dbContext.SaveChangesAsync();
-						if (saveState <= 0)
-						{
-							throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
-						}
-						return newAccountUser;
-					}
-					else
-					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
-					}
-				}
+					AccountId = newAccount.Id,
+					UserId = newCandidate.Id
+				};
+				var result = await _accountUserService.Add(newAccountUserVM);
+
+				await SendMailToActiveAccount(newAccount);
+				return result;
 			}
 			catch (ExceptionReturn e)
 			{
@@ -375,57 +353,29 @@ namespace CVLookup_WebAPI.Services.AuthService
 			}
 
 		}
-		public async Task<AccountUser> RegisterEmployer(EmployerVM employerVM, AccountVM account)
+		public async Task<AccountUser> RegisterEmployer(EmployerVM employerVM, AccountVM accountVM)
 		{
-			var accountExist = await _dbContext.Account.Where(prop => account.Email == prop.Email).FirstOrDefaultAsync();
-			var userExist = await _dbContext.User.Where(prop => employerVM.Email == prop.Email).FirstOrDefaultAsync();
-
 			try
 			{
-				if (employerVM.Email != account.Email)
-				{
-					throw new ExceptionReturn(400, "Thất bại. Email không khớp với nhau.");
-				}
-				if (accountExist != null && userExist != null)
-				{
-					throw new ExceptionReturn(400, "Thất bại. Email đã tồn tại!");
-				}
-				else
-				{
-					var newAccount = await _accountService.Add(account);
-					var newEmployer = await _userService.AddEmployer(employerVM);
-					var newAccountUser = new AccountUser
-					{
-						Account = newAccount,
-						User = newEmployer,
-						AccountID = newAccount.Id,
-						UserId = newEmployer.Id,
-					};
+				var newAccount = await _accountService.Add(accountVM);
+				var newCandidate = await _userService.AddEmployer(employerVM);
 
-					var role = await _dbContext.Role.SingleOrDefaultAsync(prop => prop.RoleName == "Employer");
-					var userRoleVM = new UserRoleVM
-					{
-						RoleId = role.Id,
-						UserId = newEmployer.Id,
-						Role = role,
-						User = newEmployer,
-					};
-					await _userRoleService.Add(userRoleVM);
-					var result = await _dbContext.AccountUser.AddAsync(newAccountUser);
-					if (result.State.ToString() == "Added")
-					{
-						int saveState = await _dbContext.SaveChangesAsync();
-						if (saveState <= 0)
-						{
-							throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
-						}
-						return newAccountUser;
-					}
-					else
-					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
-					}
-				}
+				var role = await _roleService.GetRoleByValue("Employer");
+				var userRoleVM = new UserRoleVM
+				{
+					RoleId = role.Id,
+					UserId = newCandidate.Id
+				};
+				await _userRoleService.Add(userRoleVM);
+
+				var newAccountUserVM = new AccountUserVM
+				{
+					AccountId = newAccount.Id,
+					UserId = newCandidate.Id
+				};
+				var result = await _accountUserService.Add(newAccountUserVM);
+
+				return result;
 			}
 			catch (ExceptionReturn e)
 			{
@@ -433,43 +383,72 @@ namespace CVLookup_WebAPI.Services.AuthService
 			}
 
 		}
-        #endregion
+		#endregion
 
+		private async Task SendMailToActiveAccount(Account account)
+		{
+			try
+			{
+				var claims = new ListDictionary();
+				claims.Add("Account", account);
+				string activeToken = await GenerateToken(GetMailKey(), claims, DateTime.Now.AddDays(1));
+				string activeLink = "http://localhost:4026/api/v1/active-account?token=" + activeToken;
+				string subject = "Xác thực email cho tài khoản CVLookup của bạn";
+				var webRoot = _env.WebRootPath;
+				var filePath = webRoot + "\\mail_template.html";
+				var builder = new BodyBuilder();
+				using (StreamReader reader = System.IO.File.OpenText(filePath))
+				{
+					builder.HtmlBody = reader.ReadToEnd();
+				}
+				builder.HtmlBody = builder.HtmlBody.Replace("{{activeLink}}", activeLink);
+				string message = builder.HtmlBody;
+				await _mailService.sendMail(account.Email, subject, message);
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
+			catch (Exception e)
+			{
+				throw new ExceptionReturn(500, e.Message);
+			}
+		}
 
-        public async Task Logout()
-        {
-            try
-            {
-                string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+		public async Task Logout()
+		{
+			try
+			{
+				string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
 
-                if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer "))
-                {
-                    accessToken = accessToken.Substring("Bearer ".Length).Trim();
-                }
-                else
-                {
-                    throw new ExceptionReturn(400, "Token không hợp lệ hoặc không tồn tại.");
-                }
+				if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer "))
+				{
+					accessToken = accessToken.Substring("Bearer ".Length).Trim();
+				}
+				else
+				{
+					throw new ExceptionReturn(400, "RefreshToken không hợp lệ hoặc không tồn tại.");
+				}
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.ReadJwtToken(accessToken);
-                var userIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "UserId").Value;
-                var accountIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "AccountId").Value;
-                if (userIdClaim == null || accountIdClaim == null)
+				var tokenHandler = new JwtSecurityTokenHandler();
+				var token = tokenHandler.ReadJwtToken(accessToken);
+				var userIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "UserId").Value;
+				var accountIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "AccountId").Value;
+				if (userIdClaim == null || accountIdClaim == null)
 				{
 					throw new ExceptionReturn(400, "Có lỗi xảy ra trong quá trình xử lýs");
 				}
-				await _refreshTokenService.DeleteRToken(userIdClaim, accountIdClaim);
+				await _tokenService.DeleteRefreshToken(userIdClaim, accountIdClaim);
 
-                _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
+				_httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
 
-                return;
-            }
-            catch (ExceptionReturn e)
-            {
-                throw new ExceptionReturn(e.Code, e.Message);
-            }
-        }
+				return;
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
+		}
 
-    }
+	}
 }

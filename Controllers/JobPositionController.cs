@@ -1,6 +1,4 @@
-﻿using CVLookup_WebAPI.Models.Domain;
-using CVLookup_WebAPI.Models.ViewModel;
-using CVLookup_WebAPI.Services.JobPositionService;
+﻿using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.JobPositionService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +23,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("get-all-job-position")]
-		public async Task<IActionResult> getAllJobPosition()
+		public async Task<IActionResult> GetAllJobPosition()
 		{
 			try
 			{
@@ -55,7 +53,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-position-by-id")]
-		public async Task<IActionResult> getJobPositionById([FromQuery] string id)
+		public async Task<IActionResult> GetJobPositionById([FromQuery] string id)
 		{
 			try
 			{
@@ -85,7 +83,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="name"></param>
 		/// <returns></returns>
 		[HttpGet("get-job-position-by-name")]
-		public async Task<IActionResult> getJobPositionsByName([FromQuery] string name)
+		public async Task<IActionResult> GetJobPositionsByName([FromQuery] string name)
 		{
 			try
 			{
@@ -115,7 +113,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="jobPosition"></param>
 		/// <returns></returns>
 		[HttpPost("add-job-position")]
-		public async Task<IActionResult> addJobPosition([FromBody] JobPositionVM jobPosition)
+		public async Task<IActionResult> AddJobPosition([FromBody] JobPositionVM jobPosition)
 		{
 			try
 			{
@@ -145,7 +143,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("delete")]
-		public async Task<IActionResult> deleteJobPosition([FromQuery] string id)
+		public async Task<IActionResult> DeleteJobPosition([FromQuery] string id)
 		{
 			try
 			{
@@ -177,7 +175,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="jobPositionVM"></param>
 		/// <returns></returns>
 		[HttpPatch("update")]
-		public async Task<IActionResult> updateJobPosition([FromQuery] string id, [FromBody] JobPositionVM jobPositionVM)
+		public async Task<IActionResult> UpdateJobPosition([FromQuery] string id, [FromBody] JobPositionVM jobPositionVM)
 		{
 			try
 			{

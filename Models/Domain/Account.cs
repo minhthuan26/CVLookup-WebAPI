@@ -19,15 +19,14 @@ namespace CVLookup_WebAPI.Models.Domain
 
         [Required(ErrorMessage = "{0} không được để trống")]
         [Display(Name = "Email")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Yêu cầu nhập đúng email")]
-        [Remote(action: "AccountEmailIsUsed", controller: "Account")]
+        [EmailAddress(ErrorMessage = "Yêu cầu nhập đúng email")]
         public string Email { get; set; }
 
         [Display(Name = "Trạng thái tài khoản")]
         public bool Status { get; set; } = false;
 
         [Display(Name = "Ngày tạo")]
-        public DateTime IssuedAt { get; set; }
+        public DateTime IssuedAt { get; set; } 
 
         [Display(Name = "Ngày kích hoạt tài khoản")]
         public DateTime ActivedAt { get; set; }

@@ -10,8 +10,7 @@ namespace CVLookup_WebAPI.Models.Domain
 
         [Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Email")]
-		[DataType(DataType.EmailAddress, ErrorMessage = "Yêu cầu nhập đúng email")]
-		[Remote(action: "UserEmailIsUsed", controller: "Validation")]
+		[EmailAddress(ErrorMessage = "Yêu cầu nhập đúng email")]
 		public string Email { get; set; }
 
 		[Display(Name = "Số điện thoại")]

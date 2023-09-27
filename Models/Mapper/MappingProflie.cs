@@ -9,6 +9,7 @@ namespace CVLookup_WebAPI.Models.Mapper
 		public MappingProflie()
 		{
 			CreateMap<Account, AccountVM>().ReverseMap();
+			CreateMap<AccountUser, AccountUserVM>().ReverseMap();
 			CreateMap<User, UserVM>().ReverseMap();
 			CreateMap<UserRole, UserRoleVM>().ReverseMap();
 			CreateMap<JobAddress, JobAddressVM>().ReverseMap();
@@ -22,7 +23,7 @@ namespace CVLookup_WebAPI.Models.Mapper
 			CreateMap<Role, RoleVM>().ReverseMap();
 			CreateMap<JobForm, JobFormVM>().ReverseMap();
 			CreateMap<JobAddress, JobAddressVM>().ReverseMap();
-			CreateMap<RefreshToken, RefreshTokenVM>().ReverseMap();
+			CreateMap<Token, TokenVM>().ReverseMap();
 		}
 	}
 }

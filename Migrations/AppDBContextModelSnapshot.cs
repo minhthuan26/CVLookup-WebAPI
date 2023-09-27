@@ -57,13 +57,13 @@ namespace CVLookup_WebAPI.Migrations
 
             modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.AccountUser", b =>
                 {
-                    b.Property<string>("AccountID")
+                    b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("AccountID", "UserId");
+                    b.HasKey("AccountId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -285,31 +285,6 @@ namespace CVLookup_WebAPI.Migrations
                     b.ToTable("RecruitmentCV");
                 });
 
-            modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.RefreshToken", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AccountId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiredAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "AccountId");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("RefreshToken");
-                });
-
             modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -322,6 +297,31 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+                });
+
+            modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.Token", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "AccountId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Token");
                 });
 
             modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.User", b =>
@@ -411,7 +411,7 @@ namespace CVLookup_WebAPI.Migrations
                 {
                     b.HasOne("CVLookup_WebAPI.Models.Domain.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountID")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -511,11 +511,17 @@ namespace CVLookup_WebAPI.Migrations
                     b.Navigation("Recruitment");
                 });
 
-            modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.RefreshToken", b =>
+            modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.Token", b =>
                 {
                     b.HasOne("CVLookup_WebAPI.Models.Domain.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CVLookup_WebAPI.Models.Domain.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -526,6 +532,8 @@ namespace CVLookup_WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
+
+                    b.Navigation("Role");
 
                     b.Navigation("User");
                 });

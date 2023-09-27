@@ -42,13 +42,11 @@ namespace CVLookup_WebAPI.Services.AccountService
                 {
                     throw new ExceptionReturn(400, "Thất bại. Email đã tồn tại!");
                 }
+
                 var passwordHash = HashPassword(accountVM.Password);
-                var newAccount = new AccountVM
-                {
-                    Email = accountVM.Email,
-                    Password = passwordHash
-                };
-                var account = _mapper.Map<Account>(newAccount);
+                accountVM.Password = passwordHash;
+
+                var account = _mapper.Map<Account>(accountVM);
                 var result = await _dbContext.Account.AddAsync(account);
                 if (result.State.ToString() == "Added")
                 {

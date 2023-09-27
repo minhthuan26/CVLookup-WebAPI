@@ -28,12 +28,12 @@ namespace FirstWebApi.Models.Database
                 .HasKey(prop => new { prop.RoleId, prop.UserId });
 
             modelBuilder.Entity<AccountUser>()
-                .HasKey(prop => new { prop.AccountID, prop.UserId });
+                .HasKey(prop => new { prop.AccountId, prop.UserId });
 
             modelBuilder.Entity<RecruitmentCV>()
                 .HasKey(prop => new { prop.RecruitmentId, prop.CurriculumVitaeId });
 
-            modelBuilder.Entity<RefreshToken>()
+            modelBuilder.Entity<Token>()
                 .HasKey(prop => new { prop.UserId, prop.AccountId });
         }
 
@@ -60,7 +60,7 @@ namespace FirstWebApi.Models.Database
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<RecruitmentCV> RecruitmentCV { get; set; }
         public DbSet<User> User { get; set; }
-        public DbSet<RefreshToken> RefreshToken { get; set; }
+        public DbSet<Token> Token { get; set; }
         //public DbSet<RecruitmentCV> RecruitmentCV { get; set; }
         //public DbSet<EmployerAccount> EmployerAccount { get; set; }
         //public DbSet<CandidateAccount> CandidateAccount { get; set; }

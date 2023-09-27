@@ -302,7 +302,7 @@ namespace CVLookup_WebAPI.Migrations
                     b.Property<DateTime>("ExpiredAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Token")
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
