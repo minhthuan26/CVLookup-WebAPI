@@ -18,15 +18,14 @@ namespace CVLookup_WebAPI.Controllers
     [ApiController]
     public class CurriculumVitaeController : ControllerBase
     {
-        private readonly AppDBContext _dbContext;
-        private readonly IMapper _mapper;
-        private readonly ILogger<CurriculumVitaeController> _logger;
 
-        public CurriculumVitaeController(ILogger<CurriculumVitaeController> logger, AppDBContext dbContext, IMapper mapper)
+        private readonly ILogger<CurriculumVitaeController> _logger;
+        private readonly ICurriculumViateService _curriculumViateService;
+
+        public CurriculumVitaeController(ILogger<CurriculumVitaeController> logger,ICurriculumViateService curriculumViateService)
         {
             _logger = logger;
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _curriculumViateService = curriculumViateService;
         }
 
         /// <summary>
@@ -39,8 +38,7 @@ namespace CVLookup_WebAPI.Controllers
         {
             try
             {
-                var curriculumService = new CurriculumVitaeService(_dbContext, _mapper);
-                var result = await curriculumService.Add(curriculumVitaeVM);
+                var result = await _curriculumViateService.Add(curriculumVitaeVM);
 
                 return Ok(new ApiResponse
                 {
@@ -70,8 +68,7 @@ namespace CVLookup_WebAPI.Controllers
         {
             try
             {
-                var curriculumService = new CurriculumVitaeService(_dbContext, _mapper);
-                var result = await curriculumService.CurriculumVitaeList();
+                var result = await _curriculumViateService.CurriculumVitaeList();
 
                 return Ok(new ApiResponse
                 {
@@ -102,8 +99,7 @@ namespace CVLookup_WebAPI.Controllers
         {
             try
             {
-                var curriculumService = new CurriculumVitaeService(_dbContext, _mapper);
-                var result = await curriculumService.Delete(id);
+                var result = await _curriculumViateService.Delete(id);
 
                 return Ok(new ApiResponse
                 {
@@ -134,8 +130,7 @@ namespace CVLookup_WebAPI.Controllers
         {
             try
             {
-                var curriculumService = new CurriculumVitaeService(_dbContext, _mapper);
-                var result = await curriculumService.GetCurriculumVitaeById(id);
+               var result = await _curriculumViateService.GetCurriculumVitaeById(id);
 
                 return Ok(new ApiResponse
                 {
@@ -167,8 +162,7 @@ namespace CVLookup_WebAPI.Controllers
         {
             try
             {
-                var curriculumService = new CurriculumVitaeService(_dbContext, _mapper);
-                var result = await curriculumService.Update(id, newCurriculumVitaeVM);
+                var result = await _curriculumViateService.Update(id, newCurriculumVitaeVM);
 
                 return Ok(new ApiResponse
                 {

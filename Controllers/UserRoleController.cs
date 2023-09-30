@@ -16,16 +16,14 @@ namespace CVLookup_WebAPI.Controllers
     {
         private readonly IUserRoleService _userRoleService;
         private readonly ILogger<UserRoleController> _logger;
-        private readonly IMapper _mapper;
 
         public UserRoleController(
             ILogger<UserRoleController> logger,
-            IUserRoleService userRoleService,
-            IMapper mapper)
+            IUserRoleService userRoleService
+            )
         {
             _userRoleService = userRoleService;
             _logger = logger;
-            _mapper = mapper;
         }
 
         /// <summary>

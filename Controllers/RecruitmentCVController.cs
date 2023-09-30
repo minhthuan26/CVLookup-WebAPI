@@ -16,16 +16,14 @@ namespace CVLookup_WebAPI.Controllers
     {
         private readonly IRecruitmentCVService _recruitmentCVService;
         private readonly ILogger<RecruitmentCVController> _logger;
-        private readonly IMapper _mapper;
 
         public RecruitmentCVController(
             ILogger<RecruitmentCVController> logger,
-            IRecruitmentCVService recruitmentCVService,
-            IMapper mapper)
+            IRecruitmentCVService recruitmentCVService
+           )
         {
             _recruitmentCVService = recruitmentCVService;
             _logger = logger;
-            _mapper = mapper;
         }
 
         /// <summary>
