@@ -10,6 +10,6 @@ namespace CVLookup_WebAPI.Services.UserRoleService
 		public Task<UserRole> GetByRoleId(string releId);
         public Task<UserRole> Add(UserRoleVM userRole);
         public Task<UserRole> Update(string Id, UserRoleVM newUserRole);
-        public Task<UserRole> Delete(string Id);
+        public Task<UserRole> Delete(string userId, string roleId);
     }
 }
