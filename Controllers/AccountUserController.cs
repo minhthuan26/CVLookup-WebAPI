@@ -51,5 +51,85 @@ namespace CVLookup_WebAPI.Controllers
 				});
 			}
 		}
-	}
+
+        /// <summary>
+        /// Lấy thông tin AcountUser theo UserId
+        /// </summary>
+        /// <param name="userId">ID của User</param>
+        /// <returns>Thông tin UserRole</returns>
+        [HttpGet("get-by-user-id")]
+        public async Task<IActionResult> GetByUserId([FromQuery] string userId)
+        {
+            try
+            {
+                var result = await _accountUserService.GetByUserId(userId);
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Code = StatusCodes.Status200OK,
+                    Message = "Hoàn thành",
+                    Data = result
+                });
+            }
+            catch (ExceptionReturn ex)
+            {
+                return Ok(new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Code = ex.Code
+                });
+            }
+        }
+
+        /// <summary>
+        /// Lấy thông tin AccountUser theo AcountID
+        /// </summary>
+        /// <param name="roleId">ID của Role</param>
+        /// <returns>Thông tin UserRole</returns>
+        [HttpGet("get-by-account-id")]
+        public async Task<IActionResult> GetByAccountId([FromQuery] string roleId)
+        {
+            try
+            {
+                var result = await _accountUserService.GetByAccountId(roleId);
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Code = StatusCodes.Status200OK,
+                    Message = "Hoàn thành",
+                    Data = result
+                });
+            }
+            catch (ExceptionReturn ex)
+            {
+                return Ok(new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Code = ex.Code
+                });
+            }
+        }
+
+        /// <summary>
+        /// Xóa UserRole
+        /// </summary>
+        /// <param name="roleId">ID của Role</param>
+        /// <param name="userId">ID của User</param>
+        /// <returns>Thông tin UserRole đã xóa</returns>
+        [HttpDelete("delete-user-role")]
+        public async Task<IActionResult> DeleteUserRole([FromQuery] string accountId , [FromQuery] string userId)
+        {
+            try
+            {
+                var result = await _accountUserService.Delete(accountId, userId);
+                return Ok(new ApiResponse { Success = true, Code = StatusCodes.Status200OK, Message = "Hoàn thành", Data = result });
+            }
+            catch (ExceptionReturn ex)
+            {
+                return Ok(new ApiResponse { Success = false, Message = ex.Message, Code = StatusCodes.Status500InternalServerError });
+            }
+        }
+    }
 }

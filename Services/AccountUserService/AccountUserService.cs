@@ -82,10 +82,42 @@ namespace CVLookup_WebAPI.Services.AccountUserService
 			}
 		}
 
-		public Task<AccountUser> Delete(string accountId, string userId)
+		public async Task<AccountUser> Delete(string accountId, string userId)
 		{
-			throw new NotImplementedException();
-		}
+            try
+            {
+                if (accountId == null || userId == null)
+                {
+                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                }
+
+                var accountUser = await _dbContext.AccountUser.Where(prop => prop.UserId == userId && prop.AccountId == accountId).FirstOrDefaultAsync();
+                if (accountUser == null)
+                {
+                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+
+                var result = _dbContext.AccountUser.Remove(accountUser);
+                if (result.State.ToString() == "Deleted")
+                {
+                    var saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return accountUser;
+                }
+                else
+                {
+                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                }
+
+            }
+            catch (ExceptionReturn e)
+            {
+                throw new ExceptionReturn(e.Code, e.Message);
+            }
+        }
 
 		public async Task<AccountUser> GetByAccountId(string accountId)
 		{
@@ -121,7 +153,7 @@ namespace CVLookup_WebAPI.Services.AccountUserService
 			}
 		}
 
-		public Task<AccountUser> Update(string Id, RoleVM newAccount)
+		public Task<AccountUser> Update(string Id, AccountUserVM newAccount)
 		{
 			throw new NotImplementedException();
 		}
