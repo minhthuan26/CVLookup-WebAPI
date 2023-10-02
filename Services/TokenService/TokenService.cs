@@ -86,7 +86,44 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
             }
         }
 
-        public async Task<Token> EditRefreshToken(TokenVM tokenVM)
+		public async Task<Token> DeleteRefreshToken(string token)
+		{
+			try
+			{
+				if (token == null)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+				}
+
+				var record = await _dbContext.Token.Where(prop => prop.RefreshToken == token).FirstOrDefaultAsync();
+				if (record == null)
+				{
+					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+
+				var result = _dbContext.Token.Remove(record);
+				if (result.State.ToString() == "Deleted")
+				{
+					var saveState = await _dbContext.SaveChangesAsync();
+					if (saveState <= 0)
+					{
+						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+					}
+					return record;
+				}
+				else
+				{
+					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+				}
+
+			}
+			catch (ExceptionReturn e)
+			{
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
+		}
+
+		public async Task<Token> EditRefreshToken(TokenVM tokenVM)
         {
             try
             {
@@ -125,11 +162,9 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
         {
             try
             {
-                var result = await  _dbContext.Token.Where(prop => prop.UserId == userId && prop.AccountId == accountId).FirstOrDefaultAsync();
-                if (result == null)
-                {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
-                }
+                var result = await  _dbContext.Token
+                    .Include(prop => prop.Role)
+                    .Where(prop => prop.UserId == userId && prop.AccountId == accountId).FirstOrDefaultAsync();
                 return result;
             }
             catch (ExceptionReturn e)
@@ -142,7 +177,9 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
 		{
 			try
 			{
-				var result = await _dbContext.Token.Where(prop => prop.RefreshToken == token).FirstOrDefaultAsync();
+				var result = await _dbContext.Token
+                    .Include(prop => prop.Role)
+                    .Where(prop => prop.RefreshToken == token).FirstOrDefaultAsync();
 				if (result == null)
 				{
 					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
