@@ -23,10 +23,10 @@ namespace CVLookup_WebAPI.Models.Domain
         public string Email { get; set; }
 
         [Display(Name = "Trạng thái tài khoản")]
-        public bool Status { get; set; } = false;
+        public bool Actived { get; set; } = false;
 
         [Display(Name = "Ngày tạo")]
-        public DateTime IssuedAt { get; set; } 
+        public DateTime IssuedAt { get; set; } = DateTime.Now;
 
         [Display(Name = "Ngày kích hoạt tài khoản")]
         public DateTime ActivedAt { get; set; }

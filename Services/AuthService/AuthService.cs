@@ -10,8 +10,8 @@ using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
@@ -39,6 +39,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 		private readonly IRoleService _roleService;
 		private readonly IMailService _mailService;
 		private readonly IWebHostEnvironment _env;
+		private readonly IDbContextTransaction _transaction;
 
 		public AuthService(
 			AppDBContext dbContext,
@@ -88,11 +89,17 @@ namespace CVLookup_WebAPI.Services.AuthService
 		#region Login
 		public async Task<object> Login(AccountVM accountVM)
 		{
+			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
 			try
 			{
 				var account = await _dbContext.Account.Where(prop => prop.Email == accountVM.Email).FirstOrDefaultAsync();
+
 				if (account != null)
 				{
+					if (!account.Actived)
+					{
+						throw new ExceptionReturn(400, "Thất bại. Tài khoản của bạn chưa được kích hoạt, vui lòng kiểm tra email để kích hoạt tài khoản");
+					}
 					bool checkPassword = VerifyPasswordHash(accountVM.Password, account.Password);
 					if (checkPassword)
 					{
@@ -105,7 +112,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 						claims.Add("roleId", userRole.RoleId);
 
 						string accessToken = await GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
-						string refreshToken = await GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddMinutes(10));
+						string refreshToken = await GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
 
 						var authReturn = new
 						{
@@ -113,9 +120,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 							RefreshToken = refreshToken
 						};
 
-						var oldRefreshInDB = await _dbContext.Token
-							.Where(prop => prop.AccountId == account.Id && accountUser.UserId == prop.UserId)
-							.FirstOrDefaultAsync();
+						var oldRefreshInDB = await _tokenService.GetTokenById(userRole.UserId, accountUser.AccountId);
+
 						if (oldRefreshInDB == null)
 						{
 							var tokenVM = new TokenVM
@@ -147,6 +153,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 							SameSite = SameSiteMode.None,
 						};
 						_httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
+						await transaction.CommitAsync();
 						return authReturn;
 					}
 					else
@@ -161,6 +168,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 			}
 			catch (ExceptionReturn e)
 			{
+				await transaction.RollbackAsync();
 				throw new ExceptionReturn(e.Code, e.Message);
 			}
 		}
@@ -231,7 +239,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 		}
 
-		public async Task<JwtSecurityToken> ValidateToken(string token, string key)
+		public async Task<VerifyTokenResult> VerifyToken(string token, string key)
 		{
 			try
 			{
@@ -252,33 +260,46 @@ namespace CVLookup_WebAPI.Services.AuthService
 				tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
 				var jwt = (JwtSecurityToken)validatedToken;
 
-				return jwt;
-			}
-			catch (SecurityTokenValidationException e)
-			{
-				throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
-			}
-		}
-
-		private async Task<bool> CheckTokenExpired(string token, string key)
-		{
-			try
-			{
-				JwtSecurityToken result = await ValidateToken(token, key);
-				if (!(result.ValidTo < DateTime.Now))
+				return new VerifyTokenResult
 				{
-					return true;
-				}
+					IsExpired = false,
+					IsValid = true,
+					Token = jwt
+				};
 			}
-			catch (ExceptionReturn e)
+			catch (SecurityTokenExpiredException)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				return new VerifyTokenResult
+				{
+					IsExpired = true,
+					IsValid = true,
+					Token = null
+				};
 			}
-			return false;
+			catch (SecurityTokenValidationException)
+			{
+				return new VerifyTokenResult
+				{
+					IsExpired = false,
+					IsValid = false,
+					Token = null
+				};
+			}
+
+			catch (ArgumentException)
+			{
+				return new VerifyTokenResult
+				{
+					IsExpired = false,
+					IsValid = false,
+					Token = null
+				};
+			}
 		}
 
 		public async Task<object> RenewToken()
 		{
+			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
 			try
 			{
 				string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
@@ -290,15 +311,25 @@ namespace CVLookup_WebAPI.Services.AuthService
 				}
 
 				accessToken = accessToken.Split(" ")[1];
-				if (!await CheckTokenExpired(accessToken, GetSecretKey()))
+				VerifyTokenResult accessTokenVerified = await VerifyToken(accessToken, GetSecretKey());
+				if (!accessTokenVerified.IsValid)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Không thể tạo mới access token vì token chưa hết hạn");
+					throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+				}
+				if (!accessTokenVerified.IsExpired)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Không thể tạo mới token vì token cũ vẫn chưa hết hạn");
 				}
 
 				var tokenInDB = await _tokenService.GetTokenByValue(refreshToken);
-				if (await CheckTokenExpired(tokenInDB.RefreshToken, GetRefreshKey()))
+				VerifyTokenResult refreshTokenVerified = await VerifyToken(tokenInDB.RefreshToken, GetRefreshKey());
+				if (!refreshTokenVerified.IsValid)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Không thể tạo mới access token vì refresh token hết hạn");
+					throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+				}
+				if (refreshTokenVerified.IsExpired)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Không thể tạo mới token vì refresh token hết hạn, vui lòng đăng nhập lại");
 				}
 
 				var claims = new ListDictionary();
@@ -308,6 +339,23 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 				var newAccessToken = await GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
 				var newRefreshToken = await GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
+
+				await _tokenService.EditRefreshToken(new TokenVM
+				{
+					AccountId = tokenInDB.AccountId,
+					UserId = tokenInDB.UserId,
+					RoleId = tokenInDB.RoleId,
+					RefreshToken = newRefreshToken
+				});
+
+				await transaction.CommitAsync();
+				var cookieOptions = new CookieOptions
+				{
+					HttpOnly = true,
+					Secure = false,
+					SameSite = SameSiteMode.None,
+				};
+				_httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", newRefreshToken, cookieOptions);
 				return new
 				{
 					AccessToken = newAccessToken,
@@ -316,6 +364,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 			}
 			catch (ExceptionReturn e)
 			{
+				await transaction.RollbackAsync();
 				throw new ExceptionReturn(e.Code, e.Message);
 			}
 		}
@@ -324,6 +373,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 		#region Register 
 		public async Task<AccountUser> RegisterCandidate(CandidateVM candidateVM, AccountVM accountVM)
 		{
+			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
 			try
 			{
 				var newAccount = await _accountService.Add(accountVM);
@@ -345,16 +395,19 @@ namespace CVLookup_WebAPI.Services.AuthService
 				var result = await _accountUserService.Add(newAccountUserVM);
 
 				await SendMailToActiveAccount(newAccount);
+				await transaction.CommitAsync();
 				return result;
 			}
 			catch (ExceptionReturn e)
 			{
+				await transaction.RollbackAsync();
 				throw new ExceptionReturn(e.Code, e.Message);
 			}
 
 		}
 		public async Task<AccountUser> RegisterEmployer(EmployerVM employerVM, AccountVM accountVM)
 		{
+			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
 			try
 			{
 				var newAccount = await _accountService.Add(accountVM);
@@ -374,11 +427,13 @@ namespace CVLookup_WebAPI.Services.AuthService
 					UserId = newCandidate.Id
 				};
 				var result = await _accountUserService.Add(newAccountUserVM);
-
+				await SendMailToActiveAccount(newAccount);
+				await transaction.CommitAsync();
 				return result;
 			}
 			catch (ExceptionReturn e)
 			{
+				await transaction.RollbackAsync();
 				throw new ExceptionReturn(e.Code, e.Message);
 			}
 
@@ -389,13 +444,17 @@ namespace CVLookup_WebAPI.Services.AuthService
 		{
 			try
 			{
+				string appHost = _configuration.GetValue<string>("AppConfig:HOST");
+				string appPort = _configuration.GetValue<string>("AppConfig:PORT");
 				var claims = new ListDictionary();
-				claims.Add("Account", account);
-				string activeToken = await GenerateToken(GetMailKey(), claims, DateTime.Now.AddDays(1));
-				string activeLink = "http://localhost:4026/api/v1/active-account?token=" + activeToken;
+				claims.Add("AccountId", account.Id);
+				string activeToken = await GenerateToken(GetMailKey(), claims, DateTime.Now.AddDays(7));
+				string activeLink = appHost + ":" + appPort + "/api/v1/auth/active-account?token=" + activeToken;
 				string subject = "Xác thực email cho tài khoản CVLookup của bạn";
+
 				var webRoot = _env.WebRootPath;
-				var filePath = webRoot + "\\mail_template.html";
+				var filePath = webRoot + "\\mail_template.html.t";
+
 				var builder = new BodyBuilder();
 				using (StreamReader reader = System.IO.File.OpenText(filePath))
 				{
@@ -403,6 +462,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 				}
 				builder.HtmlBody = builder.HtmlBody.Replace("{{activeLink}}", activeLink);
 				string message = builder.HtmlBody;
+
 				await _mailService.sendMail(account.Email, subject, message);
 			}
 			catch (ExceptionReturn e)
@@ -415,40 +475,85 @@ namespace CVLookup_WebAPI.Services.AuthService
 			}
 		}
 
-		public async Task Logout()
+		public async Task<object> Logout()
 		{
+			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
 			try
 			{
 				string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+				string refreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
 
-				if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer "))
+				if (string.IsNullOrEmpty(accessToken) || !accessToken.StartsWith("Bearer ") || string.IsNullOrEmpty(refreshToken))
 				{
-					accessToken = accessToken.Substring("Bearer ".Length).Trim();
-				}
-				else
-				{
-					throw new ExceptionReturn(400, "RefreshToken không hợp lệ hoặc không tồn tại.");
+					throw new ExceptionReturn(400, "Thất bại. Yêu cầu không hợp lệ");
 				}
 
-				var tokenHandler = new JwtSecurityTokenHandler();
-				var token = tokenHandler.ReadJwtToken(accessToken);
-				var userIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "UserId").Value;
-				var accountIdClaim = token.Claims.FirstOrDefault(claim => claim.Type == "AccountId").Value;
-				if (userIdClaim == null || accountIdClaim == null)
-				{
-					throw new ExceptionReturn(400, "Có lỗi xảy ra trong quá trình xử lýs");
-				}
-				await _tokenService.DeleteRefreshToken(userIdClaim, accountIdClaim);
-
+				await _tokenService.DeleteRefreshToken(refreshToken);
 				_httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
-
-				return;
+				await transaction.CommitAsync();
+				return true;
 			}
 			catch (ExceptionReturn e)
 			{
+				await transaction.RollbackAsync();
 				throw new ExceptionReturn(e.Code, e.Message);
 			}
 		}
 
+		public async Task<object> ActiveAccount(string activeToken)
+		{
+			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
+			try
+			{
+				if (string.IsNullOrEmpty(activeToken))
+				{
+					throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+				}
+
+				VerifyToken(activeToken, GetMailKey());
+
+				VerifyTokenResult tokenVerified = await VerifyToken(activeToken, GetMailKey());
+				if (tokenVerified.IsExpired)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Token đã hết hạn, bạn đã không kích hoạt tài khoản trong vòng 7 ngày. Để sử dụng dịch vụ của CVLookup vui lòng đăng kí lại và nhận email kích hoạt tài khoản");
+				}
+				if (!tokenVerified.IsValid)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+				}
+				string accountId = tokenVerified.Token.Claims.FirstOrDefault(prop => prop.Type == "AccountId").Value;
+				var account = await _accountService.GetAccountById(accountId);
+				if (account.Actived)
+				{
+					throw new ExceptionReturn(400, "Thất bại. Tài khoản này đã được kích hoạt trước đó");
+				}
+
+				var accountVM = new AccountVM
+				{
+					ActivedAt = DateTime.Now,
+					UpdatedAt = DateTime.Now,
+					Actived = true,
+					Email = account.Email,
+					Password = account.Password
+				};
+				var result = await _accountService.Update(accountId, accountVM);
+
+				await transaction.CommitAsync();
+				return new
+				{
+					AccountId = result.Id,
+					Email = result.Email,
+					Actived = result.Actived,
+					IssuedAt = result.IssuedAt,
+					UpdatedAt = result.UpdatedAt,
+					ActivedAt = result.ActivedAt
+				};
+			}
+			catch (ExceptionReturn e)
+			{
+				await transaction.RollbackAsync();
+				throw new ExceptionReturn(e.Code, e.Message);
+			}
+		}
 	}
 }

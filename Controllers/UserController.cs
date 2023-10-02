@@ -265,7 +265,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <param name="candidateVM"></param>
 		/// <returns></returns>
-		[HttpPut("update-candidate")]
+		[HttpPatch("update-candidate")]
 		public async Task<IActionResult> UpdateCandidate([FromQuery] string id, [FromBody] CandidateVM candidateVM)
 		{
 			try
@@ -296,7 +296,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <param name="employerVM"></param>
 		/// <returns></returns>
-		[HttpPut("update-employer")]
+		[HttpPatch("update-employer")]
 		public async Task<IActionResult> UpdateEmployer([FromQuery] string id, [FromBody] EmployerVM employerVM)
 		{
 			try

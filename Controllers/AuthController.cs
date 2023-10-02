@@ -39,15 +39,14 @@ namespace CVLookup_WebAPI.Controllers
 				});
 
 			}
-			catch (Exception e)
+			catch (ExceptionReturn e)
 			{
 				return Ok(new ApiResponse
 				{
 					Success = false,
-					Code = StatusCodes.Status500InternalServerError,
+					Code = e.Code,
 					Message = e.Message,
 				});
-				throw;
 			}
 		}
 
@@ -55,7 +54,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <summary>
 		/// Đăng ký tài khoản ứng viên
 		/// </summary>
-		/// <param name="request"></param>
+		/// <param name="candidateRegisterVM"></param>
 		/// <returns></returns>
 		[HttpPost("register-candidate")]
 		public async Task<IActionResult> RegisterCandidate([FromBody] CandidateRegisterVM candidateRegisterVM)
@@ -86,7 +85,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <summary>
 		/// Đăng ký tài khoản nhà tuyển dụng
 		/// </summary>
-		/// <param name="request"></param>
+		/// <param name="employerRegisterVM"></param>
 		/// <returns></returns>
 		[HttpPost("register-employer")]
 		public async Task<IActionResult> RegisterEmployer([FromBody] EmployerRegisterVM employerRegisterVM)
@@ -117,7 +116,6 @@ namespace CVLookup_WebAPI.Controllers
 		/// <summary>
 		/// Tạo mới token
 		/// </summary>
-		/// <param name="tokenVM"></param>
 		/// <returns></returns>
 		[HttpPost("renew-token")]
 		public async Task<IActionResult> RenewToken()
@@ -133,12 +131,12 @@ namespace CVLookup_WebAPI.Controllers
 					Data = result
 				});
 			}
-			catch (Exception e)
+			catch (ExceptionReturn e)
 			{
 				return Ok(new ApiResponse
 				{
 					Success = false,
-					Code = StatusCodes.Status400BadRequest,
+					Code = e.Code,
 					Message = e.Message,
 				});
 			}
@@ -148,22 +146,23 @@ namespace CVLookup_WebAPI.Controllers
 		/// <summary>
 		/// Đăng xuất
 		/// </summary>
-		/// <param name="tokenVM"></param>
 		/// <returns></returns>
 		[HttpPost("logout")]
+		[HttpGet("logout")]
 		public async Task<IActionResult> Logout()
 		{
 			try
 			{
-				await _authService.Logout();
+				var result = await _authService.Logout();
 				return Ok(new ApiResponse
 				{
 					Success = true,
 					Code = StatusCodes.Status200OK,
 					Message = "Thành công.",
+					Data = result
 				});
 			}
-			catch (Exception e)
+			catch (ExceptionReturn e)
 			{
 				return Ok(new ApiResponse
 				{
@@ -174,5 +173,28 @@ namespace CVLookup_WebAPI.Controllers
 			}
 		}
 
+		[HttpGet("active-account")]
+		public async Task<IActionResult> ActiveAccount([FromQuery] string? token)
+		{
+			try
+			{
+				var result = await _authService.ActiveAccount(token);
+				return Ok(new ApiResponse
+				{
+					Success = true,
+					Code = StatusCodes.Status200OK,
+					Message = "Hoàn thành",
+					Data = result
+				});
+			} catch (ExceptionReturn e)
+			{
+				return Ok(new ApiResponse
+				{
+					Success = false,
+					Code = e.Code,
+					Message = e.Message
+				});
+			}
+		}
 	}
 }

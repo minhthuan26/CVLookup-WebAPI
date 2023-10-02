@@ -151,18 +151,17 @@ namespace CVLookup_WebAPI.Services.AccountService
             throw new NotImplementedException();
         }
 
-        public async Task<Account> Update(string Id, AccountVM newAccount)
+        public async Task<Account> Update(string Id, AccountVM newAccountVM)
         {
             try
             {
-                var account = await _dbContext.Account.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
-                if (account == null)
+                var accountInDB = await _dbContext.Account.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
+                if (accountInDB == null)
                 {
                     throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
-                account.Password = newAccount.Password;
-                account.Email = newAccount.Email;
-                var result = _dbContext.Account.Update(account);
+                 _mapper.Map(newAccountVM, accountInDB);
+                var result = _dbContext.Account.Update(accountInDB);
                 if (result.State.ToString() == "Modified")
                 {
                     int saveState = await _dbContext.SaveChangesAsync();
@@ -170,7 +169,7 @@ namespace CVLookup_WebAPI.Services.AccountService
                     {
                         throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
-                    return account;
+                    return accountInDB;
                 }
                 else
                 {
