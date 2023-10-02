@@ -7,6 +7,7 @@ namespace CVLookup_WebAPI.Services.CurriculumService
     {
         public Task<List<CurriculumVitae>> CurriculumVitaeList();
 		public Task<CurriculumVitae> GetCurriculumVitaeById(string id);
+        public Task<CurriculumVitae> GetByCandidateId(string candidateId);
         public Task<CurriculumVitae> Add(CurriculumVitaeVM curriculumVitae);
         public Task<CurriculumVitae> Update(string Id, CurriculumVitaeVM newCurriculumVitae);
         public Task<CurriculumVitae> Delete(string Id);

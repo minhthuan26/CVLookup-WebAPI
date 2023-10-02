@@ -113,13 +113,13 @@ namespace CVLookup_WebAPI.Controllers
         }
 
         /// <summary>
-        /// Xóa UserRole
+        /// Xóa AccountUser
         /// </summary>
         /// <param name="roleId">ID của Role</param>
         /// <param name="userId">ID của User</param>
         /// <returns>Thông tin UserRole đã xóa</returns>
-        [HttpDelete("delete-user-role")]
-        public async Task<IActionResult> DeleteUserRole([FromQuery] string accountId , [FromQuery] string userId)
+        [HttpDelete("delete-account-user")]
+        public async Task<IActionResult> DeleteAccountUser([FromQuery] string accountId , [FromQuery] string userId)
         {
             try
             {

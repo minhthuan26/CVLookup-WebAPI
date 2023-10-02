@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,13 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 	{
 		private AppDBContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public CurriculumVitaeService(AppDBContext dbContext, IMapper mapper)
+        public CurriculumVitaeService(AppDBContext dbContext, IMapper mapper, IUserService userService)
         {
 			_dbContext = dbContext; 
             _mapper = mapper;
-
+            _userService= userService;
         }
 
         public async Task<CurriculumVitae> Add(CurriculumVitaeVM curriculumVitaeVM)
@@ -24,6 +26,13 @@ namespace CVLookup_WebAPI.Services.CurriculumService
             try
             {
                 var curriculumVitae = _mapper.Map<CurriculumVitae>(curriculumVitaeVM);
+                var user = await _userService.GetUserByEmail(curriculumVitaeVM.Email);  
+                curriculumVitae.FullName = curriculumVitaeVM.FullName;
+                curriculumVitae.PhoneNumber = curriculumVitaeVM.PhoneNumber;
+                curriculumVitae.CVPath = curriculumVitaeVM.CVPath;
+                curriculumVitae.Introdution = curriculumVitaeVM.Introdution;
+                curriculumVitae.Email = curriculumVitaeVM.Email;
+                curriculumVitae.User = user;
                 var result = await _dbContext.CurriculumVitae.AddAsync(curriculumVitae);
                 if (result.State.ToString() == "Added")
                 {
@@ -117,6 +126,35 @@ namespace CVLookup_WebAPI.Services.CurriculumService
                 throw new ExceptionReturn(e.Code, e.Message);
             }
         }
+
+
+        public async Task<CurriculumVitae> GetByCandidateId (string candidateId)
+        {
+            try
+            {
+                if (candidateId == null)
+                {
+                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                }
+                var candidate = await _dbContext.Candidate.Where(prop => prop.Id == candidateId).FirstOrDefaultAsync();
+                if (candidate == null)
+                {
+                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+
+                var result = await _dbContext.CurriculumVitae.Where(prop => prop.User.Id == candidate.Id).FirstOrDefaultAsync();
+                if (result == null)
+                {
+                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                return result;
+            }
+            catch (ExceptionReturn e)
+            {
+                throw new ExceptionReturn(e.Code, e.Message);
+            }
+        }
+
 
 		public async Task<CurriculumVitae> Update(string Id, CurriculumVitaeVM newCurriculumVitaeVM)
 		{

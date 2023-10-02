@@ -150,6 +150,38 @@ namespace CVLookup_WebAPI.Controllers
                 });
             }
         }
+        
+        
+        /// <summary>
+        /// Lấy CV theo Id ứng viên
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("get-curriculum-vitae-by-candidateId")]
+        public async Task<IActionResult> GetByCandidateId([FromQuery] string id)
+        {
+            try
+            {
+               var result = await _curriculumViateService.GetByCandidateId(id);
+
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Code = StatusCodes.Status200OK,
+                    Data = result,
+                    Message = "Hoàn thành"
+                });
+            }
+            catch (ExceptionReturn e)
+            {
+                return Ok(new ApiResponse
+                {
+                    Success = false,
+                    Code = e.Code,
+                    Message = e.Message
+                });
+            }
+        }
 
         /// <summary>
         /// Sửa CV
