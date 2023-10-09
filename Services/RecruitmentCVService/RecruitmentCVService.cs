@@ -30,19 +30,19 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return recruitmentCV;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -52,13 +52,13 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
             {
                 if (recruitmentId == null || curriculumVitaeId == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
                 var recruitmentCV = await _dbContext.RecruitmentCV.Where(prop => prop.RecruitmentId == recruitmentId && prop.CurriculumVitaeId == curriculumVitaeId).FirstOrDefaultAsync();
                 if (recruitmentCV == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
 
                 var result = _dbContext.RecruitmentCV.Remove(recruitmentCV);
@@ -67,18 +67,18 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
                     var saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return recruitmentCV;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
                 }
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -90,13 +90,13 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 
                 if (result == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 return result;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         } 
         
@@ -108,13 +108,13 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 
                 if (result == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 return result;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 

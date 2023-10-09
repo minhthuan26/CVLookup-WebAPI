@@ -10,7 +10,7 @@ namespace CVLookup_WebAPI.Controllers
     [Route("api/v1/[controller]/")]
     [ApiController]
     [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-    [AuthorizationAttribute("Employer", "Candidate")]
+    [AuthorizationAttribute("Employer", "Admin")]
     public class RecruitmentController : ControllerBase
     {
         private readonly IRecruitmentService _recruimentService;

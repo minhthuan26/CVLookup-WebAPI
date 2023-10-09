@@ -34,26 +34,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-by-recruitment-id")]
         public async Task<IActionResult> GetRecruitmentCVByRecruitmentId([FromQuery] string id)
         {
-            try
+            var recruitmentCV = await _recruitmentCVService.GetAccountByRecruitmentId(id);
+            return Ok(new ApiResponse
             {
-                var recruitmentCV = await _recruitmentCVService.GetAccountByRecruitmentId(id);
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Message = "Hoàn thành",
-                    Data = recruitmentCV
-                });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Message = ex.Message,
-                    Code = ex.Code
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = recruitmentCV
+            });
         }
 
         /// <summary>
@@ -64,26 +52,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-by-curriculum-vitae-id")]
         public async Task<IActionResult> GetRecruitmentCVByCurriculumVitaeId([FromQuery] string id)
         {
-            try
+            var recruitmentCV = await _recruitmentCVService.GetAccountByCurriculumVitaeId(id);
+            return Ok(new ApiResponse
             {
-                var recruitmentCV = await _recruitmentCVService.GetAccountByCurriculumVitaeId(id);
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Message = "Hoàn thành",
-                    Data = recruitmentCV
-                });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Message = ex.Message,
-                    Code = ex.Code
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = recruitmentCV
+            });
         }
 
         /// <summary>
@@ -94,21 +70,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpPost("create-recruitment-cv")]
         public async Task<IActionResult> AddRecruitmentCV([FromBody] RecruitmentCVVM recruitmentCVVM)
         {
-            try
+            var newRecruitmentCV = await _recruitmentCVService.Add(recruitmentCVVM);
+            return Ok(new ApiResponse
             {
-                var newRecruitmentCV = await _recruitmentCVService.Add(recruitmentCVVM);
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Message = "Hoàn thành",
-                    Data = newRecruitmentCV
-                });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse { Success = false, Message = ex.Message, Code = StatusCodes.Status500InternalServerError });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = newRecruitmentCV
+            });
         }
 
         /// <summary>
@@ -120,16 +89,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpDelete("delete-recruitment-cv")]
         public async Task<IActionResult> DeleteRecruitmentCV([FromQuery] string recruitmentId, [FromQuery] string curriculumVitaeId)
         {
-            try
-            {
-                var deletedRecruitmentCV = await _recruitmentCVService.Delete(recruitmentId, curriculumVitaeId);
-                return Ok(new ApiResponse { Success = true, Code = StatusCodes.Status200OK, Message = "Hoàn thành", Data = deletedRecruitmentCV });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse { Success = false, Message = ex.Message, Code = StatusCodes.Status500InternalServerError });
-            }
+            var deletedRecruitmentCV = await _recruitmentCVService.Delete(recruitmentId, curriculumVitaeId);
+            return Ok(new ApiResponse 
+            { 
+                Success = true, 
+                Code = StatusCodes.Status200OK, 
+                Message = "Hoàn thành", 
+                Data = deletedRecruitmentCV 
+            });
         }
-
     }
 }
