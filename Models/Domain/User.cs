@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CVLookup_WebAPI.Models.Domain
 {
-	public abstract class User
+	public class User
 	{
 		[Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -15,10 +15,10 @@ namespace CVLookup_WebAPI.Models.Domain
 
 		[Display(Name = "Số điện thoại")]
 		[DataType(DataType.PhoneNumber, ErrorMessage = "Yêu cầu nhập đúng số điện thoại")]
-		public string PhoneNumber { get; set; }
+		public string? PhoneNumber { get; set; }
 
 		[Display(Name = "Ảnh đại diện")]
-		public string Avatar { get; set; }
+		public string? Avatar { get; set; }
 
 	}
 }
