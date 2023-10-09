@@ -3,6 +3,7 @@ using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AccountService;
 using CVLookup_WebAPI.Services.AccountUserService;
+using CVLookup_WebAPI.Services.JwtService;
 using CVLookup_WebAPI.Services.MailService;
 using CVLookup_WebAPI.Services.RefreshTokenService;
 using CVLookup_WebAPI.Services.RoleService;
@@ -39,7 +40,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 		private readonly IRoleService _roleService;
 		private readonly IMailService _mailService;
 		private readonly IWebHostEnvironment _env;
-		private readonly IDbContextTransaction _transaction;
+        private readonly IJwtService _jwtService;
+        private readonly IDbContextTransaction _transaction;
 
 		public AuthService(
 			AppDBContext dbContext,
@@ -54,7 +56,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 			IConfiguration configuration,
 			IRoleService roleService,
 			IMailService mailService,
-			IWebHostEnvironment env
+			IWebHostEnvironment env,
+			IJwtService jwtService
 			)
 		{
 			_dbContext = dbContext;
@@ -70,7 +73,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 			_roleService = roleService;
 			_mailService = mailService;
 			_env = env;
-		}
+            _jwtService = jwtService;
+        }
 
 		private string GetSecretKey()
 		{
@@ -98,7 +102,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 				{
 					if (!account.Actived)
 					{
-						throw new ExceptionReturn(400, "Thất bại. Tài khoản của bạn chưa được kích hoạt, vui lòng kiểm tra email để kích hoạt tài khoản");
+						throw new ExceptionModel(400, "Thất bại. Tài khoản của bạn chưa được kích hoạt, vui lòng kiểm tra email để kích hoạt tài khoản");
 					}
 					bool checkPassword = VerifyPasswordHash(accountVM.Password, account.Password);
 					if (checkPassword)
@@ -111,8 +115,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 						claims.Add("userId", userRole.UserId);
 						claims.Add("roleId", userRole.RoleId);
 
-						string accessToken = await GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
-						string refreshToken = await GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
+						string accessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
+						string refreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
 
 						var authReturn = new
 						{
@@ -158,18 +162,18 @@ namespace CVLookup_WebAPI.Services.AuthService
 					}
 					else
 					{
-						throw new ExceptionReturn(400, "Thất bại. Email hoặc mật khẩu không đúng");
+						throw new ExceptionModel(400, "Thất bại. Email hoặc mật khẩu không đúng");
 					}
 				}
 				else
 				{
-					throw new ExceptionReturn(404, "Thất bại. Email hoặc mật khẩu không đúng");
+					throw new ExceptionModel(404, "Thất bại. Email hoặc mật khẩu không đúng");
 				}
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
 				await transaction.RollbackAsync();
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -191,111 +195,12 @@ namespace CVLookup_WebAPI.Services.AuthService
 					return computedHash.SequenceEqual(saltedPassword);
 				}
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 		#endregion
-
-		public async Task<string> GenerateToken(string key, ListDictionary data, DateTime expires)
-		{
-			try
-			{
-				var signingCredential = new SigningCredentials(
-					new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-					SecurityAlgorithms.HmacSha512Signature
-				);
-				var claims = new List<Claim>();
-				if (data.Count > 0)
-				{
-					foreach (DictionaryEntry entry in data)
-					{
-						claims.Add(new(entry.Key.ToString(), entry.Value.ToString()));
-					}
-				}
-
-				var tokenDescript = new JwtSecurityToken(
-					claims: claims,
-					expires: expires,
-					signingCredentials: signingCredential
-				);
-
-				var token = new JwtSecurityTokenHandler().WriteToken(tokenDescript);
-				if (token == null)
-				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình ghi token");
-				}
-				return token;
-			}
-			catch (ArgumentOutOfRangeException e)
-			{
-				throw new ExceptionReturn(500, "Thất bại. Độ dài khoá không hợp lệ. " + e.Message);
-			}
-			catch (Exception e)
-			{
-				throw new ExceptionReturn(500, e.Message);
-			}
-
-		}
-
-		public async Task<VerifyTokenResult> VerifyToken(string token, string key)
-		{
-			try
-			{
-				var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-
-				var validationParameters = new TokenValidationParameters
-				{
-					ValidateIssuer = false,
-					ValidateAudience = false,
-
-					ValidateIssuerSigningKey = true,
-					IssuerSigningKeys = new List<SecurityKey> { signingKey },
-					ValidateLifetime = true
-				};
-
-
-				var tokenHandler = new JwtSecurityTokenHandler();
-				tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-				var jwt = (JwtSecurityToken)validatedToken;
-
-				return new VerifyTokenResult
-				{
-					IsExpired = false,
-					IsValid = true,
-					Token = jwt
-				};
-			}
-			catch (SecurityTokenExpiredException)
-			{
-				return new VerifyTokenResult
-				{
-					IsExpired = true,
-					IsValid = true,
-					Token = null
-				};
-			}
-			catch (SecurityTokenValidationException)
-			{
-				return new VerifyTokenResult
-				{
-					IsExpired = false,
-					IsValid = false,
-					Token = null
-				};
-			}
-
-			catch (ArgumentException)
-			{
-				return new VerifyTokenResult
-				{
-					IsExpired = false,
-					IsValid = false,
-					Token = null
-				};
-			}
-		}
 
 		public async Task<object> RenewToken()
 		{
@@ -307,29 +212,29 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 				if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
 				{
-					throw new ExceptionReturn(400, "Thất bại. Không tìm thấy token");
+					throw new ExceptionModel(400, "Thất bại. Không tìm thấy token");
 				}
 
 				accessToken = accessToken.Split(" ")[1];
-				VerifyTokenResult accessTokenVerified = await VerifyToken(accessToken, GetSecretKey());
+				VerifyTokenResult accessTokenVerified = await _jwtService.VerifyToken(accessToken, GetSecretKey());
 				if (!accessTokenVerified.IsValid)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Token không hợp lệ");
 				}
 				if (!accessTokenVerified.IsExpired)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Không thể tạo mới token vì token cũ vẫn chưa hết hạn");
+					throw new ExceptionModel(400, "Thất bại. Không thể tạo mới token vì token cũ vẫn chưa hết hạn");
 				}
 
 				var tokenInDB = await _tokenService.GetTokenByValue(refreshToken);
-				VerifyTokenResult refreshTokenVerified = await VerifyToken(tokenInDB.RefreshToken, GetRefreshKey());
+				VerifyTokenResult refreshTokenVerified = await _jwtService.VerifyToken(tokenInDB.RefreshToken, GetRefreshKey());
 				if (!refreshTokenVerified.IsValid)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Token không hợp lệ");
 				}
 				if (refreshTokenVerified.IsExpired)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Không thể tạo mới token vì refresh token hết hạn, vui lòng đăng nhập lại");
+					throw new ExceptionModel(400, "Thất bại. Không thể tạo mới token vì refresh token hết hạn, vui lòng đăng nhập lại");
 				}
 
 				var claims = new ListDictionary();
@@ -337,8 +242,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 				claims.Add("userId", tokenInDB.UserId);
 				claims.Add("roleId", tokenInDB.Role.Id);
 
-				var newAccessToken = await GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
-				var newRefreshToken = await GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
+				var newAccessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
+				var newRefreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
 
 				await _tokenService.EditRefreshToken(new TokenVM
 				{
@@ -362,10 +267,10 @@ namespace CVLookup_WebAPI.Services.AuthService
 					RefreshToken = newRefreshToken
 				};
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
 				await transaction.RollbackAsync();
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -382,15 +287,15 @@ namespace CVLookup_WebAPI.Services.AuthService
 				var role = await _roleService.GetRoleByValue("Candidate");
 				var userRoleVM = new UserRoleVM
 				{
-					RoleId = role.Id,
-					UserId = newCandidate.Id
-				};
+					Role = role,
+					User = newCandidate
+                };
 				await _userRoleService.Add(userRoleVM);
 
 				var newAccountUserVM = new AccountUserVM
 				{
-					AccountId = newAccount.Id,
-					UserId = newCandidate.Id
+					Account = newAccount,
+					User = newCandidate
 				};
 				var result = await _accountUserService.Add(newAccountUserVM);
 
@@ -398,10 +303,10 @@ namespace CVLookup_WebAPI.Services.AuthService
 				await transaction.CommitAsync();
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
 				await transaction.RollbackAsync();
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 
 		}
@@ -423,18 +328,18 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 				var newAccountUserVM = new AccountUserVM
 				{
-					AccountId = newAccount.Id,
-					UserId = newCandidate.Id
+					Account = newAccount,
+					User = newCandidate
 				};
 				var result = await _accountUserService.Add(newAccountUserVM);
 				await SendMailToActiveAccount(newAccount);
 				await transaction.CommitAsync();
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
 				await transaction.RollbackAsync();
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 
 		}
@@ -448,12 +353,12 @@ namespace CVLookup_WebAPI.Services.AuthService
 				string appPort = _configuration.GetValue<string>("AppConfig:PORT");
 				var claims = new ListDictionary();
 				claims.Add("AccountId", account.Id);
-				string activeToken = await GenerateToken(GetMailKey(), claims, DateTime.Now.AddDays(7));
+				string activeToken = await _jwtService.GenerateToken(GetMailKey(), claims, DateTime.Now.AddDays(7));
 				string activeLink = appHost + ":" + appPort + "/api/v1/auth/active-account?token=" + activeToken;
 				string subject = "Xác thực email cho tài khoản CVLookup của bạn";
 
 				var webRoot = _env.WebRootPath;
-				var filePath = webRoot + "\\mail_template.html.t";
+				var filePath = webRoot + "\\mail_template.html";
 
 				var builder = new BodyBuilder();
 				using (StreamReader reader = System.IO.File.OpenText(filePath))
@@ -465,13 +370,13 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 				await _mailService.sendMail(account.Email, subject, message);
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 			catch (Exception e)
 			{
-				throw new ExceptionReturn(500, e.Message);
+				throw new ExceptionModel(500, e.Message);
 			}
 		}
 
@@ -485,7 +390,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 
 				if (string.IsNullOrEmpty(accessToken) || !accessToken.StartsWith("Bearer ") || string.IsNullOrEmpty(refreshToken))
 				{
-					throw new ExceptionReturn(400, "Thất bại. Yêu cầu không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Yêu cầu không hợp lệ");
 				}
 
 				await _tokenService.DeleteRefreshToken(refreshToken);
@@ -493,10 +398,10 @@ namespace CVLookup_WebAPI.Services.AuthService
 				await transaction.CommitAsync();
 				return true;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
 				await transaction.RollbackAsync();
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -507,36 +412,23 @@ namespace CVLookup_WebAPI.Services.AuthService
 			{
 				if (string.IsNullOrEmpty(activeToken))
 				{
-					throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Token không hợp lệ");
 				}
 
-				VerifyToken(activeToken, GetMailKey());
+                _jwtService.VerifyToken(activeToken, GetMailKey());
 
-				VerifyTokenResult tokenVerified = await VerifyToken(activeToken, GetMailKey());
+				VerifyTokenResult tokenVerified = await _jwtService.VerifyToken(activeToken, GetMailKey());
 				if (tokenVerified.IsExpired)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Token đã hết hạn, bạn đã không kích hoạt tài khoản trong vòng 7 ngày. Để sử dụng dịch vụ của CVLookup vui lòng đăng kí lại và nhận email kích hoạt tài khoản");
+					throw new ExceptionModel(400, "Thất bại. Token đã hết hạn, bạn đã không kích hoạt tài khoản trong vòng 7 ngày. Để sử dụng dịch vụ của CVLookup vui lòng đăng kí lại và nhận email kích hoạt tài khoản");
 				}
 				if (!tokenVerified.IsValid)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Token không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Token không hợp lệ");
 				}
 				string accountId = tokenVerified.Token.Claims.FirstOrDefault(prop => prop.Type == "AccountId").Value;
-				var account = await _accountService.GetAccountById(accountId);
-				if (account.Actived)
-				{
-					throw new ExceptionReturn(400, "Thất bại. Tài khoản này đã được kích hoạt trước đó");
-				}
-
-				var accountVM = new AccountVM
-				{
-					ActivedAt = DateTime.Now,
-					UpdatedAt = DateTime.Now,
-					Actived = true,
-					Email = account.Email,
-					Password = account.Password
-				};
-				var result = await _accountService.Update(accountId, accountVM);
+				
+				var result = await _accountService.ActiveAccount(accountId);
 
 				await transaction.CommitAsync();
 				return new
@@ -549,10 +441,10 @@ namespace CVLookup_WebAPI.Services.AuthService
 					ActivedAt = result.ActivedAt
 				};
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
 				await transaction.RollbackAsync();
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 	}

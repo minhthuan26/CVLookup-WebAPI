@@ -14,9 +14,6 @@ namespace CVLookup_WebAPI.Services.AuthService
 		public Task<object> RenewToken();
 		public Task<object> Logout ();
 
-		public Task<string> GenerateToken(string key, ListDictionary data, DateTime expires);
-		public Task<VerifyTokenResult> VerifyToken(string token, string key);
-
 		public Task<object> ActiveAccount(string activeToken);
 	}
 }

@@ -24,17 +24,17 @@ namespace CVLookup_WebAPI.Services.RoleService
                 var role = await _dbContext.Role.ToListAsync();
                 if (role == null)
                 {
-                    throw new ExceptionReturn(400, "Không có danh sách.");
+                    throw new ExceptionModel(400, "Không có danh sách.");
                 }
                 else
                 {
                     return role;
                 }
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
 
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -47,7 +47,7 @@ namespace CVLookup_WebAPI.Services.RoleService
                 var roleExisted = await _dbContext.Role.Where(prop => prop.RoleName == roleVM.RoleName).FirstOrDefaultAsync();
                 if (roleExisted != null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Phân quyền đã tồn tại!");
+                    throw new ExceptionModel(400, "Thất bại. Phân quyền đã tồn tại!");
                 }
                 var result = await _dbContext.Role.AddAsync(role);
                 if (result.State.ToString() == "Added")
@@ -55,19 +55,19 @@ namespace CVLookup_WebAPI.Services.RoleService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return role;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -77,13 +77,13 @@ namespace CVLookup_WebAPI.Services.RoleService
             {
                 if (Id == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
                 var role = await _dbContext.Role.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
                 if (role == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
 
                 var result = _dbContext.Role.Remove(role);
@@ -92,19 +92,19 @@ namespace CVLookup_WebAPI.Services.RoleService
                     var saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return role;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -114,19 +114,19 @@ namespace CVLookup_WebAPI.Services.RoleService
             {
                 if (id == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
                 var result = await _dbContext.Role.Where(prop => prop.Id == id).FirstOrDefaultAsync();
                 if (result == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 return result;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -137,13 +137,13 @@ namespace CVLookup_WebAPI.Services.RoleService
 				var result = await _dbContext.Role.Where(prop => prop.RoleName == value).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -154,7 +154,7 @@ namespace CVLookup_WebAPI.Services.RoleService
                 var role = await _dbContext.Role.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
                 if (role == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 role.RoleName = newRole.RoleName;
                 var result = _dbContext.Role.Update(role);
@@ -163,19 +163,19 @@ namespace CVLookup_WebAPI.Services.RoleService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return role;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
     }

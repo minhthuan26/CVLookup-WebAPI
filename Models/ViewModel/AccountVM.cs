@@ -18,14 +18,5 @@ namespace CVLookup_WebAPI.Models.ViewModel
 		[EmailAddress(ErrorMessage = "Yêu cầu nhập đúng email")]
 		public string Email { get; set; }
 
-		[Display(Name = "Ngày kích hoạt tài khoản")]
-		public DateTime ActivedAt { get; set; }
-
-		[Display(Name = "Ngày cập nhật")]
-		public DateTime UpdatedAt { get; set; }
-
-		[Display(Name = "Trạng thái tài khoản")]
-		public bool Actived { get; set; } = false;
-
 	}
 }
