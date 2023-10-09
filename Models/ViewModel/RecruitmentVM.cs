@@ -15,7 +15,7 @@ namespace CVLookup_WebAPI.Models.ViewModel
 
         [Required(ErrorMessage = "{0} không được để trống")]
         [Display(Name = "Địa điểm công việc")]
-        public string JobAddress { get; set; }
+        public JobAddressVM JobAddress { get; set; }
 
         [Required(ErrorMessage = "{0} không được để trống")]
         [Display(Name = "Ngành nghề")]
