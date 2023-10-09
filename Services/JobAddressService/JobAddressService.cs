@@ -24,7 +24,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			try
 			{
 				var jobAddress = _mapper.Map<JobAddress>(jobAddressVM);
-				var addressExisted = await _dbContext.JobAddress.Where(prop => prop.Address == jobAddress.Address).FirstOrDefaultAsync();
+				var addressExisted = await _dbContext.JobAddress.Where(prop => prop.AddressDetail == jobAddress.AddressDetail).FirstOrDefaultAsync();
 				if (addressExisted != null)
 				{
 					throw new ExceptionModel(400, "Thất bại. Tên địa điểm đã tồn tại");
@@ -119,7 +119,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
-				var result = await _dbContext.JobAddress.Where(prop => prop.Address.Contains(address)).ToListAsync();
+				var result = await _dbContext.JobAddress.Where(prop => prop.AddressDetail.Contains(address)).ToListAsync();
 				return result;
 			}
 			catch (ExceptionModel e)
@@ -151,7 +151,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 
-				jobAddress.Address = newJobAddressVM.Address;
+				jobAddress.AddressDetail = newJobAddressVM.AddressDetail;
 				var result = _dbContext.JobAddress.Update(jobAddress);
 				if (result.State.ToString() == "Modified")
 				{

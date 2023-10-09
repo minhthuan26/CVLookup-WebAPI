@@ -10,10 +10,13 @@ namespace CVLookup_WebAPI.Models.Domain
 
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Địa chỉ làm việc")]
-		public string Address { get; set; }
+		public string AddressDetail { get; set; }
 
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Tỉnh thành")]
         public Province Province { get; set; }
+
+        [Display(Name = "Quận")]
+        public District? District { get; set; }
     }
 }
