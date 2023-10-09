@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Services.AccountService;
+﻿using CVLookup_WebAPI.Middleware;
+using CVLookup_WebAPI.Services.AccountService;
 using CVLookup_WebAPI.Services.AccountUserService;
 using CVLookup_WebAPI.Services.AuthService;
 using CVLookup_WebAPI.Services.CandidateService;
@@ -10,6 +11,7 @@ using CVLookup_WebAPI.Services.JobCareerService;
 using CVLookup_WebAPI.Services.JobFieldService;
 using CVLookup_WebAPI.Services.JobFormService;
 using CVLookup_WebAPI.Services.JobPositionService;
+using CVLookup_WebAPI.Services.JwtService;
 using CVLookup_WebAPI.Services.MailService;
 using CVLookup_WebAPI.Services.RecruitmentCVService;
 using CVLookup_WebAPI.Services.RecruitmentService;
@@ -19,12 +21,9 @@ using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +58,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddTransient<IJwtService, JwtService>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -88,26 +88,6 @@ builder.Services.AddControllers()
         };
     });
 
-// Authentication with Json Web RefreshToken
-builder.Services.Configure<Jwt>(builder.Configuration.GetSection("JwtConfig"));
-var secretKey = builder.Configuration["JwtConfig:SECRET_KEY"];
-var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
-{
-    option.TokenValidationParameters = new TokenValidationParameters
-    {
-        //Tự ký token
-        ValidateIssuer = false,
-        ValidateAudience = false,
-
-        //Ký vào token
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
-
-        ClockSkew = TimeSpan.Zero
-    };
-});
-
 //Add Cors
 builder.Services.AddCors(options =>
 {
@@ -123,15 +103,25 @@ builder.Services.AddCors(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CVLooup API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "CVLooup API", Version = "v1" });
 
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
     // Sử dụng XML Comments
     var dir = new DirectoryInfo(AppContext.BaseDirectory);
     foreach (var fi in dir.EnumerateFiles("*.xml"))
     {
-        c.IncludeXmlComments(fi.FullName);
+        options.IncludeXmlComments(fi.FullName);
     }
 
 });
@@ -142,16 +132,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
+    app.UseSwaggerUI(options =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CVLookup API V1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CVLookup API V1");
 
     });
+    app.UseDeveloperExceptionPage();
 }
-app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseHttpsRedirection();
 
 app.MapControllers();
 

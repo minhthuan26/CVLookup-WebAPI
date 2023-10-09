@@ -11,5 +11,6 @@ namespace CVLookup_WebAPI.Services.AccountService
         public Task<Account> Add(AccountVM account);
         public Task<Account> Update(string Id, AccountVM newAccount);
         public Task<Account> Delete(string Id);
+        public Task<Account> ActiveAccount(string Id);
     }
 }

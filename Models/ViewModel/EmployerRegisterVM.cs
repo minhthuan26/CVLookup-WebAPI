@@ -2,7 +2,7 @@
 {
 	public class EmployerRegisterVM
 	{
-		public EmployerVM EmployerVM { get; set; }
-		public AccountVM AccountVM { get; set; }
+		public EmployerVM Employer { get; set; }
+		public AccountVM Account { get; set; }
 	}
 }

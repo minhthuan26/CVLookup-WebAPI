@@ -41,7 +41,7 @@ namespace CVLookup_WebAPI.Services.MailService
 				);
 				if (!smptClient.IsConnected)
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình kết nối đến smtp");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình kết nối đến smtp");
 				}
 				await smptClient.AuthenticateAsync(
 					_configuration.GetValue<string>("MailConfig:MAIL_USER"),
@@ -49,18 +49,18 @@ namespace CVLookup_WebAPI.Services.MailService
 				);
 				if (!smptClient.IsAuthenticated)
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xác thực");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xác thực");
 				}
 				var sendResult = await smptClient.SendAsync(email);
 				if (!sendResult.Contains("2.0.0 OK"))
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình gửi mail");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình gửi mail");
 				}
 				await smptClient.DisconnectAsync(true);
 				return true;
-			} catch (ExceptionReturn e)
+			} catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 	}

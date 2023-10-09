@@ -1,10 +1,10 @@
-﻿namespace CVLookup_WebAPI.Models.ViewModel
+﻿using CVLookup_WebAPI.Models.Domain;
+
+namespace CVLookup_WebAPI.Models.ViewModel
 {
 	public class RecruitmentCVVM
 	{
-		public RecruitmentVM Recruitment { get; set; }
-		public CurriculumVitaeVM CurriculumVitae { get; set; }
-		public string RecruitmentId { get; set; }
-		public string CurriculumVitaeId { get; set; }
+		public Recruitment Recruitment { get; set; }
+		public CurriculumVitae CurriculumVitae { get; set; }
 	}
 }
