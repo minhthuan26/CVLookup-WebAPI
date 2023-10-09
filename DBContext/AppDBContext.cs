@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.DBContext;
+using CVLookup_WebAPI.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -35,6 +36,8 @@ namespace FirstWebApi.Models.Database
 
             modelBuilder.Entity<Token>()
                 .HasKey(prop => new { prop.UserId, prop.AccountId });
+
+            modelBuilder.SeedData();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
@@ -61,9 +64,8 @@ namespace FirstWebApi.Models.Database
         public DbSet<RecruitmentCV> RecruitmentCV { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Token> Token { get; set; }
-        //public DbSet<RecruitmentCV> RecruitmentCV { get; set; }
-        //public DbSet<EmployerAccount> EmployerAccount { get; set; }
-        //public DbSet<CandidateAccount> CandidateAccount { get; set; }
+        public DbSet<Province> Province { get; set; }
+        public DbSet<District> District { get; set; }
         #endregion
     }
 
