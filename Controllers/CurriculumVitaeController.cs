@@ -22,7 +22,7 @@ namespace CVLookup_WebAPI.Controllers
         private readonly ILogger<CurriculumVitaeController> _logger;
         private readonly ICurriculumViateService _curriculumViateService;
 
-        public CurriculumVitaeController(ILogger<CurriculumVitaeController> logger,ICurriculumViateService curriculumViateService)
+        public CurriculumVitaeController(ILogger<CurriculumVitaeController> logger, ICurriculumViateService curriculumViateService)
         {
             _logger = logger;
             _curriculumViateService = curriculumViateService;
@@ -36,27 +36,15 @@ namespace CVLookup_WebAPI.Controllers
         [HttpPost("add-curriculum-vitae")]
         public async Task<IActionResult> AddCurriculumVitae([FromBody] CurriculumVitaeVM curriculumVitaeVM)
         {
-            try
-            {
-                var result = await _curriculumViateService.Add(curriculumVitaeVM);
+            var result = await _curriculumViateService.Add(curriculumVitaeVM);
 
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Data = result,
-                    Message = "Hoàn thành"
-                });
-            }
-            catch (ExceptionReturn e)
+            return Ok(new ApiResponse
             {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Code = e.Code,
-                    Message = e.Message
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
         }
 
         /// <summary>
@@ -66,27 +54,15 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-all-curriculum-vitae")]
         public async Task<IActionResult> GetAllCurriculumVitae()
         {
-            try
-            {
-                var result = await _curriculumViateService.CurriculumVitaeList();
+            var result = await _curriculumViateService.CurriculumVitaeList();
 
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Data = result,
-                    Message = "Hoàn thành"
-                });
-            }
-            catch (ExceptionReturn e)
+            return Ok(new ApiResponse
             {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Code = e.Code,
-                    Message = e.Message
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
         }
 
         /// <summary>
@@ -97,27 +73,15 @@ namespace CVLookup_WebAPI.Controllers
         [HttpDelete("delete-curriculum-vitae")]
         public async Task<IActionResult> DeleteCurriculumVitae([FromQuery] string id)
         {
-            try
-            {
-                var result = await _curriculumViateService.Delete(id);
+            var result = await _curriculumViateService.Delete(id);
 
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Data = result,
-                    Message = "Hoàn thành"
-                });
-            }
-            catch (ExceptionReturn e)
+            return Ok(new ApiResponse
             {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Code = e.Code,
-                    Message = e.Message
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
         }
 
         /// <summary>
@@ -128,30 +92,18 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-curriculum-vitae-by-id")]
         public async Task<IActionResult> GetCurriculumVitaeById([FromQuery] string id)
         {
-            try
-            {
-               var result = await _curriculumViateService.GetCurriculumVitaeById(id);
+            var result = await _curriculumViateService.GetCurriculumVitaeById(id);
 
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Data = result,
-                    Message = "Hoàn thành"
-                });
-            }
-            catch (ExceptionReturn e)
+            return Ok(new ApiResponse
             {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Code = e.Code,
-                    Message = e.Message
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
         }
-        
-        
+
+
         /// <summary>
         /// Lấy CV theo Id ứng viên
         /// </summary>
@@ -160,27 +112,15 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-curriculum-vitae-by-candidateId")]
         public async Task<IActionResult> GetByCandidateId([FromQuery] string id)
         {
-            try
-            {
-               var result = await _curriculumViateService.GetByCandidateId(id);
+            var result = await _curriculumViateService.GetByCandidateId(id);
 
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Data = result,
-                    Message = "Hoàn thành"
-                });
-            }
-            catch (ExceptionReturn e)
+            return Ok(new ApiResponse
             {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Code = e.Code,
-                    Message = e.Message
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
         }
 
         /// <summary>
@@ -192,27 +132,15 @@ namespace CVLookup_WebAPI.Controllers
         [HttpPatch("update-curriculum-vitae")]
         public async Task<IActionResult> UpdateCurriculumVitae([FromQuery] string id, [FromBody] CurriculumVitaeVM newCurriculumVitaeVM)
         {
-            try
-            {
-                var result = await _curriculumViateService.Update(id, newCurriculumVitaeVM);
+            var result = await _curriculumViateService.Update(id, newCurriculumVitaeVM);
 
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Data = result,
-                    Message = "Hoàn thành"
-                });
-            }
-            catch (ExceptionReturn e)
+            return Ok(new ApiResponse
             {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Code = e.Code,
-                    Message = e.Message
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
         }
     }
 }

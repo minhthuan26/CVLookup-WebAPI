@@ -31,26 +31,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-by-user-id")]
         public async Task<IActionResult> GetByUserId([FromQuery] string userId)
         {
-            try
+            var result = await _accountUserService.GetByUserId(userId);
+            return Ok(new ApiResponse
             {
-                var result = await _accountUserService.GetByUserId(userId);
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Message = "Hoàn thành",
-                    Data = result
-                });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Message = ex.Message,
-                    Code = ex.Code
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = result
+            });
         }
 
         /// <summary>
@@ -61,26 +49,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-by-account-id")]
         public async Task<IActionResult> GetByAccountId([FromQuery] string roleId)
         {
-            try
+            var result = await _accountUserService.GetByAccountId(roleId);
+            return Ok(new ApiResponse
             {
-                var result = await _accountUserService.GetByAccountId(roleId);
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Message = "Hoàn thành",
-                    Data = result
-                });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Message = ex.Message,
-                    Code = ex.Code
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = result
+            });
         }
 
         /// <summary>
@@ -90,18 +66,18 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="userId">ID của User</param>
         /// <returns>Thông tin UserRole đã xóa</returns>
         [HttpDelete("delete-account-user")]
-        public async Task<IActionResult> DeleteAccountUser([FromQuery] string accountId , [FromQuery] string userId)
+        public async Task<IActionResult> DeleteAccountUser([FromQuery] string accountId, [FromQuery] string userId)
         {
-            try
+            var result = await _accountUserService.Delete(accountId, userId);
+            return Ok(new ApiResponse
             {
-                var result = await _accountUserService.Delete(accountId, userId);
-                return Ok(new ApiResponse { Success = true, Code = StatusCodes.Status200OK, Message = "Hoàn thành", Data = result });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse { Success = false, Message = ex.Message, Code = StatusCodes.Status500InternalServerError });
-            }
-            
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = result
+            });
+        }
+
         /// <summary>
         /// Lấy tất cả thông tin tài khoản
         /// </summary>

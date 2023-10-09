@@ -34,26 +34,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-by-user-id")]
         public async Task<IActionResult> GetUserRoleByUserId([FromQuery] string userId)
         {
-            try
+            var userRole = await _userRoleService.GetByUserId(userId);
+            return Ok(new ApiResponse
             {
-                var userRole = await _userRoleService.GetByUserId(userId);
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Message = "Hoàn thành",
-                    Data = userRole
-                });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Message = ex.Message,
-                    Code = ex.Code
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = userRole
+            });
         }
 
         /// <summary>
@@ -62,28 +50,16 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="roleId">ID của Role</param>
         /// <returns>Thông tin UserRole</returns>
         [HttpGet("get-by-role-id")]
-        public async Task<IActionResult> GetUserRoleByRoleId([FromQuery]string roleId)
+        public async Task<IActionResult> GetUserRoleByRoleId([FromQuery] string roleId)
         {
-            try
+            var userRole = await _userRoleService.GetByRoleId(roleId);
+            return Ok(new ApiResponse
             {
-                var userRole = await _userRoleService.GetByRoleId(roleId);
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Message = "Hoàn thành",
-                    Data = userRole
-                });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse
-                {
-                    Success = false,
-                    Message = ex.Message,
-                    Code = ex.Code
-                });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = userRole
+            });
         }
 
         /// <summary>
@@ -94,21 +70,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpPost("create-user-role")]
         public async Task<IActionResult> AddUserRole([FromBody] UserRoleVM userRoleVM)
         {
-            try
+            var newUserRole = await _userRoleService.Add(userRoleVM);
+            return Ok(new ApiResponse
             {
-                var newUserRole = await _userRoleService.Add(userRoleVM);
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Code = StatusCodes.Status200OK,
-                    Message = "Hoàn thành",
-                    Data = newUserRole
-                });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse { Success = false, Message = ex.Message, Code = StatusCodes.Status500InternalServerError });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = newUserRole
+            });
         }
 
         /// <summary>
@@ -120,16 +89,14 @@ namespace CVLookup_WebAPI.Controllers
         [HttpDelete("delete-user-role")]
         public async Task<IActionResult> DeleteUserRole([FromQuery] string roleId, [FromQuery] string userId)
         {
-            try
+            var deletedUserRole = await _userRoleService.Delete(roleId, userId);
+            return Ok(new ApiResponse
             {
-                var deletedUserRole = await _userRoleService.Delete(roleId, userId);
-                return Ok(new ApiResponse { Success = true, Code = StatusCodes.Status200OK, Message = "Hoàn thành", Data = deletedUserRole });
-            }
-            catch (ExceptionReturn ex)
-            {
-                return Ok(new ApiResponse { Success = false, Message = ex.Message, Code = StatusCodes.Status500InternalServerError });
-            }
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = deletedUserRole
+            });
         }
-
     }
 }
