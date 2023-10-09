@@ -27,6 +27,9 @@ namespace CVLookup_WebAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("Actived")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("ActivedAt")
                         .HasColumnType("datetime2");
 
@@ -40,9 +43,6 @@ namespace CVLookup_WebAPI.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");

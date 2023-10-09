@@ -26,7 +26,7 @@ namespace CVLookup_WebAPI.Services.UserService
                 var userExisted = await _dbContext.User.Where(prop => prop.Email == candidate.Email).FirstOrDefaultAsync();
                 if (userExisted != null)
                 {
-                    throw new ExceptionReturn(400, "Email này đã được sử dụng bởi 1 tài khoản khác");
+                    throw new ExceptionModel(400, "Email này đã được sử dụng bởi 1 tài khoản khác");
                 }
                 var result = await _dbContext.User.AddAsync(candidate);
                 if (result.State.ToString() == "Added")
@@ -34,18 +34,18 @@ namespace CVLookup_WebAPI.Services.UserService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return candidate;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
                 }
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -57,7 +57,7 @@ namespace CVLookup_WebAPI.Services.UserService
                 var userExisted = await _dbContext.User.Where(prop => prop.Email == employer.Email).FirstOrDefaultAsync();
                 if (userExisted != null)
                 {
-                    throw new ExceptionReturn(400, "Email này đã được sử dụng bởi 1 tài khoản khác");
+                    throw new ExceptionModel(400, "Email này đã được sử dụng bởi 1 tài khoản khác");
                 }
                 var result = await _dbContext.User.AddAsync(employer);
                 if (result.State.ToString() == "Added")
@@ -65,18 +65,18 @@ namespace CVLookup_WebAPI.Services.UserService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return employer;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
                 }
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -86,12 +86,12 @@ namespace CVLookup_WebAPI.Services.UserService
             {
                 if (Id == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
                 var user = await _dbContext.User.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
                 if (user == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 var result = _dbContext.User.Remove(user);
                 if (result.State.ToString() == "Deleted")
@@ -99,18 +99,18 @@ namespace CVLookup_WebAPI.Services.UserService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return user;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
                 }
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -121,9 +121,9 @@ namespace CVLookup_WebAPI.Services.UserService
                 var candidateList = await _dbContext.Candidate.Where(prop => (prop.FirstName + " " + prop.LastName).Contains(name)).ToListAsync();
                 return candidateList;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -134,9 +134,9 @@ namespace CVLookup_WebAPI.Services.UserService
                 var employerList = await _dbContext.Employer.Where(prop => prop.EmployerName.Contains(name)).ToListAsync();
                 return employerList;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -146,18 +146,18 @@ namespace CVLookup_WebAPI.Services.UserService
             {
                 if (email == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
                 var user = await _dbContext.User.Where(prop => prop.Email == email).FirstOrDefaultAsync();
                 if (user == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 return user;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -167,18 +167,18 @@ namespace CVLookup_WebAPI.Services.UserService
             {
                 if (id == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
                 var user = await _dbContext.User.Where(prop => prop.Id == id).FirstOrDefaultAsync();
                 if (user == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 return user;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -188,12 +188,12 @@ namespace CVLookup_WebAPI.Services.UserService
             {
                 if (id == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
                 var candidate = await _dbContext.Candidate.Where(prop => prop.Id == id).FirstOrDefaultAsync();
                 if (candidate == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 var newCandidate = _mapper.Map<Candidate>(newCandidateVM);
                 candidate = newCandidate;
@@ -203,18 +203,18 @@ namespace CVLookup_WebAPI.Services.UserService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return candidate;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
                 }
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -224,12 +224,12 @@ namespace CVLookup_WebAPI.Services.UserService
             {
                 if (id == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
                 var employer = await _dbContext.Employer.Where(prop => prop.Id == id).FirstOrDefaultAsync();
                 if (employer == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 var newEmployer = _mapper.Map<Employer>(newEmployerVM);
                 employer = newEmployer;
@@ -239,18 +239,18 @@ namespace CVLookup_WebAPI.Services.UserService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return employer;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
                 }
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -268,9 +268,9 @@ namespace CVLookup_WebAPI.Services.UserService
 
                 return userList;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
     }

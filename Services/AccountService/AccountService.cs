@@ -27,9 +27,43 @@ namespace CVLookup_WebAPI.Services.AccountService
                 var result = await _dbContext.Account.ToListAsync();
                 return result;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+        public async Task<Account> ActiveAccount(string Id)
+        {
+            try
+            {
+                var account = await GetAccountById(Id);
+                if (account.Actived)
+                {
+                    throw new ExceptionModel(400, "Thất bại. Tài khoản này đã được kích hoạt từ trước");
+                }
+
+                account.Actived = true;
+                account.UpdatedAt = DateTime.Now;
+                account.ActivedAt = account.UpdatedAt;
+                var result = _dbContext.Account.Update(account);
+                if (result.State.ToString() == "Modified")
+                {
+                    int saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return account;
+                }
+                else
+                {
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình kích hoạt tài khoản");
+                }
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -40,7 +74,7 @@ namespace CVLookup_WebAPI.Services.AccountService
                 var accountExisted = await _dbContext.Account.Where(prop => prop.Email == accountVM.Email).FirstOrDefaultAsync();
                 if (accountExisted != null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Email đã tồn tại!");
+                    throw new ExceptionModel(400, "Thất bại. Email đã tồn tại!");
                 }
 
                 var passwordHash = HashPassword(accountVM.Password);
@@ -53,19 +87,19 @@ namespace CVLookup_WebAPI.Services.AccountService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return account;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -75,13 +109,13 @@ namespace CVLookup_WebAPI.Services.AccountService
             {
                 if (Id == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
                 var account = await _dbContext.Account.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
                 if (account == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
 
                 var result = _dbContext.Account.Remove(account);
@@ -90,19 +124,19 @@ namespace CVLookup_WebAPI.Services.AccountService
                     var saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return account;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -112,19 +146,19 @@ namespace CVLookup_WebAPI.Services.AccountService
             {
                 if (email == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
                 var result = await _dbContext.Account.Where(prop => prop.Email == email).FirstOrDefaultAsync();
                 if (result == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 return result;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -134,53 +168,52 @@ namespace CVLookup_WebAPI.Services.AccountService
             {
                 if (id == null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
                 var result = await _dbContext.Account.Where(prop => prop.Id == id).FirstOrDefaultAsync();
                 if (result == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 return result;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
             throw new NotImplementedException();
         }
 
-        public async Task<Account> Update(string Id, AccountVM newAccount)
+        public async Task<Account> Update(string Id, AccountVM newAccountVM)
         {
             try
             {
-                var account = await _dbContext.Account.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
-                if (account == null)
+                var accountInDB = await _dbContext.Account.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
+                if (accountInDB == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
-                account.Password = newAccount.Password;
-                account.Email = newAccount.Email;
-                var result = _dbContext.Account.Update(account);
+                _mapper.Map(newAccountVM, accountInDB);
+                var result = _dbContext.Account.Update(accountInDB);
                 if (result.State.ToString() == "Modified")
                 {
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
-                    return account;
+                    return accountInDB;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -207,7 +240,7 @@ namespace CVLookup_WebAPI.Services.AccountService
             }
         }
 
-        
+
     }
 }
 

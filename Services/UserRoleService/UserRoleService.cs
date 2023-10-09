@@ -30,19 +30,19 @@ namespace CVLookup_WebAPI.Services.UserRoleService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return userRole;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -93,13 +93,13 @@ namespace CVLookup_WebAPI.Services.UserRoleService
 					.FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -110,13 +110,13 @@ namespace CVLookup_WebAPI.Services.UserRoleService
 				var result = await _dbContext.UserRole.Where(prop => prop.RoleId == roleId).Include(prop => prop.User).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 

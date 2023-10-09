@@ -1,4 +1,4 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+using CVLookup_WebAPI.Models.Domain;
 using System.ComponentModel.DataAnnotations;
 
 namespace CVLookup_WebAPI.Models.ViewModel
@@ -15,5 +15,6 @@ namespace CVLookup_WebAPI.Models.ViewModel
 
 		public string Introdution { get; set; }
 
+		public User User { get; set; }
 	}
 }

@@ -31,16 +31,16 @@ namespace CVLookup_WebAPI.Services.AccountUserService
 				var accountUser = await _dbContext.AccountUser.Include(x => x.Account).Include(x => x.User).ToListAsync();
 				if (accountUser == null)
 				{
-					throw new ExceptionReturn(404, "Không tìm thấy dữ liệu.");
+					throw new ExceptionModel(404, "Không tìm thấy dữ liệu.");
 				}
 				else
 				{
 					return accountUser;
 				}
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace CVLookup_WebAPI.Services.AccountUserService
 					.FirstOrDefaultAsync();
 				if (accountUserInDB != null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Tài khoản này đã được đăng kí cho 1 người dùng khác");
+					throw new ExceptionModel(400, "Thất bại. Tài khoản này đã được đăng kí cho 1 người dùng khác");
 				}
 				var result = await _dbContext.AccountUser.AddAsync(newAccountUser);
 				if (result.State.ToString() == "Added")
@@ -62,23 +62,23 @@ namespace CVLookup_WebAPI.Services.AccountUserService
 					int saveState = await _dbContext.SaveChangesAsync();
 					if (saveState <= 0)
 					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
 					return newAccountUser;
 				}
 				else
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
 				}
 
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 			catch (Exception e)
 			{
-				throw new ExceptionReturn(500, e.Message);
+				throw new ExceptionModel(500, e.Message);
 			}
 		}
 
@@ -126,13 +126,13 @@ namespace CVLookup_WebAPI.Services.AccountUserService
 				var result = await _dbContext.AccountUser.Where(prop => prop.AccountId == accountId).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -143,13 +143,13 @@ namespace CVLookup_WebAPI.Services.AccountUserService
 				var result = await _dbContext.AccountUser.Where(prop => prop.UserId == userId).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 

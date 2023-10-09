@@ -29,23 +29,23 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return refreshToken;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
 			catch (Exception e)
 			{
-				throw new ExceptionReturn(500, e.Message);
+				throw new ExceptionModel(500, e.Message);
 			}
 		}
 
@@ -55,13 +55,13 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
             {
                 if (userId == null || accountId ==null)
                 {
-                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
                 var refresh = await _dbContext.Token.Where(prop => prop.UserId == userId && prop.AccountId == accountId).FirstOrDefaultAsync();
                 if (refresh == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
 
                 var result = _dbContext.Token.Remove(refresh);
@@ -70,30 +70,67 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
                     var saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return refresh;
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
-        public async Task<Token> EditRefreshToken(TokenVM tokenVM)
+		public async Task<Token> DeleteRefreshToken(string token)
+		{
+			try
+			{
+				if (token == null)
+				{
+					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
+				}
+
+				var record = await _dbContext.Token.Where(prop => prop.RefreshToken == token).FirstOrDefaultAsync();
+				if (record == null)
+				{
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+
+				var result = _dbContext.Token.Remove(record);
+				if (result.State.ToString() == "Deleted")
+				{
+					var saveState = await _dbContext.SaveChangesAsync();
+					if (saveState <= 0)
+					{
+						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+					}
+					return record;
+				}
+				else
+				{
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+				}
+
+			}
+			catch (ExceptionModel e)
+			{
+				throw new ExceptionModel(e.Code, e.Message);
+			}
+		}
+
+		public async Task<Token> EditRefreshToken(TokenVM tokenVM)
         {
             try
             {
                 var refresh = await _dbContext.Token.Where(prop => prop.UserId == tokenVM.UserId && tokenVM.AccountId == prop.AccountId).FirstOrDefaultAsync();
                 if (refresh == null)
                 {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
 
                 refresh.RefreshToken = tokenVM.RefreshToken;
@@ -103,20 +140,20 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
                     int saveState = await _dbContext.SaveChangesAsync();
                     if (saveState <= 0)
                     {
-                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
                     return refresh;
 
                 }
                 else
                 {
-                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
                 }
 
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -125,16 +162,14 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
         {
             try
             {
-                var result = await  _dbContext.Token.Where(prop => prop.UserId == userId && prop.AccountId == accountId).FirstOrDefaultAsync();
-                if (result == null)
-                {
-                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
-                }
+                var result = await  _dbContext.Token
+                    .Include(prop => prop.Role)
+                    .Where(prop => prop.UserId == userId && prop.AccountId == accountId).FirstOrDefaultAsync();
                 return result;
             }
-            catch (ExceptionReturn e)
+            catch (ExceptionModel e)
             {
-                throw new ExceptionReturn(e.Code, e.Message);
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
@@ -142,16 +177,18 @@ namespace CVLookup_WebAPI.Services.RefreshTokenService
 		{
 			try
 			{
-				var result = await _dbContext.Token.Where(prop => prop.RefreshToken == token).FirstOrDefaultAsync();
+				var result = await _dbContext.Token
+                    .Include(prop => prop.Role)
+                    .Where(prop => prop.RefreshToken == token).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 	}

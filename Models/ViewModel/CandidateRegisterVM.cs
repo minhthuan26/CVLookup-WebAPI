@@ -2,7 +2,7 @@
 {
 	public class CandidateRegisterVM
 	{
-		public CandidateVM CandidateVM { get; set; }
-		public AccountVM AccountVM { get; set; }
+		public CandidateVM Candidate { get; set; }
+		public AccountVM Account { get; set; }
 	}
 }

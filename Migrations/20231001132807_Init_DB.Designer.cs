@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVLookup_WebAPI.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20230924083404_init_db")]
-    partial class init_db
+    [Migration("20231001132807_Init_DB")]
+    partial class Init_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace CVLookup_WebAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("Actived")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("ActivedAt")
                         .HasColumnType("datetime2");
 
@@ -43,9 +46,6 @@ namespace CVLookup_WebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -59,13 +59,13 @@ namespace CVLookup_WebAPI.Migrations
 
             modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.AccountUser", b =>
                 {
-                    b.Property<string>("AccountID")
+                    b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("AccountID", "UserId");
+                    b.HasKey("AccountId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -287,31 +287,6 @@ namespace CVLookup_WebAPI.Migrations
                     b.ToTable("RecruitmentCV");
                 });
 
-            modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.RefreshToken", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AccountId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiredAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "AccountId");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("RefreshToken");
-                });
-
             modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -324,6 +299,31 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+                });
+
+            modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.Token", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "AccountId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Token");
                 });
 
             modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.User", b =>
@@ -413,7 +413,7 @@ namespace CVLookup_WebAPI.Migrations
                 {
                     b.HasOne("CVLookup_WebAPI.Models.Domain.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountID")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -513,11 +513,17 @@ namespace CVLookup_WebAPI.Migrations
                     b.Navigation("Recruitment");
                 });
 
-            modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.RefreshToken", b =>
+            modelBuilder.Entity("CVLookup_WebAPI.Models.Domain.Token", b =>
                 {
                     b.HasOne("CVLookup_WebAPI.Models.Domain.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CVLookup_WebAPI.Models.Domain.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -528,6 +534,8 @@ namespace CVLookup_WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
+
+                    b.Navigation("Role");
 
                     b.Navigation("User");
                 });

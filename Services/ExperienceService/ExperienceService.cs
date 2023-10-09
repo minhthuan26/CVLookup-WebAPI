@@ -26,7 +26,7 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 				var addressExisted = await _dbContext.Experience.Where(prop => prop.Exp == jobExp.Exp).FirstOrDefaultAsync();
 				if (addressExisted != null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Tên kinh nghiệm đã tồn tại");
+					throw new ExceptionModel(400, "Thất bại. Tên kinh nghiệm đã tồn tại");
 				}
 				var result = await _dbContext.Experience.AddAsync(jobExp);
 				if (result.State.ToString() == "Added")
@@ -34,19 +34,19 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 					int saveState = await _dbContext.SaveChangesAsync();
 					if (saveState <= 0)
 					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
 					return jobExp;
 				}
 				else
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
 				}
 
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -56,13 +56,13 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 			{
 				if (Id == null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
 				var jobExp = await _dbContext.Experience.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
 				if (jobExp == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 
 				var result = _dbContext.Experience.Remove(jobExp);
@@ -71,19 +71,19 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 					var saveState = await _dbContext.SaveChangesAsync();
 					if (saveState <= 0)
 					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
 					return jobExp;
 				}
 				else
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
 				}
 
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -93,19 +93,19 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 			{
 				if (id == null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
 				var result = await _dbContext.Experience.Where(prop => prop.Id == id).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -115,15 +115,15 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 			{
 				if (value == null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
 				var result = await _dbContext.Experience.Where(prop => prop.Exp.Contains(value)).ToListAsync();
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -134,9 +134,9 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 				var jobExpList = await _dbContext.Experience.ToListAsync();
 				return jobExpList;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(500, e.Message);
+				throw new ExceptionModel(500, e.Message);
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 				var jobExp = await _dbContext.Experience.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
 				if (jobExp == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 
 				jobExp.Exp = newExperienceVM.Exp;
@@ -157,20 +157,20 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 					int saveState = await _dbContext.SaveChangesAsync();
 					if (saveState <= 0)
 					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
 					return jobExp;
 
 				}
 				else
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
 				}
 
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 	}

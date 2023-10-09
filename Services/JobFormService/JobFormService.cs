@@ -26,7 +26,7 @@ namespace CVLookup_WebAPI.Services.JobFormService
 				var formExisted = await _dbContext.JobForm.Where(prop => prop.Form == jobForm.Form).FirstOrDefaultAsync();
 				if (formExisted != null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Tên hình thức đã tồn tại");
+					throw new ExceptionModel(400, "Thất bại. Tên hình thức đã tồn tại");
 				}
 				var result = await _dbContext.JobForm.AddAsync(jobForm);
 				if (result.State.ToString() == "Added")
@@ -34,19 +34,19 @@ namespace CVLookup_WebAPI.Services.JobFormService
 					int saveState = await _dbContext.SaveChangesAsync();
 					if (saveState <= 0)
 					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
 					return jobForm;
 				}
 				else
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
 				}
 
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -56,13 +56,13 @@ namespace CVLookup_WebAPI.Services.JobFormService
 			{
 				if (Id == null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
 				var jobForm = await _dbContext.JobForm.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
 				if (jobForm == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 
 				var result = _dbContext.JobForm.Remove(jobForm);
@@ -71,19 +71,19 @@ namespace CVLookup_WebAPI.Services.JobFormService
 					var saveState = await _dbContext.SaveChangesAsync();
 					if (saveState <= 0)
 					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
 					return jobForm;
 				}
 				else
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
 				}
 
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -93,19 +93,19 @@ namespace CVLookup_WebAPI.Services.JobFormService
 			{
 				if (id == null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
 				var result = await _dbContext.JobForm.Where(prop => prop.Id == id).FirstOrDefaultAsync();
 				if (result == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -115,15 +115,15 @@ namespace CVLookup_WebAPI.Services.JobFormService
 			{
 				if (form == null)
 				{
-					throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
 				var result = await _dbContext.JobForm.Where(prop => prop.Form.Contains(form)).ToListAsync();
 				return result;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 
@@ -134,9 +134,9 @@ namespace CVLookup_WebAPI.Services.JobFormService
 				var jobFormList = await _dbContext.JobForm.ToListAsync();
 				return jobFormList;
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(500, e.Message);
+				throw new ExceptionModel(500, e.Message);
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace CVLookup_WebAPI.Services.JobFormService
 				var jobForm = await _dbContext.JobForm.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
 				if (jobForm == null)
 				{
-					throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
 				}
 
 				jobForm.Form = newJobFormVM.Form;
@@ -157,20 +157,20 @@ namespace CVLookup_WebAPI.Services.JobFormService
 					int saveState = await _dbContext.SaveChangesAsync();
 					if (saveState <= 0)
 					{
-						throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
 					return jobForm;
 
 				}
 				else
 				{
-					throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
 				}
 
 			}
-			catch (ExceptionReturn e)
+			catch (ExceptionModel e)
 			{
-				throw new ExceptionReturn(e.Code, e.Message);
+				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
 	}

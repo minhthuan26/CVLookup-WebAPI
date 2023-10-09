@@ -1,4 +1,6 @@
-﻿namespace CVLookup_WebAPI.Models.ViewModel
+﻿using CVLookup_WebAPI.Models.Domain;
+
+namespace CVLookup_WebAPI.Models.ViewModel
 {
 	public class RecruitmentCVVM
 	{ 

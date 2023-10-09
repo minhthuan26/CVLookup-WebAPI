@@ -17,6 +17,6 @@ namespace CVLookup_WebAPI.Models.ViewModel
 		[Display(Name = "Email")]
 		[EmailAddress(ErrorMessage = "Yêu cầu nhập đúng email")]
 		public string Email { get; set; }
-		
+
 	}
 }
