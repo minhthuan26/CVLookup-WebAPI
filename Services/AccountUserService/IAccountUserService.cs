@@ -9,7 +9,7 @@ namespace CVLookup_WebAPI.Services.AccountUserService
         public Task<AccountUser> GetByAccountId(string accountId);
         public Task<AccountUser> GetByUserId(string accountId);
         public Task<AccountUser> Add(AccountUserVM accountUserVM);
-        public Task<AccountUser> Update(string Id, RoleVM newAccount);
+        public Task<AccountUser> Update(string Id, AccountUserVM newAccount);
         public Task<AccountUser> Delete(string accountId, string userId);
     }
 }

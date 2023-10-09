@@ -46,10 +46,42 @@ namespace CVLookup_WebAPI.Services.UserRoleService
             }
         }
 
-		public Task<UserRole> Delete(string Id)
+		public async Task<UserRole> Delete(string roleId, string userId)
 		{
-			throw new NotImplementedException();
-		}
+            try
+            {
+                if (roleId == null || userId==null)
+                {
+                    throw new ExceptionReturn(400, "Thất bại. Truy vấn không hợp lệ");
+                }
+
+                var userRole = await _dbContext.UserRole.Where(prop => prop.UserId == userId && prop.RoleId==roleId).FirstOrDefaultAsync();
+                if (userRole == null)
+                {
+                    throw new ExceptionReturn(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+
+                var result = _dbContext.UserRole.Remove(userRole);
+                if (result.State.ToString() == "Deleted")
+                {
+                    var saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return userRole;
+                }
+                else
+                {
+                    throw new ExceptionReturn(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                }
+
+            }
+            catch (ExceptionReturn e)
+            {
+                throw new ExceptionReturn(e.Code, e.Message);
+            }
+        }
 
 		public async Task<UserRole> GetByUserId(string userId)
 		{
