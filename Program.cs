@@ -28,7 +28,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ApplyToRecruitment services to the container.
 
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
@@ -36,10 +36,10 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-// Add automapper
+// ApplyToRecruitment automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-//Add service
+//ApplyToRecruitment service
 builder.Services.AddScoped<IAccountUserService, AccountUserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICandidateService, CandidateService>();
@@ -65,7 +65,7 @@ builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddHttpContextAccessor();
 
 
-//Add custom data validate error
+//ApplyToRecruitment custom data validate error
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -90,7 +90,7 @@ builder.Services.AddControllers()
         };
     });
 
-//Add Cors
+//ApplyToRecruitment Cors
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(

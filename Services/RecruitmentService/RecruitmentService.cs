@@ -100,7 +100,17 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
-				var result = await _dbContext.Recruitment.Where(prop => prop.Id == id).FirstOrDefaultAsync();
+				var result = await _dbContext.Recruitment.Where(prop => prop.Id == id)
+					.Include(prop => prop.JobAddress)
+					.Include(prop => prop.JobAddress.Province)
+					.Include(prop => prop.JobAddress.District)
+					.Include(prop => prop.JobPosition)
+					.Include(prop => prop.JobForm)
+					.Include(prop => prop.JobField)
+					.Include(prop => prop.Experience)
+					.Include(prop => prop.JobCareer)
+					.Include(prop => prop.User)
+					.FirstOrDefaultAsync();
 				if (result == null)
 				{
 					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
