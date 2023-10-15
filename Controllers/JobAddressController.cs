@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Middleware;
+using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.JobAddressService;
 using CVLookup_WebAPI.Utilities;
@@ -9,6 +10,8 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
+    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+    [AuthorizationAttribute("Admin")]
     public class JobAddressController : ControllerBase
     {
         private readonly IJobAddressService _jobAddressService;
@@ -81,6 +84,42 @@ namespace CVLookup_WebAPI.Controllers
         public async Task<IActionResult> AddJobAddress([FromBody] JobAddressVM jobAddress)
         {
             var result = await _jobAddressService.Add(jobAddress);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
+        }
+
+        /// <summary>
+        /// Thêm tỉnh thành mới
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpPost("add-province")]
+        public async Task<IActionResult> AddProvince([FromBody] ProvinceVM name)
+        {
+            var result = await _jobAddressService.AddProvince(name);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
+        }
+
+        /// <summary>
+        /// Thêm quận mới
+        /// </summary>
+        /// <param name="district"></param>
+        /// <returns></returns>
+        [HttpPost("add-district")]
+        public async Task<IActionResult> AddDistrict([FromBody] DistrictVM district)
+        {
+            var result = await _jobAddressService.AddDistrict(district);
             return Ok(new ApiResponse
             {
                 Success = true,

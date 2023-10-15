@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Models.Domain;
+﻿using CVLookup_WebAPI.Middleware;
+using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
@@ -9,6 +10,8 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
+    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+    [AuthorizationAttribute("Admin")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

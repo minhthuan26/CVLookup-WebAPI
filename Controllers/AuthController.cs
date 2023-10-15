@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Models.ViewModel;
+﻿using CVLookup_WebAPI.Middleware;
+using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AuthService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -41,7 +42,7 @@ namespace CVLookup_WebAPI.Controllers
         /// <summary>
         /// Đăng ký tài khoản ứng viên
         /// </summary>
-        /// <param name="candidateRegisterVM"></param>
+        /// <param name="candidateRegister"></param>
         /// <returns></returns>
         [HttpPost("register-candidate")]
         public async Task<IActionResult> RegisterCandidate([FromBody] CandidateRegisterVM candidateRegister)
@@ -100,6 +101,8 @@ namespace CVLookup_WebAPI.Controllers
         /// <returns></returns>
         [HttpPost("logout")]
         [HttpGet("logout")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [AuthorizationAttribute("Admin", "Employer", "Candidate")]
         public async Task<IActionResult> Logout()
         {
             var result = await _authService.Logout();

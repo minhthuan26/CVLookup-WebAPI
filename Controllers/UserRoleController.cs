@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CVLookup_WebAPI.Middleware;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Utilities;
@@ -12,6 +13,8 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+    [AuthorizationAttribute("Admin")]
     public class UserRoleController : ControllerBase
     {
         private readonly IUserRoleService _userRoleService;

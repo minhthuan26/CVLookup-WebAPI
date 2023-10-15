@@ -15,7 +15,7 @@ namespace CVLookup_WebAPI.Models.Mapper
                 CreateMap<AccountUser, AccountUserVM>().ReverseMap();
                 CreateMap<User, UserVM>().ReverseMap();
                 CreateMap<UserRole, UserRoleVM>().ReverseMap();
-                CreateMap<JobAddress, JobAddressVM>().ReverseMap();
+                CreateMap<JobAddressVM, JobAddress>().ReverseMap();
                 CreateMap<JobField, JobFieldVM>().ReverseMap();
                 CreateMap<JobCareer, JobCareerVM>().ReverseMap();
                 CreateMap<JobPosition, JobPositionVM>().ReverseMap();
@@ -46,11 +46,16 @@ namespace CVLookup_WebAPI.Models.Mapper
                     {
                         options.MapFrom<RecruitmentResolver.JobPositionResolver>();
                     });
-                CreateMap<CurriculumVitae, CurriculumVitaeVM>().ReverseMap();
+                CreateMap<CurriculumVitaeVM, CurriculumVitae>().ReverseMap();
                 CreateMap<Role, RoleVM>().ReverseMap();
                 CreateMap<JobForm, JobFormVM>().ReverseMap();
                 CreateMap<JobAddress, JobAddressVM>().ReverseMap();
                 CreateMap<Token, TokenVM>().ReverseMap();
+                CreateMap<ProvinceVM, Province>().ReverseMap();
+                CreateMap<DistrictVM, District>().ForMember(domain => domain.ProvinceId, options =>
+                {
+                    options.MapFrom<DistrictResolver>();
+                });
             }
             catch (ExceptionModel e)
             {

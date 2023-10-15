@@ -27,23 +27,27 @@ namespace CVLookup_WebAPI.Models.Mapper
                     {
                         throw new ExceptionModel(400, "Thất bại. Địa điểm công việc không hợp lệ");
                     }
-                    var district = _dbContext.District.Where(prop => prop.Name == source.JobAddress.District).FirstOrDefault();
 
-                    if (district == null)
+                    if (source.JobAddress.District != null)
                     {
-                        throw new ExceptionModel(400, "Thất bại. Địa điểm công việc không hợp lệ");
+                        var district = _dbContext.District.Where(prop => prop.Name == source.JobAddress.District).FirstOrDefault();
+
+                        if (district == null)
+                        {
+                            throw new ExceptionModel(400, "Thất bại. Địa điểm công việc không hợp lệ");
+                        }
+
+                        if (!province.Districts.Contains(district))
+                        {
+                            throw new ExceptionModel(400, "Thất bại. Địa điểm công việc không hợp lệ");
+                        }
                     }
 
-                    if (!province.Districts.Contains(district))
-                    {
-                        throw new ExceptionModel(400, "Thất bại. Địa điểm công việc không hợp lệ");
-                    }
 
                     JobAddress jobAddress = new JobAddress
                     {
                         AddressDetail = source.JobAddress.AddressDetail,
-                        Province = province,
-                        District = district
+                        Province = province
                     };
                     return jobAddress;
                 }

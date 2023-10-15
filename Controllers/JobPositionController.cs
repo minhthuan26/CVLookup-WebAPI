@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Models.ViewModel;
+﻿using CVLookup_WebAPI.Middleware;
+using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.JobPositionService;
 using CVLookup_WebAPI.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,8 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
+    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+    [AuthorizationAttribute("Admin")]
     public class JobPositionController : ControllerBase
     {
         private readonly IJobPositionService _jobPositionService;

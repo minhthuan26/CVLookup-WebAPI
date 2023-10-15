@@ -51,7 +51,71 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
-		public async Task<JobAddress> Delete(string Id)
+        public async Task<District> AddDistrict(DistrictVM districtVM)
+        {
+            try
+            {
+                var district = _mapper.Map<District>(districtVM);
+                var districtExisted = await _dbContext.District.Where(prop => prop.Name == district.Name).FirstOrDefaultAsync();
+                if (districtExisted != null)
+                {
+                    throw new ExceptionModel(400, "Thất bại. Tên quận đã tồn tại");
+                }
+                var result = await _dbContext.District.AddAsync(district);
+                if (result.State.ToString() == "Added")
+                {
+                    int saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return district;
+                }
+                else
+                {
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                }
+
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+        public async Task<Province> AddProvince(ProvinceVM provinceVM)
+        {
+            try
+            {
+                var province = _mapper.Map<Province>(provinceVM);
+                var provinceExisted = await _dbContext.Province.Where(prop => prop.Name == province.Name).FirstOrDefaultAsync();
+                if (provinceExisted != null)
+                {
+                    throw new ExceptionModel(400, "Thất bại. Tên tỉnh thành đã tồn tại");
+                }
+                var result = await _dbContext.Province.AddAsync(province);
+                if (result.State.ToString() == "Added")
+                {
+                    int saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return province;
+                }
+                else
+                {
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình thêm dữ liệu");
+                }
+
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+        public async Task<JobAddress> Delete(string Id)
 		{
 			try
 			{

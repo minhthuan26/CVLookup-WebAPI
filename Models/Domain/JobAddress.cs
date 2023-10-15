@@ -16,7 +16,5 @@ namespace CVLookup_WebAPI.Models.Domain
 		[Display(Name = "Tỉnh thành")]
         public Province Province { get; set; }
 
-        [Display(Name = "Quận")]
-        public District? District { get; set; }
     }
 }

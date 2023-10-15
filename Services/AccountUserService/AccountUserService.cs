@@ -12,15 +12,11 @@ namespace CVLookup_WebAPI.Services.AccountUserService
     public class AccountUserService : IAccountUserService
     {
         private readonly AppDBContext _dbContext;
-        private readonly IAccountService _accountService;
-        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AccountUserService(AppDBContext dbContext, IAccountService accountService, IUserService userService, IMapper mapper)
+        public AccountUserService(AppDBContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _accountService = accountService;
-            _userService = userService;
             _mapper = mapper;
         }
 
