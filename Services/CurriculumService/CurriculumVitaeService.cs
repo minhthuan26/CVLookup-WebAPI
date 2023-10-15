@@ -133,27 +133,13 @@ namespace CVLookup_WebAPI.Services.CurriculumService
         }
 
 
-        public async Task<CurriculumVitae> GetByCandidateId (string candidateId)
+        public async Task<List<CurriculumVitae>> GetByCandidateId (string candidateId)
         {
             try
             {
-                if (candidateId == null)
-                {
-                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
-                }
-                var candidate = await _dbContext.Candidate.Where(prop => prop.Id == candidateId).FirstOrDefaultAsync();
-                if (candidate == null)
-                {
-                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
-                }
-
-                var result = await _dbContext.CurriculumVitae.Where(prop => prop.User.Id == candidate.Id).FirstOrDefaultAsync();
-                if (result == null)
-                {
-                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
-                }
-                return result;
-            }
+				var curiculumVitae = await _dbContext.CurriculumVitae.Where(prop => prop.User.Id == candidateId).ToListAsync();
+				return curiculumVitae;
+			}
             catch (ExceptionModel e)
             {
                 throw new ExceptionModel(e.Code, e.Message);
