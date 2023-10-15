@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Services.AuthService;
+using CVLookup_WebAPI.Services.FileService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
@@ -12,13 +14,15 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 	{
 		private AppDBContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
+        private readonly IFileService _fileService;
 
-        public CurriculumVitaeService(AppDBContext dbContext, IMapper mapper, IUserService userService)
+        public CurriculumVitaeService(AppDBContext dbContext, IMapper mapper, IAuthService authService, IFileService fileService)
         {
 			_dbContext = dbContext; 
             _mapper = mapper;
-            _userService= userService;
+            _authService = authService;
+            _fileService = fileService;
         }
 
         public async Task<CurriculumVitae> Add(CurriculumVitaeVM curriculumVitaeVM)
@@ -26,14 +30,15 @@ namespace CVLookup_WebAPI.Services.CurriculumService
             try
             {
                 var curriculumVitae = _mapper.Map<CurriculumVitae>(curriculumVitaeVM);
-                var user = await _userService.GetUserByEmail(curriculumVitaeVM.Email);  
-                curriculumVitae.FullName = curriculumVitaeVM.FullName;
-                curriculumVitae.PhoneNumber = curriculumVitaeVM.PhoneNumber;
-                curriculumVitae.CVPath = curriculumVitaeVM.CVPath;
-                curriculumVitae.Introdution = curriculumVitaeVM.Introdution;
-                curriculumVitae.Email = curriculumVitaeVM.Email;
+                var user = await _authService.GetCurrentLoginUser();
+                
+                string uploadPath = "App_Data\\CV_Storage\\" + user.Email;
                 curriculumVitae.User = user;
-                var result = await _dbContext.CurriculumVitae.AddAsync(curriculumVitae);
+
+                string filePath = await _fileService.UploadFile(curriculumVitaeVM.CVFile, uploadPath);
+                curriculumVitae.CVPath = filePath;
+
+				var result = await _dbContext.CurriculumVitae.AddAsync(curriculumVitae);
                 if (result.State.ToString() == "Added")
                 {
                     int saveState = await _dbContext.SaveChangesAsync();
@@ -189,5 +194,22 @@ namespace CVLookup_WebAPI.Services.CurriculumService
                 throw new ExceptionModel(e.Code, e.Message);
             }
         }
-	}
+
+        public async Task<FileDownload> DownloadCV(string id)
+        {
+            try
+            {
+                var cvInDB = await _dbContext.CurriculumVitae.Where(prop => prop.Id == id).FirstOrDefaultAsync();
+                if(cvInDB == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                var fileDownload = await _fileService.DownloadFile(cvInDB.CVPath);
+                return fileDownload;
+            } catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+    }
 }

@@ -18,8 +18,9 @@ namespace CVLookup_WebAPI.Models.Domain
 
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Email")]
-		[DataType(DataType.EmailAddress)]
+		[EmailAddress(ErrorMessage = "Vui lòng nhập đúng email")]
 		public string Email { get; set; }
+
 		[Required(ErrorMessage = "CV không được để trống")]
 		public string CVPath { get; set; }
 

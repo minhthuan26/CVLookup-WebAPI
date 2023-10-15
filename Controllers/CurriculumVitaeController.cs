@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CVLookup_WebAPI.Middleware;
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.CurriculumService;
@@ -28,31 +29,50 @@ namespace CVLookup_WebAPI.Controllers
             _curriculumViateService = curriculumViateService;
         }
 
-        /// <summary>
-        /// Tạo CV
-        /// </summary>
-        /// <param name="curriculumVitaeVM">The CurriculumVitae data</param>
-        /// <returns>The created CurriculumVitae</returns>
-        [HttpPost("add-curriculum-vitae")]
-        public async Task<IActionResult> AddCurriculumVitae([FromBody] CurriculumVitaeVM curriculumVitaeVM)
+		/// <summary>
+		/// Tải xuống CV
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpGet("download-curriculum-vitae")]
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin", "Candidate")]
+		public async Task<IActionResult> DownloadCurriculumVitae([FromQuery] string id)
         {
-            var result = await _curriculumViateService.Add(curriculumVitaeVM);
+            var result = await _curriculumViateService.DownloadCV(id);
 
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Code = StatusCodes.Status200OK,
-                Data = result,
-                Message = "Hoàn thành"
-            });
+            return File(result.Bytes, result.ContentType, result.FilePath);
         }
 
-        /// <summary>
-        /// Lấy danh sách CV
-        /// </summary>
-        /// <returns>A list of CurriculumVitae</returns>
-        [HttpGet("get-all-curriculum-vitae")]
-        public async Task<IActionResult> GetAllCurriculumVitae()
+		/// <summary>
+		/// Tạo CV
+		/// </summary>
+		/// <param name="curriculumVitaeVM">The CurriculumVitae data</param>
+		/// <returns>The created CurriculumVitae</returns>
+		[HttpPost("add-curriculum-vitae")]
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin", "Candidate")]
+		public async Task<IActionResult> AddCurriculumVitae([FromForm] CurriculumVitaeVM curriculumVitaeVM)
+		{
+			var result = await _curriculumViateService.Add(curriculumVitaeVM);
+
+			return Ok(new ApiResponse
+			{
+				Success = true,
+				Code = StatusCodes.Status200OK,
+				Data = result,
+				Message = "Hoàn thành"
+			});
+		}
+
+		/// <summary>
+		/// Lấy danh sách CV
+		/// </summary>
+		/// <returns>A list of CurriculumVitae</returns>
+		[HttpGet("get-all-curriculum-vitae")]
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin")]
+		public async Task<IActionResult> GetAllCurriculumVitae()
         {
             var result = await _curriculumViateService.CurriculumVitaeList();
 
@@ -71,7 +91,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id">The ID of the CurriculumVitae to delete</param>
         /// <returns>The deleted CurriculumVitae</returns>
         [HttpDelete("delete-curriculum-vitae")]
-        public async Task<IActionResult> DeleteCurriculumVitae([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin", "Candidate")]
+		public async Task<IActionResult> DeleteCurriculumVitae([FromQuery] string id)
         {
             var result = await _curriculumViateService.Delete(id);
 
@@ -90,7 +112,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id">The ID of the CurriculumVitae to retrieve</param>
         /// <returns>The requested CurriculumVitae</returns>
         [HttpGet("get-curriculum-vitae-by-id")]
-        public async Task<IActionResult> GetCurriculumVitaeById([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin", "Candidate")]
+		public async Task<IActionResult> GetCurriculumVitaeById([FromQuery] string id)
         {
             var result = await _curriculumViateService.GetCurriculumVitaeById(id);
 
@@ -110,7 +134,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("get-curriculum-vitae-by-candidateId")]
-        public async Task<IActionResult> GetByCandidateId([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin", "Candidate")]
+		public async Task<IActionResult> GetByCandidateId([FromQuery] string id)
         {
             var result = await _curriculumViateService.GetByCandidateId(id);
 

@@ -10,7 +10,6 @@ namespace CVLookup_WebAPI.Services.JwtService
         public Task<VerifyTokenResult> VerifyToken(string token, string key);
         public Task<ListDictionary> GetTokenClaims(VerifyTokenResult result);
         public string GetSecretKey();
-
         public string GetRefreshKey();
         public string GetMailKey();
     }

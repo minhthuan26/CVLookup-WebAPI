@@ -6,6 +6,7 @@ using CVLookup_WebAPI.Services.CandidateService;
 using CVLookup_WebAPI.Services.CurriculumService;
 using CVLookup_WebAPI.Services.EmployerService;
 using CVLookup_WebAPI.Services.ExperienceService;
+using CVLookup_WebAPI.Services.FileService;
 using CVLookup_WebAPI.Services.JobAddressService;
 using CVLookup_WebAPI.Services.JobCareerService;
 using CVLookup_WebAPI.Services.JobFieldService;
@@ -58,6 +59,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 
 builder.Services.AddHttpContextAccessor();

@@ -12,8 +12,10 @@ namespace CVLookup_WebAPI.Services.AuthService
 		public Task<AccountUser> RegisterCandidate(CandidateVM candidateVM, AccountVM account);
 		public Task<AccountUser> RegisterEmployer(EmployerVM employerVM, AccountVM account);
 		public Task<object> RenewToken();
-		public Task<object> Logout ();
-
+		public Task<object> Logout();
 		public Task<object> ActiveAccount(string activeToken);
+		public Task<string> GetCurrentRefreshToken();
+		public Task<string> GetCurrentAccessToken();
+		public Task<User> GetCurrentLoginUser();
 	}
 }

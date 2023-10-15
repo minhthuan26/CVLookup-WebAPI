@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Services.AuthService;
+using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
@@ -12,19 +14,24 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 		private readonly AppDBContext _dbContext;
 		private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthService _authService;
 
-        public RecruitmentService(AppDBContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public RecruitmentService(AppDBContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, IAuthService authService)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _authService = authService;
         }
 		public async Task<Recruitment> Add(RecruitmentVM recruitmentVM)
 		{
 			try
 			{
-				
+				var user = await _authService.GetCurrentLoginUser();
 				var recruitment = _mapper.Map<Recruitment>(recruitmentVM);
+				recruitment.User = user;
+				recruitment.CreatedAt = DateTime.Now;
+				recruitment.IsExpired = recruitment.CreatedAt > recruitment.ApplicationDeadline;
 				var result = await _dbContext.Recruitment.AddAsync(recruitment);
 				if (result.State.ToString() == "Added")
 				{

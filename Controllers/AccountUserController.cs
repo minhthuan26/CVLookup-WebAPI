@@ -1,4 +1,5 @@
-﻿using CVLookup_WebAPI.Models.ViewModel;
+﻿using CVLookup_WebAPI.Middleware;
+using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AccountService;
 using CVLookup_WebAPI.Services.AccountUserService;
 using CVLookup_WebAPI.Services.UserService;
@@ -10,6 +11,8 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+    [AuthorizationAttribute("Admin")]
     public class AccountUserController : ControllerBase
     {
         private readonly IAccountUserService _accountUserService;

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Services.AuthService;
+using CVLookup_WebAPI.Services.JwtService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Specialized;
 
 namespace CVLookup_WebAPI.Services.UserService
 {

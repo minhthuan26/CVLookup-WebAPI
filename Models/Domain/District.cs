@@ -10,5 +10,9 @@ namespace CVLookup_WebAPI.Models.Domain
         [Required(ErrorMessage = "{0} không được để trống")]
         [Display(Name = "Quận")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "{0} không được để trống")]
+        [Display(Name = "Id tỉnh thành")]
+        public string ProvinceId { get; set; }
     }
 }
