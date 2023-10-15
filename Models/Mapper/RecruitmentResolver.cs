@@ -28,7 +28,13 @@ namespace CVLookup_WebAPI.Models.Mapper
                         throw new ExceptionModel(400, "Thất bại. Địa điểm công việc không hợp lệ");
                     }
 
-                    if (source.JobAddress.District != null)
+					JobAddress jobAddress = new JobAddress
+					{
+						AddressDetail = source.JobAddress.AddressDetail,
+						Province = province
+					};
+
+					if (source.JobAddress.District != null)
                     {
                         var district = _dbContext.District.Where(prop => prop.Name == source.JobAddress.District).FirstOrDefault();
 
@@ -41,14 +47,10 @@ namespace CVLookup_WebAPI.Models.Mapper
                         {
                             throw new ExceptionModel(400, "Thất bại. Địa điểm công việc không hợp lệ");
                         }
+
+                        jobAddress.District = district;
                     }
 
-
-                    JobAddress jobAddress = new JobAddress
-                    {
-                        AddressDetail = source.JobAddress.AddressDetail,
-                        Province = province
-                    };
                     return jobAddress;
                 }
                 catch (ExceptionModel e)

@@ -21,6 +21,15 @@ namespace CVLookup_WebAPI.Models.Mapper
                 CreateMap<JobPosition, JobPositionVM>().ReverseMap();
                 CreateMap<Employer, EmployerVM>().ReverseMap();
                 CreateMap<Candidate, CandidateVM>().ReverseMap();
+                CreateMap<RecruitmentCVVM, RecruitmentCV>()
+                    .ForMember(domain => domain.Recruitment, option =>
+                    {
+                        option.MapFrom<RecruitmentCVResolver.RecruitmentResolver>();
+                    })
+					.ForMember(domain => domain.CurriculumVitae, option =>
+					{
+						option.MapFrom<RecruitmentCVResolver.CurriculumVitaeResolver>();
+					});
                 CreateMap<RecruitmentVM, Recruitment>()
                     .ForMember(domain => domain.JobAddress, options =>
                     {

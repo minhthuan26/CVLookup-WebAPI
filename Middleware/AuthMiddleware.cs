@@ -64,12 +64,7 @@ namespace CVLookup_WebAPI.Middleware
             }
             catch (ExceptionModel e)
             {
-                await ExceptionResponse.Response(context, 200, new ApiResponse
-                {
-                    Success = false,
-                    Code = e.Code,
-                    Message = e.Message
-                });
+                throw new ExceptionModel(e.Code, e.Message);
             }
         }
 
