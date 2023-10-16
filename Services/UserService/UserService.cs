@@ -3,6 +3,8 @@ using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AuthService;
 using CVLookup_WebAPI.Services.JwtService;
+using CVLookup_WebAPI.Services.RoleService;
+using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +16,13 @@ namespace CVLookup_WebAPI.Services.UserService
     {
         private readonly AppDBContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IUserRoleService _userRoleService;
 
-        public UserService(AppDBContext dbContext, IMapper mapper)
+        public UserService(AppDBContext dbContext, IMapper mapper, IUserRoleService userRoleService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _userRoleService = userRoleService;
         }
 
         public async Task<User> AddCandidate(CandidateVM candidateVM)
@@ -121,7 +125,7 @@ namespace CVLookup_WebAPI.Services.UserService
         {
             try
             {
-                var candidateList = await _dbContext.Candidate.Where(prop => (prop.FirstName + " " + prop.LastName).Contains(name)).ToListAsync();
+                var candidateList = await _dbContext.Candidate.Where(prop => (prop.Username).Contains(name)).ToListAsync();
                 return candidateList;
             }
             catch (ExceptionModel e)
@@ -134,7 +138,7 @@ namespace CVLookup_WebAPI.Services.UserService
         {
             try
             {
-                var employerList = await _dbContext.Employer.Where(prop => prop.EmployerName.Contains(name)).ToListAsync();
+                var employerList = await _dbContext.Employer.Where(prop => prop.Username.Contains(name)).ToListAsync();
                 return employerList;
             }
             catch (ExceptionModel e)
@@ -151,12 +155,25 @@ namespace CVLookup_WebAPI.Services.UserService
                 {
                     throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
+
                 var user = await _dbContext.User.Where(prop => prop.Email == email).FirstOrDefaultAsync();
                 if (user == null)
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
-                return user;
+                var userRole = await _userRoleService.GetByUserId(user.Id);
+                if (userRole.Role.RoleName == "Employer")
+                {
+                    return await _dbContext.Employer.Where(prop => prop.Email == email).FirstOrDefaultAsync();
+                }
+                else if (userRole.Role.RoleName == "Candidate")
+                {
+                    return await _dbContext.Candidate.Where(prop => prop.Id == email).FirstOrDefaultAsync();
+                }
+                else
+                {
+                    return await _dbContext.User.Where(prop => prop.Id == email).FirstOrDefaultAsync();
+                }
             }
             catch (ExceptionModel e)
             {
@@ -172,12 +189,21 @@ namespace CVLookup_WebAPI.Services.UserService
                 {
                     throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
-                var user = await _dbContext.User.Where(prop => prop.Id == id).FirstOrDefaultAsync();
-                if (user == null)
+
+                var userRole = await _userRoleService.GetByUserId(id);
+
+                if (userRole.Role.RoleName == "Employer")
                 {
-                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                    return await _dbContext.Employer.Where(prop => prop.Id == id).FirstOrDefaultAsync();
                 }
-                return user;
+                else if (userRole.Role.RoleName == "Candidate")
+                {
+                    return await _dbContext.Candidate.Where(prop => prop.Id == id).FirstOrDefaultAsync();
+                }
+                else
+                {
+                    return await _dbContext.User.Where(prop => prop.Id == id).FirstOrDefaultAsync();
+                }
             }
             catch (ExceptionModel e)
             {

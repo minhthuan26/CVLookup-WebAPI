@@ -26,7 +26,8 @@ namespace CVLookup_WebAPI.DBContext
             User userAdmin = new User
             {
                 Id = Guid.NewGuid().ToString(),
-                Email = "cvlookup.sgu.2023@gmail.com"
+                Email = "cvlookup.sgu.2023@gmail.com",
+                Username = "General Admin"
             };
             Employer userEmployer = new Employer
             {
@@ -34,14 +35,13 @@ namespace CVLookup_WebAPI.DBContext
                 Email = "cvlookup.sgu.2023_employer@gmail.com",
                 Address = "Admin",
                 Description = "Admin",
-                EmployerName = "Admin"
+                Username = "Employer Admin"
             };
             Candidate userCandidate = new Candidate
             {
                 Id = Guid.NewGuid().ToString(),
                 Email = "cvlookup.sgu.2023_candidate@gmail.com",
-                FirstName = "Admin",
-                LastName = "CVLookup"
+                Username = "Candidate Admin"
             };
             modelBuilder.Entity<User>().HasData(
                 userAdmin
