@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
 
 namespace CVLookup_WebAPI.Models.Domain
@@ -15,7 +16,7 @@ namespace CVLookup_WebAPI.Models.Domain
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Tỉnh thành")]
         public Province Province { get; set; }
-
+		[NotMapped]
 		public District District { get; set; }
 	}
 }
