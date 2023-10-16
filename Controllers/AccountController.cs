@@ -8,8 +8,6 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-    [AuthorizationAttribute("Admin")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -25,7 +23,9 @@ namespace CVLookup_WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("get-all-account")]
-        public async Task<IActionResult> GetAccountList()
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin")]
+		public async Task<IActionResult> GetAccountList()
         {
             var result = await _accountService.AccountList();
             return Ok(new ApiResponse
@@ -43,7 +43,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("get-account-by-id")]
-        public async Task<IActionResult> GetAccountById([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin")]
+		public async Task<IActionResult> GetAccountById([FromQuery] string id)
         {
             var result = await _accountService.GetAccountById(id);
             return Ok(new ApiResponse
@@ -61,7 +63,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="email"></param>
         /// <returns></returns>
         [HttpGet("get-account-by-email")]
-        public async Task<IActionResult> GetAccountByEmail([FromQuery] string email)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin")]
+		public async Task<IActionResult> GetAccountByEmail([FromQuery] string email)
         {
             var result = await _accountService.GetAccountByEmail(email);
             return Ok(new ApiResponse
@@ -79,7 +83,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="account"></param>
         /// <returns></returns>
         [HttpPost("create-account")]
-        public async Task<IActionResult> AddAccount([FromBody] AccountVM account)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin")]
+		public async Task<IActionResult> AddAccount([FromBody] AccountVM account)
         {
             var newAccount = await _accountService.Add(account);
             return Ok(new ApiResponse
@@ -98,7 +104,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="account"></param>
         /// <returns></returns>
         [HttpPut("edit-account")]
-        public async Task<IActionResult> UpdateAccount([FromQuery] string id, [FromBody] AccountVM account)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin", "Employer", "Candidate")]
+		public async Task<IActionResult> UpdateAccount([FromQuery] string id, [FromBody] AccountVM account)
         {
             var result = await _accountService.Update(id, account);
             return Ok(new ApiResponse
@@ -116,7 +124,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("delete-account")]
-        public async Task<IActionResult> DeleteAccount([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin", "Employer", "Candidate")]
+		public async Task<IActionResult> DeleteAccount([FromQuery] string id)
         {
             var result = await _accountService.Delete(id);
             return Ok(new ApiResponse

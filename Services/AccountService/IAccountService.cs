@@ -5,7 +5,7 @@ namespace CVLookup_WebAPI.Services.AccountService
 {
     public interface IAccountService
     {
-        public Task<List<Account>> AccountList();
+        public Task<object> AccountList();
         public Task<Account> GetAccountById(string id);
         public Task<Account> GetAccountByEmail(string email);
         public Task<Account> Add(AccountVM account);
