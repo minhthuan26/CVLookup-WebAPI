@@ -117,10 +117,12 @@ namespace CVLookup_WebAPI.Services.AuthService
                         string accessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
                         string refreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
 
+                        var currentUser = await _userService.GetUserById(accountUser.UserId);
                         var authReturn = new
                         {
-                            AccessToken = accessToken,
-                            RefreshToken = refreshToken
+                            accessToken = accessToken,
+                            refreshToken = refreshToken,
+                            user = currentUser
                         };
 
                         var oldRefreshInDB = await _tokenService.GetTokenById(userRole.UserId, accountUser.AccountId);

@@ -146,5 +146,6 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.UseCors();
 
 app.Run();
