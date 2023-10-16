@@ -23,12 +23,12 @@ namespace CVLookup_WebAPI.Controllers
         /// <summary>
         /// Đăng nhập
         /// </summary>
-        /// <param name="loginVM"></param>
+        /// <param name="accountVM"></param>
         /// <returns></returns>
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AccountVM loginVM)
+        public async Task<IActionResult> Login([FromBody] AccountVM accountVM)
         {
-            var result = await _authService.Login(loginVM);
+            var result = await _authService.Login(accountVM);
             return Ok(new ApiResponse
             {
                 Success = true,

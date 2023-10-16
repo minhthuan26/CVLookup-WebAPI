@@ -20,12 +20,40 @@ namespace CVLookup_WebAPI.Services.AccountService
             _mapper = mapper;
         }
 
-        public async Task<List<Account>> AccountList()
+        public async Task<object> AccountList()
         {
             try
             {
-                var result = await _dbContext.Account.ToListAsync();
-                return result;
+                var admin = await _dbContext.Account.FromSqlRaw(
+					"select a.Id, a.Email, a.Actived, a.ActivedAt, a.IssuedAt, a.UpdatedAt, a.Password " +
+					"from Account as a " +
+					"join AccountUser as au on a.Id = au.AccountId " +
+					"join [User] as u on au.UserId = u.Id " +
+					"join UserRole as ur on ur.UserId = u.Id " +
+					"join Role as r on r.RoleName='Admin' and r.Id=ur.RoleId").ToListAsync();
+
+				var employer = await _dbContext.Account.FromSqlRaw(
+				   "select a.Id, a.Email, a.Actived, a.ActivedAt, a.IssuedAt, a.UpdatedAt, a.Password " +
+				   "from Account as a " +
+				   "join AccountUser as au on a.Id = au.AccountId " +
+				   "join [User] as u on au.UserId = u.Id " +
+				   "join UserRole as ur on ur.UserId = u.Id " +
+				   "join Role as r on r.RoleName='Employer' and r.Id=ur.RoleId").ToListAsync();
+
+				var candidate = await _dbContext.Account.FromSqlRaw(
+				   "select a.Id, a.Email, a.Actived, a.ActivedAt, a.IssuedAt, a.UpdatedAt, a.Password " +
+				   "from Account as a " +
+				   "join AccountUser as au on a.Id = au.AccountId " +
+				   "join [User] as u on au.UserId = u.Id " +
+				   "join UserRole as ur on ur.UserId = u.Id " +
+				   "join Role as r on r.RoleName='Employer' and r.Id=ur.RoleId").ToListAsync();
+				
+                return new
+                {
+                    admin = admin,
+                    employer = employer,
+                    candidate = candidate
+                };
             }
             catch (ExceptionModel e)
             {
