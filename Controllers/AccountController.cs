@@ -44,7 +44,7 @@ namespace CVLookup_WebAPI.Controllers
         /// <returns></returns>
         [HttpGet("get-account-by-id")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-		[Authorization("Admin")]
+		[Authorization("Admin", "Candidate", "Employer")]
 		public async Task<IActionResult> GetAccountById([FromQuery] string id)
         {
             var result = await _accountService.GetAccountById(id);
@@ -85,7 +85,7 @@ namespace CVLookup_WebAPI.Controllers
         [HttpPost("create-account")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
 		[Authorization("Admin")]
-		public async Task<IActionResult> AddAccount([FromBody] AccountVM account)
+		public async Task<IActionResult> CreateAccount([FromBody] AccountVM account)
         {
             var newAccount = await _accountService.Add(account);
             return Ok(new ApiResponse
@@ -103,7 +103,7 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <param name="account"></param>
         /// <returns></returns>
-        [HttpPut("edit-account")]
+        [HttpPatch("edit-account")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
 		[Authorization("Admin", "Employer", "Candidate")]
 		public async Task<IActionResult> UpdateAccount([FromQuery] string id, [FromBody] AccountVM account)

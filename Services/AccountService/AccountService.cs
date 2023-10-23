@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Services.JwtService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Specialized;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -13,11 +15,13 @@ namespace CVLookup_WebAPI.Services.AccountService
     {
         private readonly AppDBContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(AppDBContext dbContext, IMapper mapper)
+        public AccountService(AppDBContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<object> AccountList()
@@ -46,13 +50,23 @@ namespace CVLookup_WebAPI.Services.AccountService
 				   "join AccountUser as au on a.Id = au.AccountId " +
 				   "join [User] as u on au.UserId = u.Id " +
 				   "join UserRole as ur on ur.UserId = u.Id " +
-				   "join Role as r on r.RoleName='Employer' and r.Id=ur.RoleId").ToListAsync();
+				   "join Role as r on r.RoleName='Candidate' and r.Id=ur.RoleId").ToListAsync();
+                
+                var noneUser = await _dbContext.Account.FromSqlRaw(
+                    "select a.Id, a.Email, a.Actived, a.ActivedAt, a.IssuedAt, a.UpdatedAt, a.Password " +
+					"from Account as a " +
+					"where not exists (" +
+					"select au.AccountId " +
+					"from AccountUser as au " +
+					"where au.AccountId = a.Id)"
+					).ToListAsync();
 				
                 return new
                 {
                     admin = admin,
                     employer = employer,
-                    candidate = candidate
+                    candidate = candidate,
+                    noneUser = noneUser
                 };
             }
             catch (ExceptionModel e)
@@ -217,12 +231,21 @@ namespace CVLookup_WebAPI.Services.AccountService
         {
             try
             {
+                var claims = (ListDictionary)_httpContextAccessor.HttpContext.Items["claims"];
+
+                var role = await _dbContext.Role.Where(prop => prop.Id == claims["roleId"]).FirstOrDefaultAsync();
+                if (role.RoleName != "Admin" && Id != claims["accountId"])
+                {
+                    throw new ExceptionModel(400, "Thất bại. Bạn không có quyền truy cập");
+                }
+
                 var accountInDB = await _dbContext.Account.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
                 if (accountInDB == null)
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 _mapper.Map(newAccountVM, accountInDB);
+                accountInDB.UpdatedAt = DateTime.Now;
                 var result = _dbContext.Account.Update(accountInDB);
                 if (result.State.ToString() == "Modified")
                 {

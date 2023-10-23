@@ -59,7 +59,7 @@ namespace CVLookup_WebAPI.Middleware
                 {
                     throw new ExceptionModel(401, "Thất bại. Bạn không có quyền truy cập");
                 }
-
+                context.Items["claims"] = claims;
                 await _next(context);
             }
             catch (ExceptionModel e)
