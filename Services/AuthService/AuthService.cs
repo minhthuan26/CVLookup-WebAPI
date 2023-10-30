@@ -7,6 +7,7 @@ using CVLookup_WebAPI.Services.JwtService;
 using CVLookup_WebAPI.Services.MailService;
 using CVLookup_WebAPI.Services.RefreshTokenService;
 using CVLookup_WebAPI.Services.RoleService;
+using CVLookup_WebAPI.Services.SignalRService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
@@ -14,12 +15,8 @@ using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using MimeKit;
-using System.Collections;
 using System.Collections.Specialized;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -41,6 +38,7 @@ namespace CVLookup_WebAPI.Services.AuthService
         private readonly IMailService _mailService;
         private readonly IWebHostEnvironment _env;
         private readonly IJwtService _jwtService;
+        private readonly NotificationHub _notificationHub;
 
         public AuthService(
             AppDBContext dbContext,
@@ -56,7 +54,8 @@ namespace CVLookup_WebAPI.Services.AuthService
             IRoleService roleService,
             IMailService mailService,
             IWebHostEnvironment env,
-            IJwtService jwtService
+            IJwtService jwtService,
+            NotificationHub notificationHub
             )
         {
             _dbContext = dbContext;
@@ -73,6 +72,7 @@ namespace CVLookup_WebAPI.Services.AuthService
             _mailService = mailService;
             _env = env;
             _jwtService = jwtService;
+            _notificationHub = notificationHub;
         }
 
         private string GetSecretKey()
@@ -122,7 +122,9 @@ namespace CVLookup_WebAPI.Services.AuthService
                         {
                             accessToken = accessToken,
                             refreshToken = refreshToken,
-                            user = currentUser
+                            user = currentUser,
+                            accountId = account.Id,
+                            roleId = userRole.RoleId
                         };
 
                         var oldRefreshInDB = await _tokenService.GetTokenById(userRole.UserId, accountUser.AccountId);
@@ -158,6 +160,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                             SameSite = SameSiteMode.None,
                         };
                         _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
+                        //await _notificationHub.AddHubConnection(currentUser);
                         await transaction.CommitAsync();
                         return authReturn;
                     }
@@ -396,6 +399,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 
                 await _tokenService.DeleteRefreshToken(refreshToken);
                 _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
+                //await _notificationHub.
                 await transaction.CommitAsync();
                 return true;
             }

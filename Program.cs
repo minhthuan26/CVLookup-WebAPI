@@ -18,6 +18,7 @@ using CVLookup_WebAPI.Services.RecruitmentCVService;
 using CVLookup_WebAPI.Services.RecruitmentService;
 using CVLookup_WebAPI.Services.RefreshTokenService;
 using CVLookup_WebAPI.Services.RoleService;
+using CVLookup_WebAPI.Services.SignalRService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
@@ -28,7 +29,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ApplyToRecruitment services to the container.
+//services to the container.
 
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
@@ -36,10 +37,10 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-// ApplyToRecruitment automapper
+//automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-//ApplyToRecruitment service
+//service
 builder.Services.AddScoped<IAccountUserService, AccountUserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICandidateService, CandidateService>();
@@ -61,11 +62,12 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
+builder.Services.AddScoped<NotificationHub>();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
-
-//ApplyToRecruitment custom data validate error
+//custom data validate error
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -90,7 +92,7 @@ builder.Services.AddControllers()
         };
     });
 
-//ApplyToRecruitment Cors
+//Cors
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -137,7 +139,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "CVLookup API V1");
-
     });
     app.UseDeveloperExceptionPage();
 }
@@ -147,5 +148,6 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 app.UseCors();
+app.MapHub<NotificationHub>("/notification/hub");
 
 app.Run();
