@@ -66,6 +66,8 @@ namespace FirstWebApi.Models.Database
         public DbSet<Token> Token { get; set; }
         public DbSet<Province> Province { get; set; }
         public DbSet<District> District { get; set; }
+        public DbSet<Notification> Notification { get; set; }
+        public DbSet<HubConnection> HubConnection { get; set; }
         #endregion
     }
 
