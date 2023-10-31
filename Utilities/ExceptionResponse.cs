@@ -11,7 +11,10 @@ namespace CVLookup_WebAPI.Utilities
 			{
 				context.Response.ContentType = "application/json";
 				context.Response.StatusCode = statusCode;
-				var options = new JsonSerializerOptions { WriteIndented = true };
+				var options = new JsonSerializerOptions {
+					WriteIndented = true,
+					PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+				};
 				var jsonResponse = JsonSerializer.Serialize(message, options);
 				await context.Response.WriteAsync(jsonResponse);
 				await context.Response.StartAsync();

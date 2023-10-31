@@ -157,8 +157,9 @@ namespace CVLookup_WebAPI.Services.AuthService
                         {
                             HttpOnly = true,
                             Secure = false,
-                            SameSite = SameSiteMode.None,
-                        };
+                            SameSite = SameSiteMode.Strict,
+                            Path = "/"
+						};
                         _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
                         //await _notificationHub.AddHubConnection(currentUser);
                         await transaction.CommitAsync();
