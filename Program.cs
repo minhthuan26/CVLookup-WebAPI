@@ -75,10 +75,9 @@ builder.Services.AddControllers()
         {
             var messages = context.ModelState.Keys.Select(key =>
             {
-                return new
+                return new[]
                 {
-                    field = key,
-                    message = context.ModelState[key]?.Errors.Select(error => error.ErrorMessage)
+                    context.ModelState[key]?.Errors.Select(error => error.ErrorMessage)
                 };
             });
 

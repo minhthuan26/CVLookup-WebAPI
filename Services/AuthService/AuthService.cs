@@ -112,7 +112,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                         var claims = new ListDictionary();
                         claims.Add("accountId", account.Id);
                         claims.Add("userId", userRole.UserId);
-                        claims.Add("roleId", userRole.RoleId);
+                        claims.Add("role", userRole.Role.RoleName);
 
                         string accessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
                         string refreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
@@ -124,7 +124,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                             refreshToken = refreshToken,
                             user = currentUser,
                             accountId = account.Id,
-                            roleId = userRole.RoleId
+                            role = userRole.Role.RoleName
                         };
 
                         var oldRefreshInDB = await _tokenService.GetTokenById(userRole.UserId, accountUser.AccountId);
@@ -391,14 +391,15 @@ namespace CVLookup_WebAPI.Services.AuthService
             try
             {
                 string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
-                string refreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
 
-                if (string.IsNullOrEmpty(accessToken) || !accessToken.StartsWith("Bearer ") || string.IsNullOrEmpty(refreshToken))
+                if (string.IsNullOrEmpty(accessToken))
                 {
                     throw new ExceptionModel(400, "Thất bại. Yêu cầu không hợp lệ");
                 }
 
-                await _tokenService.DeleteRefreshToken(refreshToken);
+                VerifyTokenResult verifyResult = await _jwtService.VerifyToken(accessToken.Split(" ")[1], _jwtService.GetSecretKey());
+                ListDictionary claims = await _jwtService.GetTokenClaims(verifyResult);
+				await _tokenService.DeleteRefreshToken((string)claims["userId"], (string)claims["accountId"]);
                 _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
                 //await _notificationHub.
                 await transaction.CommitAsync();

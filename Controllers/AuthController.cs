@@ -102,7 +102,7 @@ namespace CVLookup_WebAPI.Controllers
         [HttpPost("logout")]
         [HttpGet("logout")]
         [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-        [AuthorizationAttribute("Admin", "Employer", "Candidate")]
+        [Authorization("Admin", "Employer", "Candidate")]
         public async Task<IActionResult> Logout()
         {
             var result = await _authService.Logout();
