@@ -10,10 +10,12 @@ namespace CVLookup_WebAPI.Services.SignalRService
 	public class NotificationHub : Hub
 	{
 		private readonly AppDBContext _dbContext;
+		private readonly IHttpContextAccessor _httpContext;
 
 		public NotificationHub(AppDBContext dbContext)
 		{
 			_dbContext = dbContext;
+			_httpContext = httpContext;
 		}
 
 		public async Task SendNotificationToAll(string message)
@@ -54,6 +56,7 @@ namespace CVLookup_WebAPI.Services.SignalRService
 		{
 			try
 			{
+				var refreshTokenInDb = await _dbContext.Token.FirstOrDefaultAsync(prop => prop.UserId == userId);
 				var connectionId = Context.ConnectionId;
 				HubConnection hubConnection = new HubConnection
 				{
@@ -69,6 +72,14 @@ namespace CVLookup_WebAPI.Services.SignalRService
 					{
 						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
+					var cookieOptions = new CookieOptions
+					{
+						HttpOnly = true,
+						Secure = false,
+						SameSite = SameSiteMode.Strict,
+						Path = "/"
+					};
+					_httpContext.HttpContext.Response.Cookies.Append("RefreshToken", refreshTokenInDb.RefreshToken, cookieOptions);
 				}
 				else
 				{

@@ -48,8 +48,8 @@ namespace CVLookup_WebAPI.Middleware
                 {
                     throw new ExceptionModel(401, "Thất bại. Token không hợp lệ");
                 }
-                string roleId = (string)claims["roleId"];
-                Role roleInToken = await dbContext.Role.Where(prop => prop.Id == roleId).FirstOrDefaultAsync();
+                string role = (string)claims["role"];
+                Role roleInToken = await dbContext.Role.Where(prop => prop.RoleName == role).FirstOrDefaultAsync();
                 if (roleInToken == null)
                 {
                     throw new ExceptionModel(401, "Thất bại. Bạn không có quyền truy cập");

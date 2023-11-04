@@ -126,7 +126,7 @@ namespace CVLookup_WebAPI.Services.JwtService
 
                 if (result.IsExpired)
                 {
-                    throw new ExceptionModel(400, "Thất bại. Token đã hết hạn");
+                    throw new ExceptionModel(403, "Thất bại. Token đã hết hạn");
                 }
 
                 ListDictionary claims = new();
