@@ -114,7 +114,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                         claims.Add("userId", userRole.UserId);
                         claims.Add("role", userRole.Role.RoleName);
 
-                        string accessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
+                        string accessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddSeconds(10));
                         string refreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
 
                         var currentUser = await _userService.GetUserById(accountUser.UserId);
@@ -212,7 +212,7 @@ namespace CVLookup_WebAPI.Services.AuthService
             IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+				string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
                 string refreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
 
                 if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
@@ -245,7 +245,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                 var claims = new ListDictionary();
                 claims.Add("accountId", tokenInDB.AccountId);
                 claims.Add("userId", tokenInDB.UserId);
-                claims.Add("roleId", tokenInDB.Role.Id);
+                claims.Add("role", tokenInDB.Role.RoleName);
 
                 var newAccessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
                 var newRefreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
@@ -392,14 +392,13 @@ namespace CVLookup_WebAPI.Services.AuthService
             {
                 string accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
 
-                if (string.IsNullOrEmpty(accessToken))
-                {
-                    throw new ExceptionModel(400, "Thất bại. Yêu cầu không hợp lệ");
-                }
-
-                VerifyTokenResult verifyResult = await _jwtService.VerifyToken(accessToken.Split(" ")[1], _jwtService.GetSecretKey());
-                ListDictionary claims = await _jwtService.GetTokenClaims(verifyResult);
-				await _tokenService.DeleteRefreshToken((string)claims["userId"], (string)claims["accountId"]);
+				if (string.IsNullOrEmpty(accessToken))
+				{
+					throw new ExceptionModel(400, "Thất bại. Không tìm thấy token");
+				}
+                VerifyTokenResult verifyTokenResult = await _jwtService.VerifyToken(accessToken.Split(" ")[1], _jwtService.GetSecretKey());
+                ListDictionary claims = await _jwtService.GetTokenClaims(verifyTokenResult);
+                await _tokenService.DeleteRefreshToken((string)claims["userId"], (string)claims["accountId"]);
                 _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
                 //await _notificationHub.
                 await transaction.CommitAsync();
@@ -509,5 +508,28 @@ namespace CVLookup_WebAPI.Services.AuthService
                 throw new ExceptionModel(e.Code, e.Message);
             }
         }
-    }
+
+		public async Task RestoreRefreshToken(string userId)
+		{
+			try
+			{
+				var refreshTokenInDb = await _dbContext.Token.FirstOrDefaultAsync(prop => prop.UserId == userId);
+
+				var cookieOptions = new CookieOptions
+				{
+					HttpOnly = true,
+					Secure = false,
+					SameSite = SameSiteMode.Strict,
+					Path = "/"
+				};
+
+				_httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", refreshTokenInDb.RefreshToken, cookieOptions);
+			}
+			catch (Exception e)
+			{
+				throw new ExceptionModel(500, e.Message);
+			}
+
+		}
+	}
 }
