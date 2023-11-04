@@ -12,7 +12,7 @@ namespace CVLookup_WebAPI.Services.SignalRService
 		private readonly AppDBContext _dbContext;
 		private readonly IHttpContextAccessor _httpContext;
 
-		public NotificationHub(AppDBContext dbContext)
+		public NotificationHub(AppDBContext dbContext, IHttpContextAccessor httpContext)
 		{
 			_dbContext = dbContext;
 			_httpContext = httpContext;
