@@ -1,4 +1,5 @@
 ﻿using CVLookup_WebAPI.Middleware;
+using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AuthService;
 using CVLookup_WebAPI.Utilities;
@@ -82,7 +83,7 @@ namespace CVLookup_WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("renew-token")]
-        public async Task<IActionResult> RenewToken()
+		public async Task<IActionResult> RenewToken()
         {
             var result = await _authService.RenewToken();
             return Ok(new ApiResponse
@@ -127,5 +128,17 @@ namespace CVLookup_WebAPI.Controllers
                 Data = result
             });
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpPost("restore-refresh-token")]
+        public async Task<IActionResult> RestoreRefreshToken([FromQuery]string userId)
+        {
+			await _authService.RestoreRefreshToken(userId);
+			return Ok();
+		}
     }
 }

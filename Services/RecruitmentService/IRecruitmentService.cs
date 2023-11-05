@@ -1,11 +1,13 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
+using CVLookup_WebAPI.Utilities;
 
 namespace CVLookup_WebAPI.Services.RecruitmentService
 {
     public interface IRecruitmentService
     {
         public Task<List<Recruitment>> RecruitmentList();
+        public Task<object> GetRecruitment(Filter filter);
 		public Task<Recruitment> GetRecruitmentById(string id);
 		public Task<List<Recruitment>> GetRecruitmentsByTitle(string title);
 		public Task<List<Recruitment>> GetRecruitmentsByUserId(string id);

@@ -38,6 +38,19 @@ namespace CVLookup_WebAPI.Controllers
             });
         }
 
+        [HttpGet("get-recruitment")]
+        public async Task<IActionResult> GetRecruitment([FromQuery]Filter filter)
+        {
+			var result = await _recruimentService.GetRecruitment(filter);
+			return Ok(new ApiResponse
+			{
+				Code = StatusCodes.Status200OK,
+				Success = true,
+				Data = result,
+				Message = "Hoàn thành"
+			});
+		}
+
         /// <summary>
         /// Tìm kiếm đơn tuyển dụng bằng id
         /// </summary>

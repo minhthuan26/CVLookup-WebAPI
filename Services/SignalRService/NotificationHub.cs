@@ -1,6 +1,7 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
@@ -48,7 +49,8 @@ namespace CVLookup_WebAPI.Services.SignalRService
 
 		public override Task OnConnectedAsync()
 		{
-			Clients.Caller.SendAsync("ClientConnected");
+			//Clients.Caller.SendAsync("RestoreRefreshToken");
+
 			return base.OnConnectedAsync();
 		}
 
@@ -56,7 +58,6 @@ namespace CVLookup_WebAPI.Services.SignalRService
 		{
 			try
 			{
-				var refreshTokenInDb = await _dbContext.Token.FirstOrDefaultAsync(prop => prop.UserId == userId);
 				var connectionId = Context.ConnectionId;
 				HubConnection hubConnection = new HubConnection
 				{
@@ -72,14 +73,6 @@ namespace CVLookup_WebAPI.Services.SignalRService
 					{
 						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
-					var cookieOptions = new CookieOptions
-					{
-						HttpOnly = true,
-						Secure = false,
-						SameSite = SameSiteMode.Strict,
-						Path = "/"
-					};
-					_httpContext.HttpContext.Response.Cookies.Append("RefreshToken", refreshTokenInDb.RefreshToken, cookieOptions);
 				}
 				else
 				{
@@ -92,11 +85,12 @@ namespace CVLookup_WebAPI.Services.SignalRService
 			}
 		}
 
-		public async Task<HubConnection> DeleteHubConnectionByUserId(string userId)
+		public async Task DeleteHubConnectionByConnectionId()
 		{
 			try
 			{
-				var hubConnection = await _dbContext.HubConnection.FirstOrDefaultAsync(prop => prop.UserId == userId);
+				var connectionId = Context.ConnectionId;
+				var hubConnection = await _dbContext.HubConnection.FirstOrDefaultAsync(prop => prop.ConnectionId == connectionId);
 
 				if (hubConnection == null)
 				{
@@ -111,7 +105,6 @@ namespace CVLookup_WebAPI.Services.SignalRService
 					{
 						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
-					return hubConnection;
 				}
 				else
 				{

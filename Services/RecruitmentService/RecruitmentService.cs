@@ -6,6 +6,7 @@ using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CVLookup_WebAPI.Services.RecruitmentService
 {
@@ -13,16 +14,16 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 	{
 		private readonly AppDBContext _dbContext;
 		private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IAuthService _authService;
+		private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly IAuthService _authService;
 
-        public RecruitmentService(AppDBContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, IAuthService authService)
+		public RecruitmentService(AppDBContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, IAuthService authService)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
-            _authService = authService;
-        }
+			_httpContextAccessor = httpContextAccessor;
+			_authService = authService;
+		}
 		public async Task<Recruitment> Add(RecruitmentVM recruitmentVM)
 		{
 			try
@@ -91,6 +92,120 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 			}
 		}
 
+		public async Task<object> GetRecruitment(Filter filter)
+		{
+			try
+			{
+				var recruitments = _dbContext.Recruitment
+					.Include(prop => prop.JobAddress)
+					.Include(prop => prop.JobAddress.Province)
+					.Include(prop => prop.User)
+					.AsQueryable();
+				#region Filter
+				if (!string.IsNullOrEmpty(filter.Keyword))
+				{
+					recruitments = recruitments.Where(prop => prop.JobTitle.Contains(filter.Keyword));
+				}
+
+				if (!string.IsNullOrEmpty(filter.UserId))
+				{
+					recruitments = recruitments.Where(prop => prop.User.Id == filter.UserId);
+				}
+
+				if (!string.IsNullOrEmpty(filter.Province))
+				{
+					recruitments = recruitments.Where(prop => prop.JobAddress.Province.Name == filter.Province);
+					
+				}
+
+				if (!string.IsNullOrEmpty(filter.District))
+				{
+					recruitments = recruitments.Where(prop => prop.JobAddress.District == filter.District);
+				}
+
+				if (!string.IsNullOrEmpty(filter.Career))
+				{
+					recruitments = recruitments.Where(prop => prop.JobCareer.Career == filter.Career);
+				}
+
+				if (!string.IsNullOrEmpty(filter.UserId))
+				{
+					recruitments = recruitments.Where(prop => prop.User.Id == filter.UserId);
+				}
+
+				if (!string.IsNullOrEmpty(filter.JobField))
+				{
+					recruitments = recruitments.Where(prop => prop.JobField.Field == filter.JobField);
+				}
+
+				if (!string.IsNullOrEmpty(filter.JobForm))
+				{
+					recruitments = recruitments.Where(prop => prop.JobForm.Form == filter.JobForm);
+				}
+
+				if (!string.IsNullOrEmpty(filter.Experience))
+				{
+					recruitments = recruitments.Where(prop => prop.Experience.Exp == filter.Experience);
+				}
+
+				if (!string.IsNullOrEmpty(filter.JobPosition))
+				{
+					recruitments = recruitments.Where(prop => prop.JobPosition.Position == filter.JobPosition);
+				}
+				#endregion
+
+				#region Sort
+				switch (filter.SortBy)
+				{
+					case "title_asc":
+						recruitments = recruitments.OrderBy(prop => prop.JobTitle);
+						break;
+
+					case "title_desc":
+						recruitments = recruitments.OrderByDescending(prop => prop.JobTitle);
+						break;
+
+					case "date_asc":
+						recruitments = recruitments.OrderBy(prop => prop.CreatedAt);
+						break;
+
+					case "date_desc":
+						recruitments = recruitments.OrderByDescending(prop => prop.CreatedAt);
+						break;
+
+					default:
+						break;
+				}
+				#endregion
+
+				#region Paging
+				var paging = Pagination<Recruitment>.Create(recruitments, filter.Page, Filter.PageSize);
+				#endregion
+				
+				var result = paging.Select(prop => new
+				{
+					Id = prop.Id,
+					User = prop.User,
+					JobTitle = prop.JobTitle,
+					Salary = prop.Salary,
+					JobAddress = new {
+						Province = prop.JobAddress.Province.Name,
+						District = prop.JobAddress.District
+					}
+				});
+				return result.ToList();
+
+			}
+			catch (ExceptionModel e)
+			{
+				throw new ExceptionModel(e.Code, e.Message);
+			}
+			catch(Exception e)
+			{
+				throw new ExceptionModel(500, e.Message);
+			}
+		}
+
 		public async Task<Recruitment> GetRecruitmentById(string id)
 		{
 			try
@@ -103,7 +218,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 				var result = await _dbContext.Recruitment.Where(prop => prop.Id == id)
 					.Include(prop => prop.JobAddress)
 					.Include(prop => prop.JobAddress.Province)
-					.Include(prop => prop.JobAddress.District)
+					.Include(prop => prop.JobAddress.Province.Districts)
 					.Include(prop => prop.JobPosition)
 					.Include(prop => prop.JobForm)
 					.Include(prop => prop.JobField)
@@ -141,12 +256,12 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 			}
 		}
 
-        public Task<List<Recruitment>> GetRecruitmentsByUserId(string id)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<List<Recruitment>> GetRecruitmentsByUserId(string id)
+		{
+			throw new NotImplementedException();
+		}
 
-        public async Task<List<Recruitment>> RecruitmentList()
+		public async Task<List<Recruitment>> RecruitmentList()
 		{
 			try
 			{
