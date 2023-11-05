@@ -16,7 +16,7 @@ namespace CVLookup_WebAPI.Models.Domain
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Tỉnh thành")]
         public Province Province { get; set; }
-		[NotMapped]
-		public District District { get; set; }
+		[Display(Name = "Quận")]
+		public string? District { get; set; }
 	}
 }

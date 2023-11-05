@@ -27,8 +27,6 @@ namespace CVLookup_WebAPI.Services.AuthService
         private readonly AppDBContext _dbContext;
         private readonly IAccountService _accountService;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
-        private readonly Jwt _jwt;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserRoleService _userRoleService;
         private readonly ITokenService _tokenService;
@@ -38,12 +36,9 @@ namespace CVLookup_WebAPI.Services.AuthService
         private readonly IMailService _mailService;
         private readonly IWebHostEnvironment _env;
         private readonly IJwtService _jwtService;
-        private readonly NotificationHub _notificationHub;
 
         public AuthService(
             AppDBContext dbContext,
-            IMapper mapper,
-            IOptionsMonitor<Jwt> monitor,
             IHttpContextAccessor httpContextAccessor,
             IAccountService accountService,
             IUserService userService,
@@ -54,15 +49,12 @@ namespace CVLookup_WebAPI.Services.AuthService
             IRoleService roleService,
             IMailService mailService,
             IWebHostEnvironment env,
-            IJwtService jwtService,
-            NotificationHub notificationHub
+            IJwtService jwtService
             )
         {
             _dbContext = dbContext;
             _accountService = accountService;
             _userService = userService;
-            _mapper = mapper;
-            _jwt = monitor.CurrentValue;
             _httpContextAccessor = httpContextAccessor;
             _userRoleService = userRoleService;
             _tokenService = tokenService;
@@ -72,7 +64,6 @@ namespace CVLookup_WebAPI.Services.AuthService
             _mailService = mailService;
             _env = env;
             _jwtService = jwtService;
-            _notificationHub = notificationHub;
         }
 
         private string GetSecretKey()
@@ -114,7 +105,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                         claims.Add("userId", userRole.UserId);
                         claims.Add("role", userRole.Role.RoleName);
 
-                        string accessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddSeconds(10));
+                        string accessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
                         string refreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
 
                         var currentUser = await _userService.GetUserById(accountUser.UserId);

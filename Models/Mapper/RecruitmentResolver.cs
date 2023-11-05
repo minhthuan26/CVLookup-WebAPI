@@ -48,7 +48,7 @@ namespace CVLookup_WebAPI.Models.Mapper
                             throw new ExceptionModel(400, "Thất bại. Địa điểm công việc không hợp lệ");
                         }
 
-                        jobAddress.District = district;
+                        jobAddress.District = district.Name;
                     }
 
                     return jobAddress;
