@@ -185,13 +185,13 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 				var result = paging.Select(prop => new
 				{
 					Id = prop.Id,
-					User = prop.User,
 					JobTitle = prop.JobTitle,
-					Salary = prop.Salary,
+					User = prop.User,
 					JobAddress = new {
 						Province = prop.JobAddress.Province.Name,
 						District = prop.JobAddress.District
-					}
+					},
+					Salary = prop.Salary,
 				});
 				return result.ToList();
 
