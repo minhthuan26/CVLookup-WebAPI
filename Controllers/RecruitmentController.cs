@@ -9,8 +9,6 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
-    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-    [AuthorizationAttribute("Employer", "Admin")]
     public class RecruitmentController : ControllerBase
     {
         private readonly IRecruitmentService _recruimentService;
@@ -93,7 +91,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="recruiment"></param>
         /// <returns></returns>
         [HttpPost("add-recruitment")]
-        public async Task<IActionResult> AddRecruitment([FromBody] RecruitmentVM recruiment)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Employer", "Admin")]
+		public async Task<IActionResult> AddRecruitment([FromBody] RecruitmentVM recruiment)
         {
             var result = await _recruimentService.Add(recruiment);
             return Ok(new ApiResponse
@@ -111,7 +111,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteRecruitment([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Employer", "Admin")]
+		public async Task<IActionResult> DeleteRecruitment([FromQuery] string id)
         {
             var result = await _recruimentService.Delete(id);
             return Ok(new ApiResponse
@@ -131,7 +133,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="recruimentVM"></param>
         /// <returns></returns>
         [HttpPatch("update")]
-        public async Task<IActionResult> UpdateRecruitment([FromQuery] string id, [FromBody] RecruitmentVM recruimentVM)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Employer", "Admin")]
+		public async Task<IActionResult> UpdateRecruitment([FromQuery] string id, [FromBody] RecruitmentVM recruimentVM)
         {
             var result = await _recruimentService.Update(id, recruimentVM);
             return Ok(new ApiResponse
