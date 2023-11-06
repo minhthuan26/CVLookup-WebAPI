@@ -181,17 +181,19 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 				#region Paging
 				var paging = Pagination<Recruitment>.Create(recruitments, filter.Page, Filter.PageSize);
 				#endregion
+
 				
 				var result = paging.Select(prop => new
 				{
-					Id = prop.Id,
-					JobTitle = prop.JobTitle,
-					User = prop.User,
+					prop.Id,
+					prop.JobTitle,
+					prop.User,
 					JobAddress = new {
 						Province = prop.JobAddress.Province.Name,
-						District = prop.JobAddress.District
+						prop.JobAddress.District
 					},
-					Salary = prop.Salary,
+					prop.Salary,
+					CreatedAt = prop.CreatedAt.AsTimeAgo()
 				});
 				return result.ToList();
 
