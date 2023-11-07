@@ -34,7 +34,7 @@ namespace CVLookup_WebAPI.Models.Mapper
 						Province = province
 					};
 
-					if (source.JobAddress.District != null)
+					if (!string.IsNullOrEmpty(source.JobAddress.District))
                     {
                         var district = _dbContext.District.Where(prop => prop.Name == source.JobAddress.District).FirstOrDefault();
 

@@ -32,7 +32,7 @@ namespace CVLookup_WebAPI.Services.CurriculumService
                 var curriculumVitae = _mapper.Map<CurriculumVitae>(curriculumVitaeVM);
                 var user = await _authService.GetCurrentLoginUser();
                 
-                string uploadPath = "App_Data\\CV_Storage\\" + user.Email;
+                string uploadPath = "App_Data\\Storage\\" + user.Email + "\\CV";
                 curriculumVitae.User = user;
 
                 string filePath = await _fileService.UploadFile(curriculumVitaeVM.CVFile, uploadPath);
