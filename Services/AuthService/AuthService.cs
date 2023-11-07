@@ -3,18 +3,17 @@ using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AccountService;
 using CVLookup_WebAPI.Services.AccountUserService;
+using CVLookup_WebAPI.Services.FileService;
 using CVLookup_WebAPI.Services.JwtService;
 using CVLookup_WebAPI.Services.MailService;
 using CVLookup_WebAPI.Services.RefreshTokenService;
 using CVLookup_WebAPI.Services.RoleService;
-using CVLookup_WebAPI.Services.SignalRService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Collections.Specialized;
 using System.Security.Cryptography;
@@ -66,20 +65,6 @@ namespace CVLookup_WebAPI.Services.AuthService
             _jwtService = jwtService;
         }
 
-        private string GetSecretKey()
-        {
-            return _configuration.GetValue<string>("JwtConfig:SECRET_KEY");
-        }
-
-        private string GetRefreshKey()
-        {
-            return _configuration.GetValue<string>("JwtConfig:REFRESH_KEY");
-        }
-        private string GetMailKey()
-        {
-            return _configuration.GetValue<string>("MailConfig:MAIL_KEY");
-        }
-
         #region Login
         public async Task<object> Login(AccountVM accountVM)
         {
@@ -105,8 +90,8 @@ namespace CVLookup_WebAPI.Services.AuthService
                         claims.Add("userId", userRole.UserId);
                         claims.Add("role", userRole.Role.RoleName);
 
-                        string accessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
-                        string refreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
+                        string accessToken = await _jwtService.GenerateToken(_jwtService.GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
+                        string refreshToken = await _jwtService.GenerateToken(_jwtService.GetRefreshKey(), claims, DateTime.Now.AddDays(7));
 
                         var currentUser = await _userService.GetUserById(accountUser.UserId);
                         var authReturn = new
@@ -212,7 +197,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                 }
 
                 accessToken = accessToken.Split(" ")[1];
-                VerifyTokenResult accessTokenVerified = await _jwtService.VerifyToken(accessToken, GetSecretKey());
+                VerifyTokenResult accessTokenVerified = await _jwtService.VerifyToken(accessToken, _jwtService.GetSecretKey());
                 if (!accessTokenVerified.IsValid)
                 {
                     throw new ExceptionModel(400, "Thất bại. Token không hợp lệ");
@@ -223,7 +208,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                 }
 
                 var tokenInDB = await _tokenService.GetTokenByValue(refreshToken);
-                VerifyTokenResult refreshTokenVerified = await _jwtService.VerifyToken(tokenInDB.RefreshToken, GetRefreshKey());
+                VerifyTokenResult refreshTokenVerified = await _jwtService.VerifyToken(tokenInDB.RefreshToken, _jwtService.GetRefreshKey());
                 if (!refreshTokenVerified.IsValid)
                 {
                     throw new ExceptionModel(400, "Thất bại. Token không hợp lệ");
@@ -238,8 +223,8 @@ namespace CVLookup_WebAPI.Services.AuthService
                 claims.Add("userId", tokenInDB.UserId);
                 claims.Add("role", tokenInDB.Role.RoleName);
 
-                var newAccessToken = await _jwtService.GenerateToken(GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
-                var newRefreshToken = await _jwtService.GenerateToken(GetRefreshKey(), claims, DateTime.Now.AddDays(7));
+                var newAccessToken = await _jwtService.GenerateToken(_jwtService.GetSecretKey(), claims, DateTime.Now.AddMinutes(10));
+                var newRefreshToken = await _jwtService.GenerateToken(_jwtService.GetRefreshKey(), claims, DateTime.Now.AddDays(7));
 
                 await _tokenService.EditRefreshToken(new TokenVM
                 {
@@ -349,7 +334,7 @@ namespace CVLookup_WebAPI.Services.AuthService
                 string appPort = _configuration.GetValue<string>("AppConfig:PORT");
                 var claims = new ListDictionary();
                 claims.Add("AccountId", account.Id);
-                string activeToken = await _jwtService.GenerateToken(GetMailKey(), claims, DateTime.Now.AddDays(7));
+                string activeToken = await _jwtService.GenerateToken(_jwtService.GetMailKey(), claims, DateTime.Now.AddDays(7));
                 string activeLink = appHost + ":" + appPort + "/api/v1/auth/active-account?token=" + activeToken;
                 string subject = "Xác thực email cho tài khoản CVLookup của bạn";
 
@@ -412,9 +397,9 @@ namespace CVLookup_WebAPI.Services.AuthService
                     throw new ExceptionModel(400, "Thất bại. Token không hợp lệ");
                 }
 
-                _jwtService.VerifyToken(activeToken, GetMailKey());
+                _jwtService.VerifyToken(activeToken, _jwtService.GetMailKey());
 
-                VerifyTokenResult tokenVerified = await _jwtService.VerifyToken(activeToken, GetMailKey());
+                VerifyTokenResult tokenVerified = await _jwtService.VerifyToken(activeToken, _jwtService.GetMailKey());
                 if (tokenVerified.IsExpired)
                 {
                     throw new ExceptionModel(400, "Thất bại. Token đã hết hạn, bạn đã không kích hoạt tài khoản trong vòng 7 ngày. Để sử dụng dịch vụ của CVLookup vui lòng đăng kí lại và nhận email kích hoạt tài khoản");

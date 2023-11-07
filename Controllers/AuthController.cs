@@ -46,7 +46,7 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="candidateRegister"></param>
         /// <returns></returns>
         [HttpPost("register-candidate")]
-        public async Task<IActionResult> RegisterCandidate([FromBody] CandidateRegisterVM candidateRegister)
+        public async Task<IActionResult> RegisterCandidate([FromForm] CandidateRegisterVM candidateRegister)
         {
             var result = await _authService.RegisterCandidate(candidateRegister.Candidate, candidateRegister.Account);
             return Ok(new ApiResponse

@@ -123,6 +123,7 @@ namespace CVLookup_WebAPI.Services.AccountService
                 accountVM.Password = passwordHash;
 
                 var account = _mapper.Map<Account>(accountVM);
+
                 var result = await _dbContext.Account.AddAsync(account);
                 if (result.State.ToString() == "Added")
                 {

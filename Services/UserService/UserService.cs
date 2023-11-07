@@ -2,6 +2,7 @@
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AuthService;
+using CVLookup_WebAPI.Services.FileService;
 using CVLookup_WebAPI.Services.JwtService;
 using CVLookup_WebAPI.Services.RoleService;
 using CVLookup_WebAPI.Services.UserRoleService;
@@ -17,12 +18,14 @@ namespace CVLookup_WebAPI.Services.UserService
         private readonly AppDBContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IUserRoleService _userRoleService;
+        private readonly IFileService _fileService;
 
-        public UserService(AppDBContext dbContext, IMapper mapper, IUserRoleService userRoleService)
+        public UserService(AppDBContext dbContext, IMapper mapper, IUserRoleService userRoleService, IFileService fileService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _userRoleService = userRoleService;
+            _fileService = fileService;
         }
 
         public async Task<User> AddCandidate(CandidateVM candidateVM)
@@ -35,6 +38,15 @@ namespace CVLookup_WebAPI.Services.UserService
                 {
                     throw new ExceptionModel(400, "Email này đã được sử dụng bởi 1 tài khoản khác");
                 }
+
+                if (candidateVM.Avatar != null)
+                {
+                    string uploadPath = "App_Data\\Storage\\" + candidate.Email + "\\Avatar";
+                    string filePath = await _fileService.UploadFile(candidateVM.Avatar, uploadPath);
+                    candidate.Avatar = filePath;
+                }
+
+
                 var result = await _dbContext.User.AddAsync(candidate);
                 if (result.State.ToString() == "Added")
                 {
@@ -65,6 +77,12 @@ namespace CVLookup_WebAPI.Services.UserService
                 if (userExisted != null)
                 {
                     throw new ExceptionModel(400, "Email này đã được sử dụng bởi 1 tài khoản khác");
+                }
+                if (employerVM.Avatar != null)
+                {
+                    string uploadPath = "App_Data\\Storage\\" + employer.Email + "\\Avatar";
+                    string filePath = await _fileService.UploadFile(employerVM.Avatar, uploadPath);
+                    employer.Avatar = filePath;
                 }
                 var result = await _dbContext.User.AddAsync(employer);
                 if (result.State.ToString() == "Added")
