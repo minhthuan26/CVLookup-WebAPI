@@ -334,12 +334,12 @@ namespace CVLookup_WebAPI.Services.AuthService
 		{
 			try
 			{
-				string appHost = _configuration.GetValue<string>("AppConfig:HOST");
-				string appPort = _configuration.GetValue<string>("AppConfig:PORT");
+				string appHost = _configuration.GetValue<string>("ClientConfig:HOST");
+				string appPort = _configuration.GetValue<string>("ClientConfig:PORT");
 				var claims = new ListDictionary();
 				claims.Add("AccountId", account.Id);
 				string activeToken = await _jwtService.GenerateToken(_jwtService.GetMailKey(), claims, DateTime.Now.AddDays(7));
-				string activeLink = appHost + ":" + appPort + "/api/v1/auth/active-account?token=" + activeToken;
+				string activeLink = appHost + ":" + appPort + "/active-account?token=" + activeToken;
 				string subject = "Xác thực email cho tài khoản CVLookup của bạn";
 
 				var webRoot = _env.WebRootPath;

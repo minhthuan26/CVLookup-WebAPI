@@ -116,7 +116,7 @@ namespace CVLookup_WebAPI.Controllers
 			});
 		}
 
-		[HttpGet("active-account")]
+		[HttpPost("active-account")]
 		public async Task<IActionResult> ActiveAccount([FromQuery] string? token)
 		{
 			var result = await _authService.ActiveAccount(token);
@@ -124,7 +124,7 @@ namespace CVLookup_WebAPI.Controllers
 			{
 				Success = true,
 				Code = StatusCodes.Status200OK,
-				Message = "Hoàn thành",
+				Message = "Kích hoạt tài khoản thành công",
 				Data = result
 			});
 		}
