@@ -49,12 +49,12 @@ namespace CVLookup_WebAPI.Services.SignalRService
 
 		public override Task OnConnectedAsync()
 		{
-			//Clients.Caller.SendAsync("RestoreRefreshToken");
+			//Clients.Caller.SendAsync("ClientConnected", Context.ConnectionId);
 
 			return base.OnConnectedAsync();
 		}
 
-		public async Task AddHubConnection(string userId)
+		public async Task<string> AddHubConnection(string userId)
 		{
 			try
 			{
@@ -73,6 +73,7 @@ namespace CVLookup_WebAPI.Services.SignalRService
 					{
 						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
 					}
+					return connectionId;
 				}
 				else
 				{

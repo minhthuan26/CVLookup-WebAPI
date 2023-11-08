@@ -62,10 +62,13 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
-builder.Services.AddScoped<NotificationHub>();
+//builder.Services.AddScoped<NotificationHub>();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
 
 //custom data validate error
 builder.Services.AddControllers()

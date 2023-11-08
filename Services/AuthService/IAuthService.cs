@@ -17,6 +17,6 @@ namespace CVLookup_WebAPI.Services.AuthService
 		public Task<string> GetCurrentRefreshToken();
 		public Task<string> GetCurrentAccessToken();
 		public Task<User> GetCurrentLoginUser();
-		public Task RestoreRefreshToken(string userId);
+		public Task RestoreRefreshToken(string userId, string connectionId);
 	}
 }
