@@ -13,5 +13,8 @@ namespace CVLookup_WebAPI.Models.Domain
         [Display(Name = "Giới thiệu")]
         public string Description { get; set; }
 
-    }
+		[Display(Name = "Địa chỉ trang web")]
+		public string? Website { get; set; }
+
+	}
 }
