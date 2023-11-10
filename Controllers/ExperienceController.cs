@@ -10,8 +10,6 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
-    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-    [AuthorizationAttribute("Admin")]
     public class ExperienceController : ControllerBase
     {
         private readonly IExperienceService _experienceService;
@@ -81,7 +79,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="experience"></param>
         /// <returns></returns>
         [HttpPost("add-experience")]
-        public async Task<IActionResult> AddExperience([FromBody] ExperienceVM experience)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> AddExperience([FromBody] ExperienceVM experience)
         {
             var result = await _experienceService.Add(experience);
             return Ok(new ApiResponse
@@ -99,7 +99,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteExperience([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> DeleteExperience([FromQuery] string id)
         {
             var result = await _experienceService.Delete(id);
             return Ok(new ApiResponse
@@ -118,7 +120,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="experienceVM"></param>
         /// <returns></returns>
         [HttpPatch("update")]
-        public async Task<IActionResult> UpdateExperience([FromQuery] string id, [FromBody] ExperienceVM experienceVM)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> UpdateExperience([FromQuery] string id, [FromBody] ExperienceVM experienceVM)
         {
             var result = await _experienceService.Update(id, experienceVM);
             return Ok(new ApiResponse

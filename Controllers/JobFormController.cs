@@ -10,8 +10,6 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
-    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-    [AuthorizationAttribute("Admin")]
     public class JobFormController : ControllerBase
     {
         private readonly IJobFormService _jobFormService;
@@ -81,7 +79,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="jobForm"></param>
         /// <returns></returns>
         [HttpPost("add-job-form")]
-        public async Task<IActionResult> AddJobForm([FromBody] JobFormVM jobForm)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> AddJobForm([FromBody] JobFormVM jobForm)
         {
             var result = await _jobFormService.Add(jobForm);
             return Ok(new ApiResponse
@@ -99,7 +99,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteJobForm([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> DeleteJobForm([FromQuery] string id)
         {
             var result = await _jobFormService.Delete(id);
             return Ok(new ApiResponse
@@ -118,7 +120,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="jobFormVM"></param>
         /// <returns></returns>
         [HttpPatch("update")]
-        public async Task<IActionResult> UpdateJobForm([FromQuery] string id, [FromBody] JobFormVM jobFormVM)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> UpdateJobForm([FromQuery] string id, [FromBody] JobFormVM jobFormVM)
         {
             var result = await _jobFormService.Update(id, jobFormVM);
             return Ok(new ApiResponse

@@ -10,8 +10,6 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
-    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-    [AuthorizationAttribute("Admin")]
     public class JobCareerController : ControllerBase
     {
         private readonly IJobCareerService _jobCareerService;
@@ -81,7 +79,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="jobAddress"></param>
         /// <returns></returns>
         [HttpPost("add-job-career")]
-        public async Task<IActionResult> AddCareer([FromBody] JobCareerVM jobAddress)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> AddCareer([FromBody] JobCareerVM jobAddress)
         {
             var result = await _jobCareerService.Add(jobAddress);
             return Ok(new ApiResponse
@@ -99,7 +99,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteCareer([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> DeleteCareer([FromQuery] string id)
         {
             var result = await _jobCareerService.Delete(id);
             return Ok(new ApiResponse
@@ -118,7 +120,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="jobCareerVM"></param>
         /// <returns></returns>
         [HttpPatch("update")]
-        public async Task<IActionResult> UpdateCareer([FromQuery] string id, [FromBody] JobCareerVM jobCareerVM)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> UpdateCareer([FromQuery] string id, [FromBody] JobCareerVM jobCareerVM)
         {
             var result = await _jobCareerService.Update(id, jobCareerVM);
             return Ok(new ApiResponse
