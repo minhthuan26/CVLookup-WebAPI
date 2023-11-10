@@ -9,8 +9,6 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
-    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-    [AuthorizationAttribute("Admin")]
     public class JobPositionController : ControllerBase
     {
         private readonly IJobPositionService _jobPositionService;
@@ -80,7 +78,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="jobPosition"></param>
         /// <returns></returns>
         [HttpPost("add-job-position")]
-        public async Task<IActionResult> AddJobPosition([FromBody] JobPositionVM jobPosition)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> AddJobPosition([FromBody] JobPositionVM jobPosition)
         {
             var result = await _jobPositionService.Add(jobPosition);
             return Ok(new ApiResponse
@@ -98,7 +98,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteJobPosition([FromQuery] string id)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> DeleteJobPosition([FromQuery] string id)
         {
             var result = await _jobPositionService.Delete(id);
             return Ok(new ApiResponse
@@ -117,7 +119,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="jobPositionVM"></param>
         /// <returns></returns>
         [HttpPatch("update")]
-        public async Task<IActionResult> UpdateJobPosition([FromQuery] string id, [FromBody] JobPositionVM jobPositionVM)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin")]
+		public async Task<IActionResult> UpdateJobPosition([FromQuery] string id, [FromBody] JobPositionVM jobPositionVM)
         {
             var result = await _jobPositionService.Update(id, jobPositionVM);
             return Ok(new ApiResponse
