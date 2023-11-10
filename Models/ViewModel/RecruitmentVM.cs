@@ -52,5 +52,9 @@ namespace CVLookup_WebAPI.Models.ViewModel
         [Required(ErrorMessage = "{0} không được để trống")]
         [Display(Name = "Phúc lợi")]
         public string Benefit { get; set; }
-    }
+
+		[Required(ErrorMessage = "{0} không được để trống")]
+		[Display(Name = "Số lượng")]
+		public string Quantity { get; set; }
+	}
 }
