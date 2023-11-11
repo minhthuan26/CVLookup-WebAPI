@@ -4,6 +4,7 @@ using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Net;
 
 namespace CVLookup_WebAPI.Services.JobAddressService
@@ -152,6 +153,19 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			}
 		}
 
+		public async Task<List<Province>> GetAllProvince()
+		{
+			try
+			{
+				var provinceList = await _dbContext.Province.Include(prop => prop.Districts).OrderBy(prop => prop.Name).ToListAsync();
+				return provinceList;
+			}
+			catch (ExceptionModel e)
+			{
+				throw new ExceptionModel(500, e.Message);
+			}
+		}
+
 		public async Task<JobAddress> GetJobAddressById(string id)
 		{
 			try
@@ -196,7 +210,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 		{
 			try
 			{
-				var jobAddressList = await _dbContext.JobAddress.ToListAsync();
+				var jobAddressList = await _dbContext.JobAddress.OrderBy(prop => prop.AddressDetail).ToListAsync();
 				return jobAddressList;
 			}
 			catch (ExceptionModel e)

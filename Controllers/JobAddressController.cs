@@ -111,12 +111,26 @@ namespace CVLookup_WebAPI.Controllers
             });
         }
 
-        /// <summary>
-        /// Thêm quận mới
-        /// </summary>
-        /// <param name="district"></param>
-        /// <returns></returns>
-        [HttpPost("add-district")]
+
+		[HttpGet("get-all-province")]
+		public async Task<IActionResult> GetALLProvince()
+		{
+			var result = await _jobAddressService.GetAllProvince();
+			return Ok(new ApiResponse
+			{
+				Success = true,
+				Code = StatusCodes.Status200OK,
+				Data = result,
+				Message = "Hoàn thành"
+			});
+		}
+
+		/// <summary>
+		/// Thêm quận mới
+		/// </summary>
+		/// <param name="district"></param>
+		/// <returns></returns>
+		[HttpPost("add-district")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
 		[AuthorizationAttribute("Admin")]
 		public async Task<IActionResult> AddDistrict([FromBody] DistrictVM district)
