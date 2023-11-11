@@ -131,7 +131,7 @@ namespace CVLookup_WebAPI.Services.JobCareerService
 		{
 			try
 			{
-				var jobCareerList = await _dbContext.JobCareer.ToListAsync();
+				var jobCareerList = await _dbContext.JobCareer.OrderBy(prop => prop.Career).ToListAsync();
 				return jobCareerList;
 			}
 			catch (ExceptionModel e)

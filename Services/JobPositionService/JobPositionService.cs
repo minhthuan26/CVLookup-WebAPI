@@ -130,7 +130,7 @@ namespace CVLookup_WebAPI.Services.JobPositionService
 		{
 			try
 			{
-				var jobPositionList = await _dbContext.JobPosition.ToListAsync();
+				var jobPositionList = await _dbContext.JobPosition.OrderBy(prop => prop.Position).ToListAsync();
 				return jobPositionList;
 			}
 			catch (ExceptionModel e)

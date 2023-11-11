@@ -131,7 +131,7 @@ namespace CVLookup_WebAPI.Services.JobFieldService
 		{
 			try
 			{
-				var jobFieldList = await _dbContext.JobField.ToListAsync();
+				var jobFieldList = await _dbContext.JobField.OrderBy(prop => prop.Field).ToListAsync();
 				return jobFieldList;
 			}
 			catch (ExceptionModel e)

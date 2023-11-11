@@ -220,7 +220,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 				var result = await _dbContext.Recruitment.Where(prop => prop.Id == id)
 					.Include(prop => prop.JobAddress)
 					.Include(prop => prop.JobAddress.Province)
-					.Include(prop => prop.JobAddress.Province.Districts)
 					.Include(prop => prop.JobPosition)
 					.Include(prop => prop.JobForm)
 					.Include(prop => prop.JobField)

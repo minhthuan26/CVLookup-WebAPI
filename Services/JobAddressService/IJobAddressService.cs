@@ -12,6 +12,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
         public Task<JobAddress> Update(string Id, JobAddressVM newJobAddressVM);
         public Task<JobAddress> Delete(string Id);
         public Task<Province> AddProvince(ProvinceVM provinceVM);
+        public Task<List<Province>> GetAllProvince();
         public Task<District> AddDistrict(DistrictVM districtVM);
     }
 }

@@ -131,7 +131,7 @@ namespace CVLookup_WebAPI.Services.ExperienceService
 		{
 			try
 			{
-				var jobExpList = await _dbContext.Experience.ToListAsync();
+				var jobExpList = await _dbContext.Experience.OrderBy(prop => prop.Exp).ToListAsync();
 				return jobExpList;
 			}
 			catch (ExceptionModel e)
