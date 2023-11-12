@@ -257,10 +257,11 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 						prop.Experience,
 						prop.Salary,
 						prop.Quantity,
-						prop.CreatedAt,
+						CreatedAt = prop.CreatedAt.AsTimeAgo(),
 						prop.Benefit,
 						prop.JobDescription,
-						prop.JobRequirement
+						prop.JobRequirement,
+						prop.ApplicationDeadline
 					})
 					.FirstOrDefaultAsync() ;
 				if (result == null)
