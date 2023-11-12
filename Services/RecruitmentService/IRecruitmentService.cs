@@ -8,7 +8,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
     {
         public Task<List<Recruitment>> RecruitmentList();
         public Task<object> GetRecruitment(Filter filter);
-		public Task<Recruitment> GetRecruitmentById(string id);
+		public Task<object> GetRecruitmentById(string id);
 		public Task<List<Recruitment>> GetRecruitmentsByTitle(string title);
 		public Task<List<Recruitment>> GetRecruitmentsByUserId(string id);
         public Task<Recruitment> Add(RecruitmentVM recruitment);

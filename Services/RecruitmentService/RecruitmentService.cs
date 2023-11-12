@@ -30,7 +30,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 			{
 				var user = await _authService.GetCurrentLoginUser();
 				var recruitment = _mapper.Map<Recruitment>(recruitmentVM);
-				recruitment.User = user;
+				recruitment.Employer = (Employer) user;
 				recruitment.CreatedAt = DateTime.Now;
 				recruitment.IsExpired = recruitment.CreatedAt > recruitment.ApplicationDeadline;
 				var result = await _dbContext.Recruitment.AddAsync(recruitment);
@@ -99,7 +99,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 				var recruitments = _dbContext.Recruitment
 					.Include(prop => prop.JobAddress)
 					.Include(prop => prop.JobAddress.Province)
-					.Include(prop => prop.User)
+					.Include(prop => prop.Employer)
 					.AsQueryable();
 				#region Filter
 				if (!string.IsNullOrEmpty(filter.Keyword))
@@ -109,7 +109,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 
 				if (!string.IsNullOrEmpty(filter.UserId))
 				{
-					recruitments = recruitments.Where(prop => prop.User.Id == filter.UserId);
+					recruitments = recruitments.Where(prop => prop.Employer.Id == filter.UserId);
 				}
 
 				if (!string.IsNullOrEmpty(filter.Province))
@@ -130,7 +130,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 
 				if (!string.IsNullOrEmpty(filter.UserId))
 				{
-					recruitments = recruitments.Where(prop => prop.User.Id == filter.UserId);
+					recruitments = recruitments.Where(prop => prop.Employer.Id == filter.UserId);
 				}
 
 				if (!string.IsNullOrEmpty(filter.JobField))
@@ -181,20 +181,25 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 				#region Paging
 				var paging = Pagination<Recruitment>.Create(recruitments, filter.Page, Filter.PageSize);
 				#endregion
-
-				
-				var result = paging.Select(prop => new
+				var result = paging.Select(async prop => new
 				{
 					prop.Id,
 					prop.JobTitle,
-					prop.User,
-					JobAddress = new {
+					User = new { 
+						prop.Employer.Id,
+						prop.Employer.Email,
+						prop.Employer.Username,
+						Avatar = prop?.Employer?.Avatar != null ? Convert.ToBase64String(File.ReadAllBytes(prop.Employer.Avatar)) : null
+					},
+					JobAddress = new
+					{
 						Province = prop.JobAddress.Province.Name,
 						prop.JobAddress.District
 					},
 					prop.Salary,
 					CreatedAt = prop.CreatedAt.AsTimeAgo()
 				});
+				
 				return result.ToList();
 
 			}
@@ -208,7 +213,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 			}
 		}
 
-		public async Task<Recruitment> GetRecruitmentById(string id)
+		public async Task<object> GetRecruitmentById(string id)
 		{
 			try
 			{
@@ -225,8 +230,39 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
 					.Include(prop => prop.JobField)
 					.Include(prop => prop.Experience)
 					.Include(prop => prop.JobCareer)
-					.Include(prop => prop.User)
-					.FirstOrDefaultAsync();
+					.Include(prop => prop.Employer)
+					.Select(prop => new
+					{
+						prop.Id,
+						prop.JobTitle,
+						User = new
+						{
+							prop.Employer.Address,
+							prop.Employer.Website,
+							prop.Employer.Id,
+							prop.Employer.Email,
+							prop.Employer.Username,
+							Avatar = prop.Employer.Avatar != null ? Convert.ToBase64String(File.ReadAllBytes(prop.Employer.Avatar)) : null
+						},
+						JobAddress = new
+						{
+							prop.JobAddress.AddressDetail,
+							Province = prop.JobAddress.Province.Name,
+							prop.JobAddress.District
+						},
+						prop.JobField,
+						prop.JobForm,
+						prop.JobCareer,
+						prop.JobPosition,
+						prop.Experience,
+						prop.Salary,
+						prop.Quantity,
+						prop.CreatedAt,
+						prop.Benefit,
+						prop.JobDescription,
+						prop.JobRequirement
+					})
+					.FirstOrDefaultAsync() ;
 				if (result == null)
 				{
 					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
