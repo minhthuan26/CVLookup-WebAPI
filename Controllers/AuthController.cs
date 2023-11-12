@@ -65,7 +65,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <param name="employerRegister"></param>
 		/// <returns></returns>
 		[HttpPost("register-employer")]
-		public async Task<IActionResult> RegisterEmployer([FromBody] EmployerRegisterVM employerRegister)
+		public async Task<IActionResult> RegisterEmployer([FromForm] EmployerRegisterVM employerRegister)
 		{
 			var result = await _authService.RegisterEmployer(employerRegister.Employer, employerRegister.Account);
 			return Ok(new ApiResponse
