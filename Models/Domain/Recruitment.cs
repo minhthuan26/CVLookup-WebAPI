@@ -8,7 +8,7 @@ namespace CVLookup_WebAPI.Models.Domain
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
 		[Display(Name = "Nhà tuyển dụng")]
-        public User User { get; set; }
+        public Employer Employer { get; set; }
 
 		[Required(ErrorMessage = "{0} không được để trống")]
 		[Display(Name = "Tiêu đề")]
