@@ -71,7 +71,7 @@ namespace CVLookup_WebAPI.Controllers
 		/// <returns>A list of CurriculumVitae</returns>
 		[HttpGet("get-all-curriculum-vitae")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-		[Authorization("Admin")]
+		[Authorization("Admin","Candidate")]
 		public async Task<IActionResult> GetAllCurriculumVitae()
         {
             var result = await _curriculumViateService.CurriculumVitaeList();
