@@ -19,8 +19,12 @@ namespace CVLookup_WebAPI.Models.ViewModel
         [EmailAddress(ErrorMessage = "Vui lòng nhập đúng email")]
         public string Email { get; set; }
 
-		public string Introdution { get; set; }
+        [Required(ErrorMessage = "{0} không được để trống")]
+        [Display(Name = "Giới thiệu")]
+        public string Introdution { get; set; }
 
+        [Required(ErrorMessage = "{0} không được để trống")]
+        [Display(Name = "CV")]
         public IFormFile CVFile { get; set; }
     }
 }

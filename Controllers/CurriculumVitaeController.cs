@@ -1,17 +1,9 @@
 ﻿using AutoMapper;
 using CVLookup_WebAPI.Middleware;
-using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.CurriculumService;
 using CVLookup_WebAPI.Utilities;
-using FirstWebApi.Models.Database;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CVLookup_WebAPI.Controllers
 {
@@ -43,27 +35,6 @@ namespace CVLookup_WebAPI.Controllers
 
             return File(result.Bytes, result.ContentType, result.FilePath);
         }
-
-		/// <summary>
-		/// Tạo CV
-		/// </summary>
-		/// <param name="curriculumVitaeVM">The CurriculumVitae data</param>
-		/// <returns>The created CurriculumVitae</returns>
-		[HttpPost("add-curriculum-vitae")]
-		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-		[Authorization("Admin", "Candidate")]
-		public async Task<IActionResult> AddCurriculumVitae([FromForm] CurriculumVitaeVM curriculumVitaeVM)
-		{
-			var result = await _curriculumViateService.Add(curriculumVitaeVM);
-
-			return Ok(new ApiResponse
-			{
-				Success = true,
-				Code = StatusCodes.Status200OK,
-				Data = result,
-				Message = "Hoàn thành"
-			});
-		}
 
 		/// <summary>
 		/// Lấy danh sách CV
@@ -159,6 +130,27 @@ namespace CVLookup_WebAPI.Controllers
         public async Task<IActionResult> UpdateCurriculumVitae([FromQuery] string id, [FromBody] CurriculumVitaeVM newCurriculumVitaeVM)
         {
             var result = await _curriculumViateService.Update(id, newCurriculumVitaeVM);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Data = result,
+                Message = "Hoàn thành"
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="curriculumVitaeVM"></param>
+        /// <returns></returns>
+        [HttpPost("upload-curriculum-vitae")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [Authorization("Admin", "Candidate")]
+        public async Task<IActionResult> UploadCurriculumVitae([FromForm] CurriculumVitaeVM curriculumVitaeVM)
+        {
+            var result = await _curriculumViateService.Add(curriculumVitaeVM);
 
             return Ok(new ApiResponse
             {
