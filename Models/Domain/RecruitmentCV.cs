@@ -8,7 +8,7 @@
 		public string CurriculumVitaeId { get; set; }
 
 		public DateTime AppliedAt { get; set; } = DateTime.Now;
-		public bool IsView { get; set; }
-		public bool IsPass { get; set; }
+		public bool IsView { get; set; } = false;
+		public bool IsPass { get; set; } = false;
 	}
 }
