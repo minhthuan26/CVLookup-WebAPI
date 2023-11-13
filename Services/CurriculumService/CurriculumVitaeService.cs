@@ -7,38 +7,47 @@ using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.Text;
+using System.Web;
+using Newtonsoft.Json;
+
 
 namespace CVLookup_WebAPI.Services.CurriculumService
 {
-	public class CurriculumVitaeService : ICurriculumViateService
-	{
-		private AppDBContext _dbContext;
+    public class CurriculumVitaeService : ICurriculumViateService
+    {
+        private AppDBContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
         private readonly IFileService _fileService;
 
         public CurriculumVitaeService(AppDBContext dbContext, IMapper mapper, IAuthService authService, IFileService fileService)
         {
-			_dbContext = dbContext; 
+            _dbContext = dbContext;
             _mapper = mapper;
             _authService = authService;
             _fileService = fileService;
         }
 
         public async Task<CurriculumVitae> Add(CurriculumVitaeVM curriculumVitaeVM)
-		{
+        {
             try
             {
                 var curriculumVitae = _mapper.Map<CurriculumVitae>(curriculumVitaeVM);
                 var user = await _authService.GetCurrentLoginUser();
                 
-                string uploadPath = "App_Data\\Storage\\" + user.Email + "\\CV";
+                string uploadPath = "App_Data\\CV_Storage\\" + user.Email;
                 curriculumVitae.User = user;
 
                 string filePath = await _fileService.UploadFile(curriculumVitaeVM.CVFile, uploadPath);
-                curriculumVitae.CVPath = filePath;
+                byte[] fileContent = File.ReadAllBytes(filePath);
+                string base64String = Convert.ToBase64String(fileContent);
 
-				var result = await _dbContext.CurriculumVitae.AddAsync(curriculumVitae);
+                curriculumVitae.CVPath = filePath;
+                curriculumVitae.Base64StringFile = base64String;
+
+                var result = await _dbContext.CurriculumVitae.AddAsync(curriculumVitae);
                 if (result.State.ToString() == "Added")
                 {
                     int saveState = await _dbContext.SaveChangesAsync();
@@ -60,8 +69,8 @@ namespace CVLookup_WebAPI.Services.CurriculumService
             }
         }
 
-		public async Task<List<CurriculumVitae>> CurriculumVitaeList()
-		{
+        public async Task<List<CurriculumVitae>> CurriculumVitaeList()
+        {
             try
             {
                 var curiculumVitae = await _dbContext.CurriculumVitae.ToListAsync();
@@ -73,8 +82,8 @@ namespace CVLookup_WebAPI.Services.CurriculumService
             }
         }
 
-		public async Task<CurriculumVitae> Delete(string Id)
-		{
+        public async Task<CurriculumVitae> Delete(string Id)
+        {
             try
             {
                 if (Id == null)
@@ -110,8 +119,8 @@ namespace CVLookup_WebAPI.Services.CurriculumService
             }
         }
 
-		public async Task<CurriculumVitae> GetCurriculumVitaeById(string id)
-		{
+        public async Task<CurriculumVitae> GetCurriculumVitaeById(string id)
+        {
             try
             {
                 if (id == null)
@@ -133,13 +142,13 @@ namespace CVLookup_WebAPI.Services.CurriculumService
         }
 
 
-        public async Task<List<CurriculumVitae>> GetByCandidateId (string candidateId)
+        public async Task<List<CurriculumVitae>> GetByCandidateId(string candidateId)
         {
             try
             {
-				var curiculumVitae = await _dbContext.CurriculumVitae.Where(prop => prop.User.Id == candidateId).ToListAsync();
-				return curiculumVitae;
-			}
+                var curiculumVitae = await _dbContext.CurriculumVitae.Where(prop => prop.User.Id == candidateId).ToListAsync();
+                return curiculumVitae;
+            }
             catch (ExceptionModel e)
             {
                 throw new ExceptionModel(e.Code, e.Message);
@@ -147,8 +156,8 @@ namespace CVLookup_WebAPI.Services.CurriculumService
         }
 
 
-		public async Task<CurriculumVitae> Update(string Id, CurriculumVitaeVM newCurriculumVitaeVM)
-		{
+        public async Task<CurriculumVitae> Update(string Id, CurriculumVitaeVM newCurriculumVitaeVM)
+        {
             try
             {
                 var curriculumVitae = await _dbContext.CurriculumVitae.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
@@ -186,15 +195,51 @@ namespace CVLookup_WebAPI.Services.CurriculumService
             try
             {
                 var cvInDB = await _dbContext.CurriculumVitae.Where(prop => prop.Id == id).FirstOrDefaultAsync();
-                if(cvInDB == null)
+                if (cvInDB == null)
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
+
                 var fileDownload = await _fileService.DownloadFile(cvInDB.CVPath);
                 return fileDownload;
-            } catch (ExceptionModel e)
+            }
+            catch (ExceptionModel e)
             {
                 throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+        public async Task<object> GenCV()
+        {
+            try
+            {
+                var filePath = Path.Combine(Environment.CurrentDirectory, "App_Data", "Cv.html");
+                if (File.Exists(filePath))
+                {
+                    string fileContent = File.ReadAllText(filePath, Encoding.UTF8);
+                    ReplaceTemplate(ref fileContent, new
+                    {
+
+                    });
+
+                    string base64Convert = Convert.ToBase64String(Encoding.UTF8.GetBytes(fileContent));
+                    return new { base64Convert };
+                }
+                return "Tạo Cv thất bại";
+            }
+
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+        private void ReplaceTemplate(ref string template, object obj)
+        {
+            string json = JsonConvert.SerializeObject(obj);
+            foreach (var c in JsonConvert.DeserializeObject<Dictionary<string, string>>(json))
+            {
+                template = template.Replace("{{" + c.Key + "}}", c.Value);
             }
         }
     }

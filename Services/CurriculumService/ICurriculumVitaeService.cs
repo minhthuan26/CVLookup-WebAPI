@@ -13,5 +13,6 @@ namespace CVLookup_WebAPI.Services.CurriculumService
         public Task<CurriculumVitae> Update(string Id, CurriculumVitaeVM newCurriculumVitae);
         public Task<CurriculumVitae> Delete(string Id);
         public Task<FileDownload> DownloadCV(string id);
+        public Task<object> GenCV();
     }
 }
