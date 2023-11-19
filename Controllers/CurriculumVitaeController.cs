@@ -106,7 +106,7 @@ namespace CVLookup_WebAPI.Controllers
         /// <returns></returns>
         [HttpGet("get-curriculum-vitae-by-candidateId")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-		[Authorization("Admin", "Candidate")]
+		[Authorization("Admin")]
 		public async Task<IActionResult> GetByCandidateId([FromQuery] string id)
         {
             var result = await _curriculumViateService.GetByCandidateId(id);
@@ -120,13 +120,29 @@ namespace CVLookup_WebAPI.Controllers
             });
         }
 
-        /// <summary>
-        /// Sửa CV
-        /// </summary>
-        /// <param name="id">The ID of the CurriculumVitae to update</param>
-        /// <param name="newCurriculumVitaeVM">The updated CurriculumVitae data</param>
-        /// <returns>The updated CurriculumVitae</returns>
-        [HttpPatch("update-curriculum-vitae")]
+		[HttpGet("get-current-user-cv-uploaded")]
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[Authorization("Admin", "Candidate")]
+		public async Task<IActionResult> GetCurrentUserCVUploaded()
+		{
+			var result = await _curriculumViateService.GetCurrentUserCVUploaded();
+
+			return Ok(new ApiResponse
+			{
+				Success = true,
+				Code = StatusCodes.Status200OK,
+				Data = result,
+				Message = "Hoàn thành"
+			});
+		}
+
+		/// <summary>
+		/// Sửa CV
+		/// </summary>
+		/// <param name="id">The ID of the CurriculumVitae to update</param>
+		/// <param name="newCurriculumVitaeVM">The updated CurriculumVitae data</param>
+		/// <returns>The updated CurriculumVitae</returns>
+		[HttpPatch("update-curriculum-vitae")]
         public async Task<IActionResult> UpdateCurriculumVitae([FromQuery] string id, [FromBody] CurriculumVitaeVM newCurriculumVitaeVM)
         {
             var result = await _curriculumViateService.Update(id, newCurriculumVitaeVM);

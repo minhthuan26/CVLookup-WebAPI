@@ -1,6 +1,7 @@
 ﻿using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace CVLookup_WebAPI.Services.CurriculumService
 {
@@ -13,5 +14,6 @@ namespace CVLookup_WebAPI.Services.CurriculumService
         public Task<CurriculumVitae> Update(string Id, CurriculumVitaeVM newCurriculumVitae);
         public Task<CurriculumVitae> Delete(string Id);
         public Task<FileDownload> DownloadCV(string id);
+        public Task<object> GetCurrentUserCVUploaded();
     }
 }

@@ -28,5 +28,7 @@ namespace CVLookup_WebAPI.Models.Domain
 
 		public User User { get; set; }
 
+		public DateTime UploadedAt { get; set; } = DateTime.Now;
+
 	}
 }

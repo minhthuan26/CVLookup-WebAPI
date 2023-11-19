@@ -7,6 +7,9 @@ using CVLookup_WebAPI.Services.RecruitmentService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Runtime.InteropServices;
 
 namespace CVLookup_WebAPI.Services.RecruitmentCVService
 {
@@ -34,15 +37,9 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 				var currentUser = await _authService.GetCurrentLoginUser();
 				var recruitmentCV = _mapper.Map<RecruitmentCV>(recruitmentCVVM);
 
-				if(currentUser != recruitmentCV.CurriculumVitae.User)
+				if (currentUser != recruitmentCV.CurriculumVitae.User)
 				{
 					throw new ExceptionModel(400, "Thất bại. Bạn không có quyền truy cập CV này");
-				}
-
-				var existedRecruitmentCV = await _dbContext.RecruitmentCV.Where(prop => prop.CurriculumVitaeId == recruitmentCVVM.CurriculumVitaeId && prop.RecruitmentId == recruitmentCVVM.RecruitmentId).FirstOrDefaultAsync();
-				if (existedRecruitmentCV != null)
-				{
-					throw new ExceptionModel(400, "Thất bại. CV này đã được nộp cho đơn tuyển dụng này trước đó");
 				}
 
 				var result = await _dbContext.RecruitmentCV.AddAsync(recruitmentCV);
@@ -55,7 +52,8 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 					}
 					return new
 					{
-						recruitment = new {
+						recruitment = new
+						{
 							Id = recruitmentCV.RecruitmentId,
 							title = recruitmentCV.Recruitment.JobTitle
 						},
@@ -114,7 +112,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 			}
 		}
 
-		public async Task<object> GetRecruitmentCVByRecruitmentId(string id)
+		public async Task<object> GetRecruitmentCVBy_RecruitmentId(string id)
 		{
 			try
 			{
@@ -146,7 +144,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 			}
 		}
 
-		public async Task<RecruitmentCV> GetRecruitmentCVByCurriculumVitaeId(string id)
+		public async Task<object> GetRecruitmentCVBy_CVId(string id)
 		{
 			try
 			{
@@ -164,14 +162,117 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 			}
 		}
 
-		public Task<List<RecruitmentCV>> RecruitmentCVList()
+		public async Task<object> GetAllCVApplied(string recruitmentId)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				User currentUser = await _authService.GetCurrentLoginUser();
+				var role = await _dbContext.UserRole
+					.Include(prop => prop.Role)
+					.Where(prop => prop.UserId == currentUser.Id)
+					.Select(prop => new
+					{
+						prop.Role.RoleName
+					})
+					.FirstOrDefaultAsync();
+
+				var isRecruitmentBelongToUser = await _dbContext.Recruitment.FirstOrDefaultAsync(prop => prop.Employer.Id == currentUser.Id);
+				if (role?.RoleName != "Admin" && isRecruitmentBelongToUser == null)
+				{
+					throw new ExceptionModel(400, "Thất bại. Truy cập bị từ chối");
+				}
+				var result = await _dbContext.RecruitmentCV
+					.Include(prop => prop.CurriculumVitae)
+					.ThenInclude(prop => prop.User)
+					.Where(prop => prop.RecruitmentId == recruitmentId)
+					.OrderBy(prop => prop.AppliedAt)
+					.Select(prop => new
+					{
+						prop.RecruitmentId,
+						prop.CurriculumVitaeId,
+						prop.IsPass,
+						prop.IsView,
+						prop.AppliedAt,
+						prop.CurriculumVitae
+					})
+					.ToListAsync();
+
+				return result;
+			}
+			catch (ExceptionModel e)
+			{
+				throw new ExceptionModel(e.Code, e.Message);
+			}
 		}
 
-		public Task<RecruitmentCV> Update(string Id, RecruitmentCVVM newRecruitmentCV)
+		public async Task<object> ReAppplyCV(string recruitmentId, string userId, string cvId)
 		{
-			throw new NotImplementedException();
+			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
+			try
+			{
+				var recruitment = await _dbContext.RecruitmentCV
+					.Where(prop => prop.RecruitmentId == recruitmentId && prop.CurriculumVitae.User.Id == userId)
+					.FirstOrDefaultAsync();
+
+				var cv = await _dbContext.CurriculumVitae.FirstOrDefaultAsync(prop => prop.Id == cvId);
+
+				if (recruitment == null || cv == null)
+				{
+					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+				}
+
+				_dbContext.RecruitmentCV.Remove(recruitment);
+
+				var newRecord = _mapper.Map<RecruitmentCV>(new RecruitmentCVVM()
+				{
+					RecruitmentId = recruitmentId,
+					CurriculumVitaeId = cvId
+				});
+
+				await _dbContext.RecruitmentCV.AddAsync(newRecord);
+				await _dbContext.SaveChangesAsync();
+				await transaction.CommitAsync();
+
+				return newRecord;
+
+			}
+			catch (ExceptionModel e)
+			{
+				await transaction.RollbackAsync();
+				throw new ExceptionModel(e.Code, e.Message);
+			}
+		}
+
+		public async Task<object> GetRecruitmentBy_UserId_And_RecruitmentId(string userId, string recruitmentId)
+		{
+			try
+			{
+				var result = await _dbContext.RecruitmentCV
+					.Include(props => props.CurriculumVitae)
+					.ThenInclude(prop => prop.User)
+					.Where(prop => prop.CurriculumVitae.User.Id == userId && prop.RecruitmentId == recruitmentId).FirstOrDefaultAsync();
+
+				if (result == null)
+				{
+					return result;
+				}
+				else
+				{
+					return new
+					{
+						result.RecruitmentId,
+						result.CurriculumVitaeId,
+						result.IsPass,
+						result.IsView,
+						result.AppliedAt
+					};
+				}
+
+			}
+			catch (ExceptionModel e)
+			{
+				throw new ExceptionModel(e.Code, e.Message);
+			}
 		}
 	}
 }
