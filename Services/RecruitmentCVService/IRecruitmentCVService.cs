@@ -9,7 +9,9 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 		public Task<object> GetRecruitmentCVByRecruitmentId(string id);
 		public Task<RecruitmentCV> GetRecruitmentCVByCurriculumVitaeId(string id);
         public Task<object> ApplyToRecruitment(RecruitmentCVVM recruitmentCV);
-        public Task<RecruitmentCV> Update(string Id, RecruitmentCVVM newRecruitmentCV);
+        public Task<RecruitmentCV> UpdateIsView(string Id);
+        public Task<RecruitmentCV> ToggleIsPass(string id);
+
         public Task<RecruitmentCV> Delete(string recruitmentId, string curriculumVitaeId);
     }
 }

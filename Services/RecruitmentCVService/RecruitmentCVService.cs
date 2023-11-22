@@ -150,7 +150,9 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 		{
 			try
 			{
-				var result = await _dbContext.RecruitmentCV.Where(prop => prop.CurriculumVitaeId == id).Include(props => props.CurriculumVitae).FirstOrDefaultAsync();
+				var result = await _dbContext.RecruitmentCV.Where(prop => prop.CurriculumVitaeId == id)
+															.Include(props => props.CurriculumVitae)
+                                                            .FirstOrDefaultAsync();
 
 				if (result == null)
 				{
@@ -169,9 +171,62 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 			throw new NotImplementedException();
 		}
 
-		public Task<RecruitmentCV> Update(string Id, RecruitmentCVVM newRecruitmentCV)
+		public async Task<RecruitmentCV> UpdateIsView(string id)
 		{
-			throw new NotImplementedException();
-		}
-	}
+			try
+			{
+                var recruitmentCV = await this.GetRecruitmentCVByCurriculumVitaeId(id);
+                recruitmentCV.IsView = true;
+                var result = _dbContext.RecruitmentCV.Update(recruitmentCV);
+                if (result.State.ToString() == "Modified")
+                {
+                    int saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return recruitmentCV;
+
+                }
+                else
+                {
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                }
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+
+        }
+
+        public async Task<RecruitmentCV> ToggleIsPass(string id)
+        {
+            try
+            {
+                var recruitmentCV = await this.GetRecruitmentCVByCurriculumVitaeId(id);
+                recruitmentCV.IsPass = !recruitmentCV.IsPass;
+                var result = _dbContext.RecruitmentCV.Update(recruitmentCV);
+                if (result.State.ToString() == "Modified")
+                {
+                    int saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return recruitmentCV;
+
+                }
+                else
+                {
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                }
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+
+        }
+    }
 }
