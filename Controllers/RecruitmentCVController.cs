@@ -35,9 +35,9 @@ namespace CVLookup_WebAPI.Controllers
         [HttpGet("get-by-recruitment-id")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
 		[AuthorizationAttribute("Admin", "Employer")]
-		public async Task<IActionResult> GetRecruitmentCVByRecruitmentId([FromQuery] string id)
+		public async Task<IActionResult> GetRecruitmentCVBy_RecruitmentId([FromQuery] string id)
         {
-            var result = await _recruitmentCVService.GetRecruitmentCVByRecruitmentId(id);
+            var result = await _recruitmentCVService.GetRecruitmentCVBy_RecruitmentId(id);
             return Ok(new ApiResponse
             {
                 Success = true,
@@ -52,12 +52,12 @@ namespace CVLookup_WebAPI.Controllers
         /// </summary>
         /// <param name="id">ID của CurriculumVitae</param>
         /// <returns>Thông tin RecruitmentCV</returns>
-        [HttpGet("get-by-curriculum-vitae-id")]
+        [HttpGet("get-by-cv-id")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
 		[AuthorizationAttribute("Admin", "Candidate")]
-		public async Task<IActionResult> GetRecruitmentCVByCurriculumVitaeId([FromQuery] string id)
+		public async Task<IActionResult> GetRecruitmentCVBy_CVId([FromQuery] string id)
         {
-            var recruitmentCV = await _recruitmentCVService.GetRecruitmentCVByCurriculumVitaeId(id);
+            var recruitmentCV = await _recruitmentCVService.GetRecruitmentCVBy_CVId(id);
             return Ok(new ApiResponse
             {
                 Success = true,
@@ -67,12 +67,34 @@ namespace CVLookup_WebAPI.Controllers
             });
         }
 
+
         /// <summary>
-        /// Nộp CV ứng tuyển
+        /// 
         /// </summary>
-        /// <param name="recruitmentCVVM"></param>
+        /// <param name="userId"></param>
+        /// <param name="recruitmentId"></param>
         /// <returns></returns>
-        [HttpPost("apply-to-recruitment")]
+		[HttpGet("get-by-user-and-recruitment-id")]
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin", "Candidate")]
+		public async Task<IActionResult> GetRecruitmentCVBy_UserId_And_RecruitmentId([FromQuery] string userId, [FromQuery] string recruitmentId)
+		{
+			var recruitmentCV = await _recruitmentCVService.GetRecruitmentBy_UserId_And_RecruitmentId(userId, recruitmentId);
+			return Ok(new ApiResponse
+			{
+				Success = true,
+				Code = StatusCodes.Status200OK,
+				Message = "Hoàn thành",
+				Data = recruitmentCV
+			});
+		}
+
+		/// <summary>
+		/// Nộp CV ứng tuyển
+		/// </summary>
+		/// <param name="recruitmentCVVM"></param>
+		/// <returns></returns>
+		[HttpPost("apply-to-recruitment")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
 		[AuthorizationAttribute("Admin", "Candidate")]
 		public async Task<IActionResult> ApplyToRecruitment([FromBody] RecruitmentCVVM recruitmentCVVM)
@@ -129,11 +151,53 @@ namespace CVLookup_WebAPI.Controllers
 
         /// <summary>
         /// Xóa RecruitmentCV
+        /// 
         /// </summary>
-        /// <param name="recruitmentId">ID của Recruitment</param>
-        /// <param name="curriculumVitaeId">ID của CurriculumVitae</param>
-        /// <returns>Thông tin RecruitmentCV đã xóa</returns>
-        [HttpDelete("delete-recruitment-cv")]
+        /// <returns></returns>
+        [HttpGet("get-all-cv-applied")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [AuthorizationAttribute("Admin", "Employer")]
+        public async Task<IActionResult> GetAllCVApplied([FromQuery] string recruitmentId)
+		{
+			var result = await _recruitmentCVService.GetAllCVApplied(recruitmentId);
+			return Ok(new ApiResponse
+			{
+				Success = true,
+				Code = StatusCodes.Status200OK,
+				Message = "Hoàn thành",
+				Data = result
+			});
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recruitmentId"></param>
+        /// <param name="userId"></param>
+        /// <param name="cvId"></param>
+        /// <returns></returns>
+		[HttpPatch("update-applied-cv")]
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin", "Candidate")]
+		public async Task<IActionResult> UpdateAppliedCV([FromQuery] string recruitmentId, [FromQuery] string userId, [FromQuery] string cvId)
+		{
+			var result = await _recruitmentCVService.ReAppplyCV(recruitmentId, userId, cvId);
+			return Ok(new ApiResponse
+			{
+				Success = true,
+				Code = StatusCodes.Status200OK,
+				Message = "Hoàn thành",
+				Data = result
+			});
+		}
+
+		/// <summary>
+		/// Xóa RecruitmentCV
+		/// </summary>
+		/// <param name="recruitmentId">ID của Recruitment</param>
+		/// <param name="curriculumVitaeId">ID của CurriculumVitae</param>
+		/// <returns>Thông tin RecruitmentCV đã xóa</returns>
+		[HttpDelete("delete-recruitment-cv")]
         public async Task<IActionResult> DeleteRecruitmentCV([FromQuery] string recruitmentId, [FromQuery] string curriculumVitaeId)
         {
             var deletedRecruitmentCV = await _recruitmentCVService.Delete(recruitmentId, curriculumVitaeId);
