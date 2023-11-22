@@ -175,7 +175,9 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
-				var result = await _dbContext.JobAddress.Where(prop => prop.Id == id).FirstOrDefaultAsync();
+				var result = await _dbContext.JobAddress.Where(prop => prop.Id == id)
+					.Include(prop => prop.Province)
+					.FirstOrDefaultAsync();
 				if (result == null)
 				{
 					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
@@ -212,7 +214,7 @@ namespace CVLookup_WebAPI.Services.JobAddressService
 			{
 				var jobAddressList = await _dbContext.JobAddress.OrderBy(prop => prop.AddressDetail).ToListAsync();
 				return jobAddressList;
-			}
+			}	
 			catch (ExceptionModel e)
 			{
 				throw new ExceptionModel(500, e.Message);

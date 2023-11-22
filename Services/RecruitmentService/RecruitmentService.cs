@@ -340,11 +340,12 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
-                var newRecuitment = _mapper.Map<Recruitment>(newRecruitmentVM);
-                recruitment = newRecuitment;
-                recruitment.Employer = (Employer)user;
-                recruitment.IsExpired = true;
-                var result = _dbContext.Recruitment.Update(recruitment);
+            var newrecruitment = _mapper.Map<Recruitment>(newRecruitmentVM);
+                newrecruitment.Employer = (Employer)user;
+                newrecruitment.CreatedAt = DateTime.Now;
+                newrecruitment.IsExpired = newrecruitment.CreatedAt > newrecruitment.ApplicationDeadline;
+                //recruitment = newRecuitment;
+                var result = _dbContext.Recruitment.Update(newrecruitment);
                 if (result.State.ToString() == "Modified")
                 {
                     int saveState = await _dbContext.SaveChangesAsync();

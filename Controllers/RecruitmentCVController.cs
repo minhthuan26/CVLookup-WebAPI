@@ -110,6 +110,47 @@ namespace CVLookup_WebAPI.Controllers
         }
 
         /// <summary>
+        /// CẬp nhật trạng thái xem CV
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPatch("update-isView")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [AuthorizationAttribute("Admin", "Employer")]
+        public async Task<IActionResult> UpdateIsView([FromQuery] string id)
+        {
+            var newRecruitmentCV = await _recruitmentCVService.UpdateIsView(id);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = newRecruitmentCV
+            });
+        }
+
+        /// <summary>
+        /// Api dùng để chuyển đỗi trạng thái isPass
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPatch("toggle-isPass")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [AuthorizationAttribute("Admin", "Employer")]
+        public async Task<IActionResult> ToggleIsPass([FromQuery] string id)
+        {
+            var newRecruitmentCV = await _recruitmentCVService.ToggleIsPass(id);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = newRecruitmentCV
+            });
+        }
+
+        /// <summary>
+        /// Xóa RecruitmentCV
         /// 
         /// </summary>
         /// <returns></returns>
