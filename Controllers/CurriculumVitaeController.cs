@@ -84,7 +84,7 @@ namespace CVLookup_WebAPI.Controllers
         /// <returns>The requested CurriculumVitae</returns>
         [HttpGet("get-curriculum-vitae-by-id")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-		[Authorization("Admin", "Candidate")]
+		[Authorization("Admin", "Candidate","Employer")]
 		public async Task<IActionResult> GetCurriculumVitaeById([FromQuery] string id)
         {
             var result = await _curriculumViateService.GetCurriculumVitaeById(id);

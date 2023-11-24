@@ -37,11 +37,9 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 				var curriculumVitae = _mapper.Map<CurriculumVitae>(curriculumVitaeVM);
 				var user = await _authService.GetCurrentLoginUser();
 
-				string uploadPath = "App_Data\\Storage\\" + user.Email + "\\CV";
-				curriculumVitae.User = user;
+                string filePath = await _fileService.UploadFile(curriculumVitaeVM.CVFile, uploadPath);
 
-				string filePath = await _fileService.UploadFile(curriculumVitaeVM.CVFile, uploadPath);
-				curriculumVitae.CVPath = filePath;
+                curriculumVitae.CVPath = filePath;
 
 				var result = await _dbContext.CurriculumVitae.AddAsync(curriculumVitae);
 				if (result.State.ToString() == "Added")
@@ -124,18 +122,19 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
 				}
 
-				var result = await _dbContext.CurriculumVitae.Where(prop => prop.Id == id).FirstOrDefaultAsync();
-				if (result == null)
-				{
-					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
-				}
-				return result;
-			}
-			catch (ExceptionModel e)
-			{
-				throw new ExceptionModel(e.Code, e.Message);
-			}
-		}
+                var result = await _dbContext.CurriculumVitae.Where(prop => prop.Id == id).FirstOrDefaultAsync();
+                result.CVPath = result?.CVPath != null ? Convert.ToBase64String(File.ReadAllBytes(result?.CVPath)): null;
+                if (result == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                return result;
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
 
 
 		public async Task<List<CurriculumVitae>> GetByCandidateId(string candidateId)

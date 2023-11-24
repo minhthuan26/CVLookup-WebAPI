@@ -25,7 +25,7 @@ namespace CVLookup_WebAPI.Models.Domain
 		public string CVPath { get; set; }
 
 		public string Introdution { get; set; }
-		
+    
 		public User User { get; set; }
 
 		public DateTime UploadedAt { get; set; } = DateTime.Now;
