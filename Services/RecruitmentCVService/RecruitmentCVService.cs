@@ -249,7 +249,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 		{
 			try
 			{
-                var recruitmentCV = await this.GetRecruitmentCVByCurriculumVitaeId(id);
+                var recruitmentCV = (RecruitmentCV) await GetRecruitmentCVBy_CVId(id);
                 recruitmentCV.IsView = true;
                 var result = _dbContext.RecruitmentCV.Update(recruitmentCV);
                 if (result.State.ToString() == "Modified")
@@ -278,7 +278,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
         {
             try
             {
-                var recruitmentCV = await this.GetRecruitmentCVByCurriculumVitaeId(id);
+                var recruitmentCV = (RecruitmentCV) await this.GetRecruitmentCVBy_CVId(id);
                 recruitmentCV.IsPass = !recruitmentCV.IsPass;
                 var result = _dbContext.RecruitmentCV.Update(recruitmentCV);
                 if (result.State.ToString() == "Modified")
@@ -302,7 +302,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
             }
 
         }
-    }
 		public async Task<object> GetRecruitmentBy_UserId_And_RecruitmentId(string userId, string recruitmentId)
 		{
 			try
