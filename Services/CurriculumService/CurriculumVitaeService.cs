@@ -223,38 +223,39 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 				throw new ExceptionModel(500, e.Message);
 			}
 		}
-    
-        public async Task<object> GenCV()
-        {
-            try
-            {
-                var filePath = Path.Combine(Environment.CurrentDirectory, "App_Data", "Cv.html");
-                if (File.Exists(filePath))
-                {
-                    string fileContent = File.ReadAllText(filePath, Encoding.UTF8);
-                    ReplaceTemplate(ref fileContent, new
-                    {
 
-                    });
+		public async Task<object> GenCV()
+		{
+			try
+			{
+				var filePath = Path.Combine(Environment.CurrentDirectory, "App_Data", "Cv.html");
+				if (File.Exists(filePath))
+				{
+					string fileContent = File.ReadAllText(filePath, Encoding.UTF8);
+					ReplaceTemplate(ref fileContent, new
+					{
 
-                    string base64Convert = Convert.ToBase64String(Encoding.UTF8.GetBytes(fileContent));
-                    return new { base64Convert };
-                }
-                return "Tạo Cv thất bại";
-            }
+					});
 
-            catch (ExceptionModel e)
-            {
-                throw new ExceptionModel(e.Code, e.Message);
-            }
-        }
+					string base64Convert = Convert.ToBase64String(Encoding.UTF8.GetBytes(fileContent));
+					return new { base64Convert };
+				}
+				return "Tạo Cv thất bại";
+			}
 
-        private void ReplaceTemplate(ref string template, object obj)
-        {
-            string json = JsonConvert.SerializeObject(obj);
-            foreach (var c in JsonConvert.DeserializeObject<Dictionary<string, string>>(json))
-            {
-                template = template.Replace("{{" + c.Key + "}}", c.Value);
-            }
-        }
+			catch (ExceptionModel e)
+			{
+				throw new ExceptionModel(e.Code, e.Message);
+			}
+		}
+
+		private void ReplaceTemplate(ref string template, object obj)
+		{
+			string json = JsonConvert.SerializeObject(obj);
+			foreach (var c in JsonConvert.DeserializeObject<Dictionary<string, string>>(json))
+			{
+				template = template.Replace("{{" + c.Key + "}}", c.Value);
+			}
+		}
 	}
+}

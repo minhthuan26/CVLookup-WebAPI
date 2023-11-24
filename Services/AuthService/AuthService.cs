@@ -69,7 +69,6 @@ namespace CVLookup_WebAPI.Services.AuthService
 			_notificationHub = notificationHub;
 		}
 
-		#region Login
 		public async Task<object> Login(AccountVM accountVM)
 		{
 			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
@@ -185,7 +184,6 @@ namespace CVLookup_WebAPI.Services.AuthService
 				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
-		#endregion
 
 		public async Task<object> RenewToken()
 		{
@@ -243,7 +241,8 @@ namespace CVLookup_WebAPI.Services.AuthService
 				{
 					HttpOnly = true,
 					Secure = false,
-					SameSite = SameSiteMode.None,
+					SameSite = SameSiteMode.Strict,
+					Path = "/"
 				};
 				_httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", newRefreshToken, cookieOptions);
 				return new
