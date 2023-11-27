@@ -65,6 +65,15 @@ namespace CVLookup_WebAPI.Models.Mapper
                 {
                     options.MapFrom<DistrictResolver>();
                 });
+                CreateMap<NotificationVM, Notification>()
+                    .ForMember(domain => domain.RecruitmentCV, options =>
+                    {
+                        options.MapFrom<NotificationResolver.RecruitmentCVResolver>();
+                    })
+                    .ForMember(domain => domain.User, options =>
+                    {
+                        options.MapFrom<NotificationResolver.UserResolver>();
+                    });
             }
             catch (ExceptionModel e)
             {
