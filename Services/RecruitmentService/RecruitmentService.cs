@@ -33,6 +33,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                 recruitment.Employer = (Employer)user;
                 recruitment.CreatedAt = DateTime.Now;
                 recruitment.IsExpired = recruitment.CreatedAt > recruitment.ApplicationDeadline;
+                recruitment.ApplicationDeadline = recruitment.ApplicationDeadline.AddDays(1);
                 var result = await _dbContext.Recruitment.AddAsync(recruitment);
                 if (result.State.ToString() == "Added")
                 {
