@@ -24,5 +24,7 @@ namespace CVLookup_WebAPI.Models.Domain
 		public string Message { get; set; }
 
 		public RecruitmentCV RecruitmentCV { get; set; }
+
+		public bool IsView { get; set; } = false;
 	}
 }
