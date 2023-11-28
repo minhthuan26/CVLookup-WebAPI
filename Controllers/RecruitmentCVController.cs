@@ -181,7 +181,7 @@ namespace CVLookup_WebAPI.Controllers
 		[AuthorizationAttribute("Admin", "Candidate")]
 		public async Task<IActionResult> UpdateAppliedCV([FromQuery] string recruitmentId, [FromQuery] string userId, [FromQuery] string cvId)
 		{
-			var result = await _recruitmentCVService.ReAppplyCV(recruitmentId, userId, cvId);
+			var result = await _recruitmentCVService.ReApplyCV(recruitmentId, userId, cvId);
 			return Ok(new ApiResponse
 			{
 				Success = true,
