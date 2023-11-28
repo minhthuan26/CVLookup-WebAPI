@@ -64,7 +64,7 @@ builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
-//builder.Services.AddScoped<NotificationHub>();
+builder.Services.AddScoped<NotificationHub>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR(options =>

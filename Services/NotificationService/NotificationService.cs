@@ -41,7 +41,7 @@ namespace CVLookup_WebAPI.Services.NotificationService
                         newNotification.IsView,
                         newNotification.RecruitmentCV.CurriculumVitaeId,
                         newNotification.RecruitmentCV.RecruitmentId,
-                        notifiedAt = newNotification.NotifiedAt.AsTimeAgo(),
+                        NotifiedAt = newNotification.NotifiedAt.AsTimeAgo(),
                     };
                 }
                 else
@@ -50,6 +50,36 @@ namespace CVLookup_WebAPI.Services.NotificationService
                 }
             }
             catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+        public async Task<object> DeleteNotification(string id)
+        {
+            try
+            {
+                var notification = await _dbContext.Notification.FirstOrDefaultAsync(prop => prop.Id == id);
+                if (notification == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không tìm thấy dữ liệu");
+                }
+
+                var result = _dbContext.Notification.Remove(notification);
+                if (result.State.ToString() == "Deleted")
+                {
+                    var saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return notification;
+                }
+                else
+                {
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                }
+            } catch(ExceptionModel e)
             {
                 throw new ExceptionModel(e.Code, e.Message);
             }
@@ -71,6 +101,7 @@ namespace CVLookup_WebAPI.Services.NotificationService
             {
                 var notifications = await _dbContext.Notification
                     .Where(prop => prop.UserId == userId)
+                    .OrderBy(prop => prop.NotifiedAt)
                     .Select(prop => new
                     {
                         prop.Id,
@@ -81,7 +112,9 @@ namespace CVLookup_WebAPI.Services.NotificationService
                         prop.RecruitmentCV.CurriculumVitaeId,
                         prop.RecruitmentCV.RecruitmentId,
                         NotifiedAt = prop.NotifiedAt.AsTimeAgo(),
-                    }).ToListAsync();
+                    })
+                    
+                    .ToListAsync();
                 return notifications;
             }
             catch (ExceptionModel e)
@@ -90,9 +123,47 @@ namespace CVLookup_WebAPI.Services.NotificationService
             }
         }
 
-        public Task<object> UpdateViewStatus(string id)
+        public async Task<object> UpdateViewStatus(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var notification = await _dbContext.Notification
+                    .Include(prop => prop.RecruitmentCV)
+                    .FirstOrDefaultAsync(prop => prop.Id == id);
+                if (notification == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                notification.IsView = true;
+
+                var result = _dbContext.Notification.Update(notification);
+                if (result.State.ToString() == "Modified")
+                {
+                    int saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return new
+                    {
+                        notification.Id,
+                        notification.UserId,
+                        notification.SenderId,
+                        notification.Message,
+                        notification.IsView,
+                        notification.RecruitmentCV.CurriculumVitaeId,
+                        notification.RecruitmentCV.RecruitmentId,
+                        NotifiedAt = notification.NotifiedAt.AsTimeAgo(),
+                    };
+                }
+                else
+                {
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                }
+            } catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
         }
     }
 }

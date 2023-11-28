@@ -9,5 +9,6 @@ namespace CVLookup_WebAPI.Services.NotificationService
         public Task<object> GetNotification_BySenderId(string senderId);
         public Task<object> Add(NotificationVM notificationVM);
         public Task<object> UpdateViewStatus(string id);
+        public Task<object> DeleteNotification(string id);
     }
 }

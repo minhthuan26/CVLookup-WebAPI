@@ -49,5 +49,20 @@ namespace CVLookup_WebAPI.Controllers
                 Message = "Hoàn thành"
             });
         }
+
+        [HttpPatch("update-view-status")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [Authorization("Employer", "Admin", "Candidate")]
+        public async Task<IActionResult> UpdateViewStatus([FromQuery] string id)
+        {
+            var result = await _notificationService.UpdateViewStatus(id);
+            return Ok(new ApiResponse
+            {
+                Code = StatusCodes.Status200OK,
+                Success = true,
+                Data = result,
+                Message = "Hoàn thành"
+            });
+        }
     }
 }
