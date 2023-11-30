@@ -104,53 +104,48 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                 #region Filter
                 if (!string.IsNullOrEmpty(filter.Keyword))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobTitle.Contains(filter.Keyword));
-                }
-
-                if (!string.IsNullOrEmpty(filter.UserId))
-                {
-                    recruitments = recruitments.Where(prop => prop.Employer.Id == filter.UserId);
+                    recruitments = recruitments.Where(prop => prop.JobTitle.Contains(filter.Keyword, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (!string.IsNullOrEmpty(filter.Province))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobAddress.Province.Name == filter.Province);
+                    recruitments = recruitments.Where(prop => prop.JobAddress.Province.Name.Equals(filter.Province, StringComparison.OrdinalIgnoreCase));
 
                 }
 
                 if (!string.IsNullOrEmpty(filter.District))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobAddress.District == filter.District);
+                    recruitments = recruitments.Where(prop => prop.JobAddress.District.Equals(filter.District, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (!string.IsNullOrEmpty(filter.Career))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobCareer.Career == filter.Career);
+                    recruitments = recruitments.Where(prop => prop.JobCareer.Career.Equals(filter.Career, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (!string.IsNullOrEmpty(filter.UserId))
                 {
-                    recruitments = recruitments.Where(prop => prop.Employer.Id == filter.UserId);
+                    recruitments = recruitments.Where(prop => prop.Employer.Id.Equals(filter.UserId, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (!string.IsNullOrEmpty(filter.JobField))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobField.Field == filter.JobField);
+                    recruitments = recruitments.Where(prop => prop.JobField.Field.Equals(filter.JobField, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (!string.IsNullOrEmpty(filter.JobForm))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobForm.Form == filter.JobForm);
+                    recruitments = recruitments.Where(prop => prop.JobForm.Form.Equals(filter.JobForm, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (!string.IsNullOrEmpty(filter.Experience))
                 {
-                    recruitments = recruitments.Where(prop => prop.Experience.Exp == filter.Experience);
+                    recruitments = recruitments.Where(prop => prop.Experience.Exp.Equals(filter.Experience, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (!string.IsNullOrEmpty(filter.JobPosition))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobPosition.Position == filter.JobPosition);
+                    recruitments = recruitments.Where(prop => prop.JobPosition.Position.Equals(filter.JobPosition, StringComparison.OrdinalIgnoreCase));
                 }
                 #endregion
 
@@ -179,9 +174,9 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                 #endregion
 
                 #region Paging
-                var paging = Pagination<Recruitment>.Create(recruitments, filter.Page, Filter.PageSize);
+                //var paging = Pagination<Recruitment>.Create(recruitments, filter.Page, Filter.PageSize);
                 #endregion
-                var result = paging.Select(async prop => new
+                var result = recruitments.Select(prop => new
                 {
                     prop.Id,
                     prop.JobTitle,
@@ -190,7 +185,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                         prop.Employer.Id,
                         prop.Employer.Email,
                         prop.Employer.Username,
-                        Avatar = prop?.Employer?.Avatar != null ? Convert.ToBase64String(File.ReadAllBytes(prop.Employer.Avatar)) : null
+                        Avatar = prop.Employer.Avatar != null ? Convert.ToBase64String(File.ReadAllBytes(prop.Employer.Avatar)) : null
                     },
                     JobAddress = new
                     {

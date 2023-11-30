@@ -415,9 +415,9 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Actived", "ActivedAt", "Email", "IssuedAt", "Password", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "65d8823a-500d-4fb5-a11e-74d18c1b9835", true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "cvlookup.sgu.2023_employer@gmail.com", new DateTime(2023, 11, 27, 0, 15, 39, 555, DateTimeKind.Local).AddTicks(5583), "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { "6950c3a7-bdaf-4707-b82e-3552e49b8873", true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "cvlookup.sgu.2023@gmail.com", new DateTime(2023, 11, 27, 0, 15, 39, 555, DateTimeKind.Local).AddTicks(5561), "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { "88a493ac-8476-428f-a215-4fcadc579562", true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "cvlookup.sgu.2023_candidate@gmail.com", new DateTime(2023, 11, 27, 0, 15, 39, 555, DateTimeKind.Local).AddTicks(5590), "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { "a58fa60e-2978-49c7-926d-c62fa9dabb1b", true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "cvlookup.sgu.2023_employer@gmail.com", new DateTime(2023, 11, 29, 17, 14, 12, 887, DateTimeKind.Local).AddTicks(7540), "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { "cf10c7b2-13a3-4307-875e-bb3d901bee9d", true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "cvlookup.sgu.2023_candidate@gmail.com", new DateTime(2023, 11, 29, 17, 14, 12, 887, DateTimeKind.Local).AddTicks(7547), "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { "f2c45b04-9bec-4296-b76c-7d15bd5b45a9", true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "cvlookup.sgu.2023@gmail.com", new DateTime(2023, 11, 29, 17, 14, 12, 887, DateTimeKind.Local).AddTicks(7527), "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -425,14 +425,14 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Exp" },
                 values: new object[,]
                 {
-                    { "0fb1de22-a100-4d25-86c7-b8028cb85ad6", "Từ 5-10 năm" },
-                    { "1c251e95-42b9-4306-a1cc-ed27725c26e2", "Từ 1-2 năm" },
-                    { "343637d0-4f65-4f9e-a1b4-bb7e1e550171", "Từ 2-3 năm" },
-                    { "7412d9ac-597f-4888-8ad3-5b771f8084e0", "Từ 3-5 năm" },
-                    { "81f4f99e-7e2b-4189-ac98-a14ea72991a8", "Tất cả kinh nghiệm" },
-                    { "870a7f61-7c87-4a44-8d46-c314243d702b", "Dưới 1 năm" },
-                    { "897083f0-ba76-41c3-b3c0-fb3246a719bd", "Chưa có kinh nghiệm" },
-                    { "b9083246-a65f-4eb6-b1b7-aecd57575167", "Trên 10 năm" }
+                    { "13ca4404-dd37-47a4-b075-eae11cb93181", "Từ 5-10 năm" },
+                    { "21db5902-23c1-4c88-aee8-7aeecd49696e", "Tất cả kinh nghiệm" },
+                    { "38615614-adf1-413e-9c7c-4c20b3040a83", "Trên 10 năm" },
+                    { "4fe1041c-c8a2-4b40-905f-3d3940d9465a", "Từ 2-3 năm" },
+                    { "5c4369e8-15ed-44c2-9b92-5bec15544433", "Dưới 1 năm" },
+                    { "7d9f3311-f959-4c5f-9f6b-feeafee3258a", "Từ 1-2 năm" },
+                    { "a69c815b-c4f9-4e12-8a01-53211d453bbd", "Chưa có kinh nghiệm" },
+                    { "ab639afd-5def-4fc4-af63-a29bfbc177f7", "Từ 3-5 năm" }
                 });
 
             migrationBuilder.InsertData(
@@ -440,37 +440,37 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Career" },
                 values: new object[,]
                 {
-                    { "058d2083-9bfc-4bb3-a9f8-a2f084434e70", "Công nghệ cao" },
-                    { "0850655c-0e36-485c-a49e-5d93d776854c", "Thời trang" },
-                    { "09bc6852-2b68-4a6e-af2d-964a4750bc2a", "An toàn lao động" },
-                    { "0af6bad8-64d4-459b-9296-946065ed7c35", "Marketing / Truyền thông / Quảng cáo" },
-                    { "1448c211-a161-4f33-bbce-0d08e75d35eb", "Địa chất / Khoáng sản" },
-                    { "14b3bbcd-cfb1-45dd-af3c-5820a08c186c", "Dầu khí/Hóa chất" },
-                    { "2082fcec-91f4-4f7d-ae4a-7dc06141ece5", "Dệt may / Da giày" },
-                    { "24316135-243d-4dd8-b498-bf69e75c6130", "Mỹ phẩm / Trang sức" },
-                    { "27081b59-b0eb-4ec3-b623-1459aa1dc4fa", "Thực phẩm / Đồ uống" },
-                    { "2d06eac8-6049-4d28-ae51-caa1a62d6bd2", "Thiết kế đồ họa" },
-                    { "305eeb8d-f7d7-4068-8076-9949c7aaa966", "Vận tải / Kho vận" },
-                    { "33a6e107-d5c8-4a8e-9460-79207a72a6ce", "Kinh doanh / Bán hàng" },
-                    { "44ab5385-37f9-4b86-b925-44d3a8c80aad", "Tổ chức sự kiện / Quà tặng" },
-                    { "4504d132-3bb0-4d7e-8b5a-5888fb237ec6", "Dược phẩm / Công nghệ sinh học" },
-                    { "45e9a9b5-762b-4e3c-8157-8f8b1a38dc6d", "Khách sạn / Nhà hàng" },
-                    { "4b5907f5-5357-48f4-bdc5-1f5363414f7b", "Tư vấn" },
-                    { "4c57a2d7-e563-419d-8209-4d2f137390d3", "Dịch vụ khách hàng" },
-                    { "4d4785dc-b620-4d4a-97ff-7d9c4c37390d", "Báo chí / Truyền hình" },
-                    { "4df06b41-aa07-4827-94b9-c30fe917dc75", "IT Phần cứng / Mạng" },
-                    { "50316baf-8ba5-47d7-919e-1c88cc352a6f", "Hành chính / Văn phòng" },
-                    { "577086af-1edd-4b33-aa9a-62e68f92790b", "In ấn / Xuất bản" },
-                    { "5d448df0-58f4-40c4-9521-e7ef65c05219", "Thư ký / Trợ lý" },
-                    { "5e2a4c0a-ef8d-4a8f-b5f7-5c79b7bdfc26", "Hoá học / Sinh học" },
-                    { "63b4b0b7-4b10-47b0-ab8c-c90fbd391ef4", "Công nghệ thông tin" },
-                    { "66621e21-9141-4320-aebd-bbbbf021d79d", "Nông / Lâm / Ngư nghiệp" },
-                    { "6be2d285-531f-4c48-a419-e883c5a46d66", "Điện / Điện tử / Điện lạnh" },
-                    { "6d321586-ede3-4e92-a2eb-0388b2645ecf", "Kế toán / Kiểm toán" },
-                    { "76b39c84-779a-48c4-8459-a5c6567f28c7", "Logistics" },
-                    { "8432c08b-30de-48bf-b77d-244f348c2940", "Spa / Làm đẹp" },
-                    { "8498457c-1ec9-4917-820d-62b4a28f1ee7", "Y tế / Dược" },
-                    { "8b1fec4d-6468-45cc-be15-fc0b288c11ba", "Hàng hải" }
+                    { "0679ed18-12dd-4a36-ae60-3f560442810c", "Công nghệ cao" },
+                    { "09ccbdb4-35d5-40b8-b7c8-941542479fc5", "Xuất nhập khẩu" },
+                    { "0b114a6f-fd79-46c0-8e41-4fe1e8ca871f", "Bán hàng kỹ thuật" },
+                    { "0d7c8f00-b4df-4024-95c5-b7b37e6e05d0", "Mỹ phẩm / Trang sức" },
+                    { "0e82d4f8-38c7-450f-8661-d3160bb1bbdf", "Ngành nghề khác" },
+                    { "0e8d1cdd-1676-4999-bbdd-3e5c37fcd72c", "Thư ký / Trợ lý" },
+                    { "12dd0ca1-e1e1-4da1-ae8a-c0c40e279c09", "Công nghệ thông tin" },
+                    { "131d4659-4c23-4aa7-82cf-7c511061d8ae", "Hoạch định / Dự án" },
+                    { "17943175-5f85-4780-9a65-866f70450a2f", "Thiết kế nội thất" },
+                    { "1f56dc4e-f834-4412-9ba4-00bce00ad09d", "Xây dựng" },
+                    { "2050e3fc-13ce-4169-942d-d9f34925aa45", "Tất cả ngành nghề" },
+                    { "24bbf0d2-739c-44be-b15b-7fd007f27345", "Bưu chính - Viễn thông" },
+                    { "2780015c-dc3d-4705-b179-eebcdcea500a", "Điện / Điện tử / Điện lạnh" },
+                    { "28720c3f-2271-42c3-91c8-9215a1faf173", "Dầu khí/Hóa chất" },
+                    { "2886f60e-54a9-4cdd-a303-365799c41226", "Thời trang" },
+                    { "29db79be-f4a7-4799-86bd-a5c7daa8579c", "An toàn lao động" },
+                    { "2b826860-837a-4c75-a3d9-195176f9f40d", "Địa chất / Khoáng sản" },
+                    { "2de0dd31-b7c5-4859-b405-2ec0b2544bf6", "Nhân sự" },
+                    { "36975481-2e2c-4344-8e67-07a12efd1533", "Thực phẩm / Đồ uống" },
+                    { "39f725c4-6207-41e6-8e36-bd4e74ceadf4", "IT Phần cứng / Mạng" },
+                    { "42539ee3-e203-4d28-b368-c4fc5cafe020", "Hành chính / Văn phòng" },
+                    { "431fec55-2c2d-4a37-b801-5aa8dcb58ed7", "Kinh doanh / Bán hàng" },
+                    { "4739567a-93ae-4971-9939-95747019eff2", "Marketing / Truyền thông / Quảng cáo" },
+                    { "47cb3743-e7b0-4b63-b8e6-708029138af2", "Hàng gia dụng" },
+                    { "49ed8a35-bf53-4ab0-93d9-5e3c7a799581", "Nông / Lâm / Ngư nghiệp" },
+                    { "4d527ee9-3c88-40c3-80ba-9b5401f65737", "Kiến trúc" },
+                    { "4d911153-0fd7-48b2-a93d-043a48419bb8", "Dệt may / Da giày" },
+                    { "4f419a28-25b6-424d-8d7a-975e32bddb10", "Hàng hải" },
+                    { "5089531c-cf38-403d-9423-b9a2b9dfb5ff", "Môi trường / Xử lý chất thải" },
+                    { "54b9e09c-700c-45c6-a5e0-4aebed33f6c6", "IT phần mềm" },
+                    { "55edb878-db14-4680-9ba4-1a3d36f03e1a", "Luật / Pháp lý" }
                 });
 
             migrationBuilder.InsertData(
@@ -478,43 +478,43 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Career" },
                 values: new object[,]
                 {
-                    { "91d080bc-c1d3-4b61-944d-08dd147ef8bf", "Quản lý điều hành" },
-                    { "93f35967-671f-4a5c-83a6-e29e46bcd138", "Biên / Phiên dịch" },
-                    { "97fb7a1b-15d5-4046-b355-20907cfd1155", "Sản xuất" },
-                    { "99767e1e-2ff2-4b81-a1f1-6e69ccb7cd12", "Điện tử viễn thông" },
-                    { "9a1fc361-ce61-45a6-b5e9-d87930452aae", "Ngành nghề khác" },
-                    { "9e3e33e1-d52f-486b-a690-48970ba1cd29", "Xây dựng" },
-                    { "a3fb7bd7-eb1d-461c-8b6f-f0eafd458f03", "Phi chính phủ / Phi lợi nhuận" },
-                    { "a5baa96b-830d-4ef3-96e4-3adf10da4680", "Công nghệ Ô tô" },
-                    { "ac4c3471-2e87-4bb9-8457-deec023fff6e", "Sản phẩm công nghiệp" },
-                    { "ad1d3fb6-2fc6-42c6-9a18-41b55e0d3e21", "Thiết kế nội thất" },
-                    { "adb006ad-012d-4356-b05d-edce497d0db4", "Du lịch" },
-                    { "aed231d4-a1fb-4cec-bb48-ed6789257b61", "Hàng không" },
-                    { "b17435e1-0a07-4de5-9336-27a0aef7b820", "Bán lẻ / bán sỉ" },
-                    { "b1b2c349-602b-4aec-9807-8023c2bb26b3", "Nhân sự" },
-                    { "b2df99a4-31ca-4127-8c22-0de1ff75cc53", "Giáo dục / Đào tạo" },
-                    { "b5786243-e462-4d16-910e-4abcd6bd7fa1", "IT phần mềm" },
-                    { "b6b0e7cd-bb74-4dc7-b4b1-592821994186", "Hàng gia dụng" },
-                    { "b8d53260-ab39-470c-8a77-b330a18d363b", "Tất cả ngành nghề" },
-                    { "c1907d5b-c89e-40a6-8a6c-9229fb3cdb63", "Môi trường / Xử lý chất thải" },
-                    { "cc56b102-5eef-41bf-af26-7010e4ddf293", "Hàng tiêu dùng" },
-                    { "cf080354-21a5-4f1c-b5ea-b8417daba8bc", "Luật / Pháp lý" },
-                    { "d651f203-3fb3-42e2-be0c-eb34de91ff90", "Hàng cao cấp" },
-                    { "d7d45e26-2c01-41e8-bbf4-6ea0f1938603", "Ngân hàng / Tài chính" },
-                    { "d7f6468e-74c7-437b-b534-ff308974acf6", "Bảo trì / Sửa chữa" },
-                    { "da209b69-ab0b-468f-a567-e44343567591", "Bưu chính - Viễn thông" },
-                    { "db97a057-ce15-4bba-8128-e0e18b9fef65", "Bất động sản" },
-                    { "dd8fcdbd-55db-4a6a-a5cb-3aecc8234e82", "Hoạch định / Dự án" },
-                    { "ddee634a-e4f6-4e21-b7de-4f460e2b7578", "Quản lý chất lượng (QA/QC)" },
-                    { "e3e6508d-5844-4bbe-9adb-e2fd9fc4bab0", "Xuất nhập khẩu" },
-                    { "e4a6d004-5665-48ad-8756-0cfef80574b0", "Tài chính / Đầu tư" },
-                    { "e8c66dfe-9e85-4c78-8478-d373c37cfdae", "Chứng khoán / Vàng / Ngoại tệ" },
-                    { "eecde4d3-d393-4829-b16c-ababfc8ba8d4", "Bảo hiểm" },
-                    { "f48bd8c0-e5a4-4257-9dec-04a45cf0209b", "Cơ khí / Chế tạo / Tự động hóa" },
-                    { "f8654da2-87d9-47b5-a1b3-db1451fd5381", "Kiến trúc" },
-                    { "f982f596-468a-47a3-9a7f-6997a61edfed", "Bán hàng kỹ thuật" },
-                    { "fe5eb19f-a401-4f32-8c71-d9b6969a1503", "Mỹ thuật / Nghệ thuật / Điện ảnh" },
-                    { "ff5eedd0-c949-4e94-a877-daf39ec8a499", "NGO / Phi chính phủ / Phi lợi nhuận" }
+                    { "56548f9d-0048-4312-b7e8-26c25194a6c1", "Tài chính / Đầu tư" },
+                    { "57b503f2-6c44-4a9b-b978-3de22dbb1602", "Giáo dục / Đào tạo" },
+                    { "5f3ba493-2ee0-44cc-ab87-2bc24f96e2d4", "Bất động sản" },
+                    { "6298ac3b-d5be-40eb-be7d-50a4dc3253fd", "Vận tải / Kho vận" },
+                    { "6e8d8c1d-aa36-4970-b953-e9f5c7199dc1", "Du lịch" },
+                    { "7055229e-150a-4141-b9fd-4de24cdd3b8b", "Sản xuất" },
+                    { "738713cc-8656-435e-bf6d-63084ab5ac4a", "Cơ khí / Chế tạo / Tự động hóa" },
+                    { "785e793b-173a-4b66-9280-75efda5a9521", "Chứng khoán / Vàng / Ngoại tệ" },
+                    { "815fb061-477a-408b-b1fa-1aa914925958", "In ấn / Xuất bản" },
+                    { "89b9dbc1-ecdd-4cf3-aad2-46c0f79d1227", "Hàng tiêu dùng" },
+                    { "8ac18114-2f8e-4dcd-a880-9c69bf74cb52", "Tư vấn" },
+                    { "8f4af482-d9b7-499f-8459-8cd2eab367a0", "Kế toán / Kiểm toán" },
+                    { "96573923-452b-4ced-89e4-f2c99ebb0845", "Phi chính phủ / Phi lợi nhuận" },
+                    { "9773d247-697e-4a4d-a484-b1dd5ba10aaf", "Sản phẩm công nghiệp" },
+                    { "979a7306-8eb4-4345-abc0-12a46426944d", "Dịch vụ khách hàng" },
+                    { "98971bae-c003-4797-bf3b-307096bdb7eb", "Quản lý chất lượng (QA/QC)" },
+                    { "992be4b0-4e06-43e0-8d87-785ec809fd07", "Điện tử viễn thông" },
+                    { "9db2d558-38ad-46f1-bf16-26bbc838226f", "Tổ chức sự kiện / Quà tặng" },
+                    { "a0e54be7-984b-425c-a389-ea04ad87efde", "Dược phẩm / Công nghệ sinh học" },
+                    { "a3b3f9df-d710-46bf-8a8f-df3181eb6954", "Công nghệ Ô tô" },
+                    { "a5508ef5-36b6-4eaf-9f2b-f7236675b897", "Hàng không" },
+                    { "ab2c4fd1-7c89-4c34-8c7f-48c5f0474d10", "Bán lẻ / bán sỉ" },
+                    { "ad84eaa8-7fa5-48e7-a8c1-bb2e5c4a0be5", "Mỹ thuật / Nghệ thuật / Điện ảnh" },
+                    { "b1a4df4d-ea38-41af-8236-063488d7b72f", "Spa / Làm đẹp" },
+                    { "b9a87607-1bba-4154-8c1a-2a5a7db7bb17", "NGO / Phi chính phủ / Phi lợi nhuận" },
+                    { "c2412b77-d502-42fb-8f41-eed263b10f59", "Bảo hiểm" },
+                    { "c65c1aee-de31-4663-9eae-af1e41a1cdf6", "Thiết kế đồ họa" },
+                    { "ca442277-68e8-4152-be6c-933fbfc89e6e", "Quản lý điều hành" },
+                    { "d250c3e9-9942-4d71-b758-1b48d2b49970", "Khách sạn / Nhà hàng" },
+                    { "dd70a86c-f0de-483a-bc3f-a91e64dca87a", "Ngân hàng / Tài chính" },
+                    { "e1581172-2e95-4325-90db-e1c8a0669210", "Báo chí / Truyền hình" },
+                    { "e59574d0-185d-45cd-acd0-3ff9e49506e8", "Hàng cao cấp" },
+                    { "e66a6434-514e-4b49-9a9f-69ab55f13667", "Logistics" },
+                    { "e75d5445-1db1-440f-b566-9d86a2aae56c", "Biên / Phiên dịch" },
+                    { "ea27751c-791e-4eb2-9d1a-3d46669848c4", "Y tế / Dược" },
+                    { "f48ac7c9-6b80-4d2a-af8b-804365d628a4", "Hoá học / Sinh học" },
+                    { "fa85df17-53dd-492b-acae-92f0c072d7e0", "Bảo trì / Sửa chữa" }
                 });
 
             migrationBuilder.InsertData(
@@ -522,11 +522,11 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Field" },
                 values: new object[,]
                 {
-                    { "0b4e0b5c-5121-47fb-9e5c-221758933469", "Môi trường" },
-                    { "0e0254ee-aeb4-44ec-9696-16084a0e9f53", "Xây dựng" },
-                    { "16467283-5a9a-4fb6-bf0f-8fcfe4ff9070", "Bán lẻ - Hàng tiêu dùng - FMCG" },
-                    { "196e0ed2-90bb-4e14-8723-cc3ee83c337f", "Ngân hàng" },
-                    { "1b12ecbb-7066-4d8a-a751-51969c8f8a4c", "Chứng khoán" }
+                    { "0e7e9ec7-d77a-46ad-a26a-45a3846670dc", "Thương mại điện tử" },
+                    { "232a9c0b-290a-4b09-9da4-3184a52d3c9e", "Agency (Marketing/Advertising)" },
+                    { "2fd2175b-d968-4b08-bbf7-365f4623215a", "Bảo trì / Sửa chữa" },
+                    { "2fe8e1e6-c22d-4e69-841e-942d3e75cd95", "Dược phẩm / Y tế / Công nghệ sinh học" },
+                    { "3431ab7e-6688-4d47-94f7-7980464151af", "Xây dựng" }
                 });
 
             migrationBuilder.InsertData(
@@ -534,42 +534,42 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Field" },
                 values: new object[,]
                 {
-                    { "1c39d7c0-7740-436a-8e1e-8f57992d9cf5", "Kế toán / Kiểm toán" },
-                    { "2b4ae289-4253-454e-88a9-5727044c7b41", "Năng lượng" },
-                    { "3097178b-9b77-40ab-a970-e669ddc21f6f", "In ấn / Xuất bản" },
-                    { "3119fcb8-3f24-467b-9eb0-a4085f56c154", "Nông Lâm Ngư nghiệp" },
-                    { "3a5e2827-adf7-4b78-b673-a85115faa2c5", "Internet / Online" },
-                    { "3dee51e1-3935-4480-b4ca-7b387f92d68d", "IT - Phần mềm" },
-                    { "403ab6c4-067f-4673-821e-132f4d125f06", "Điện tử / Điện lạnh" },
-                    { "460f8b53-8df0-4942-a1df-71d64f135d49", "Du lịch" },
-                    { "4d058ff1-6b0d-41d5-8394-16291c311040", "Tất cả lĩnh vực" },
-                    { "6405bee6-27a6-491f-afd4-03f0b24100ae", "Agency (Design/Development)" },
-                    { "6fc9c479-6a5f-4c76-8b26-ecbd00d1adb3", "Sản xuất" },
-                    { "7c20fb88-257d-4836-b50d-67bb891874dd", "Dược phẩm / Y tế / Công nghệ sinh học" },
-                    { "7fb0fbfb-530f-4a13-ae92-edfbb8e4c825", "Khác" },
-                    { "87fb7eab-366c-4294-85bf-98add7e635b8", "Xuất nhập khẩu" },
-                    { "8bbe0cdd-ae78-44de-a588-44cf47677a38", "Viễn thông" },
-                    { "90968ca1-c6ea-48a5-80a3-60f4f6a9c7ae", "Agency (Marketing/Advertising)" },
-                    { "97de81c1-7f33-499c-93b9-d43118de1f40", "Nhà hàng / Khách sạn" },
-                    { "9ca33a99-3f6b-447e-97df-2f47341e1201", "Bất động sản" },
-                    { "a4d6f66c-6a26-46c7-8cac-522b7fa06d26", "Tài chính" },
-                    { "ae57eca1-be9f-45f3-84f2-7f530950180f", "Giải trí" },
-                    { "c00d7080-07f0-49b7-a9aa-bb920cb109c0", "Thời trang" },
-                    { "c17a6fee-efdc-4b1d-a77f-25f61e431576", "Cơ quan nhà nước" },
-                    { "c8bd3541-a8c2-4ac9-94be-ea0c7fda5506", "Tư vấn" },
-                    { "d4f3d15a-0731-4a66-94f6-3bf9e5497c8d", "Logistics - Vận tải" },
-                    { "d88d3f40-dd30-42fd-bbfb-4cdd6fdcde23", "Bảo hiểm" },
-                    { "dadd9b58-91ac-4480-bbd6-ec33e72b6d00", "Giáo dục / Đào tạo" },
-                    { "dd48335b-b20b-4d95-9479-2f97eb02f9ac", "Tổ chức phi lợi nhuận" },
-                    { "e2f2cb31-488f-4570-8c25-a9b4e3a26ee8", "Cơ khí" },
-                    { "e4c6958b-ff28-40ac-8fdb-d851596e4dce", "IT - Phần cứng" },
-                    { "e5eb003b-8ca3-48d1-8e5a-52a7576730ff", "Nhân sự" },
-                    { "e851acae-842f-450b-bf6e-58df98fe6a53", "Thương mại điện tử" },
-                    { "ec98a852-5580-4510-aead-84965d24a79b", "Tự động hóa" },
-                    { "ecc76aaf-b2bd-4f0e-b27a-eacaebb2dcc1", "Thiết kế / kiến trúc" },
-                    { "ede393d6-5cb6-4d49-be0f-9f551cc94224", "Marketing / Truyền thông / Quảng cáo" },
-                    { "f5842d78-9178-461d-a834-425187a28c4f", "Luật" },
-                    { "f9b3cc75-08d7-4e55-8b40-2a022d4673dc", "Bảo trì / Sửa chữa" }
+                    { "3c6ba32e-929c-453f-8ec4-c4ecc8dbb609", "Nhà hàng / Khách sạn" },
+                    { "3d759f31-ce81-4089-bf07-283935f0f9ea", "Kế toán / Kiểm toán" },
+                    { "532b9d54-7fc9-45b6-8564-35e0234a4293", "Marketing / Truyền thông / Quảng cáo" },
+                    { "544c4786-cf33-4fa2-8fe7-3f53ae23b543", "Điện tử / Điện lạnh" },
+                    { "581be607-99bd-42b1-8182-2c838c234907", "Sản xuất" },
+                    { "5fddf421-9720-428c-b717-66209c22873c", "Tổ chức phi lợi nhuận" },
+                    { "71747805-71b4-42e1-9981-d954bf9000b1", "Bất động sản" },
+                    { "729447eb-420e-46d4-af1c-895992da42bd", "Thiết kế / kiến trúc" },
+                    { "75a98165-626c-4e75-a79e-2d8bade73e5d", "Tất cả lĩnh vực" },
+                    { "7716b455-e05c-48d4-a9e7-bb8dc042a031", "Nhân sự" },
+                    { "7d52d709-8221-4022-881f-eeb7ed08499b", "Tư vấn" },
+                    { "845877e1-0d93-4f48-ba49-83df050e499c", "Agency (Design/Development)" },
+                    { "89df358e-af38-477a-9010-2653723c217c", "Giải trí" },
+                    { "8df01985-67d0-452d-aef0-c48105067f4a", "Thời trang" },
+                    { "8e25701b-fb5f-416a-98c3-137bc1af2039", "IT - Phần cứng" },
+                    { "926662c6-6531-4b2b-9a90-61bc1eec87f9", "Cơ quan nhà nước" },
+                    { "989527d7-6cc7-4da2-ab59-f611749c2bfd", "Bán lẻ - Hàng tiêu dùng - FMCG" },
+                    { "ad3bfd22-49a0-4b7f-b169-0f2abda59956", "Giáo dục / Đào tạo" },
+                    { "b14df983-83b5-49b4-ab98-01ed1fa057bd", "Tài chính" },
+                    { "b4e7e70e-078d-42ce-a0fb-b889ce09429a", "Chứng khoán" },
+                    { "b91061bd-ec68-4a19-9b0e-e2ca0828e80d", "Cơ khí" },
+                    { "bc39d4e8-e7a5-4eb1-9fad-3138c4279b2b", "Xuất nhập khẩu" },
+                    { "be54515d-2913-4276-9433-7e134377a241", "Nông Lâm Ngư nghiệp" },
+                    { "c88288cc-b0a9-4cfc-b438-dc193e725200", "Môi trường" },
+                    { "ca4cc88b-1436-4bc6-9900-4b571cb345b5", "In ấn / Xuất bản" },
+                    { "d0890914-6404-4db7-93a7-28f660f3357c", "Logistics - Vận tải" },
+                    { "d4dc7f6e-d60c-41d0-8b68-250ee3dff4f5", "Bảo hiểm" },
+                    { "d8f3293a-bc2a-4b5a-8ab5-2743a7c27b2f", "Du lịch" },
+                    { "e565f11e-3d43-4392-87a0-51bb1200d1f8", "Internet / Online" },
+                    { "e91d3e2e-d133-45f9-b200-ded77edfe78c", "Năng lượng" },
+                    { "f05fa11e-8d73-4ce5-8a4a-dba839c544a6", "Viễn thông" },
+                    { "f557ab9c-2362-451c-b183-0dd4401e7da5", "IT - Phần mềm" },
+                    { "f7ef5b80-0fb8-4c67-899d-35f0003dd20d", "Ngân hàng" },
+                    { "faa5ca44-40d5-431b-82a8-51fe250db3de", "Luật" },
+                    { "fc25aa4b-9a73-4c5b-9e05-d4d9eff5e1f3", "Tự động hóa" },
+                    { "fc7643c6-a75f-405f-947f-79a13b8b4699", "Khác" }
                 });
 
             migrationBuilder.InsertData(
@@ -577,10 +577,10 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Form" },
                 values: new object[,]
                 {
-                    { "28515a37-5a92-49cb-ae02-824f17b0f957", "Thực tập" },
-                    { "35cb530f-2487-4452-b8aa-e32a0aeaaeb6", "Bán thời gian" },
-                    { "435afa33-9dfe-47f6-9ac1-e97247b7d0c0", "Tất cả hình thức" },
-                    { "8978049e-1228-45f4-9a41-7ed389cf2c5d", "Toàn thời gian" }
+                    { "42934a33-ad06-47fa-af1c-df3df8009022", "Toàn thời gian" },
+                    { "7981a9a6-9df6-4836-8a01-9e516be67a90", "Bán thời gian" },
+                    { "8f626c37-8c0e-481a-a13a-cd33b33a881f", "Tất cả hình thức" },
+                    { "bef5a2b0-ae6a-4004-b2ca-af82f3e771d5", "Thực tập" }
                 });
 
             migrationBuilder.InsertData(
@@ -588,8 +588,8 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Position" },
                 values: new object[,]
                 {
-                    { "2e48f89f-d149-483b-aa99-d15f91165f98", "Phó giám đốc" },
-                    { "3c73c609-f04b-4aa6-bec0-80d5f7f07dc8", "Trưởng / Phó phòng" }
+                    { "0e5a73c6-931a-4e8a-a222-b58bc3d1aebb", "Quản lí / Giám sát" },
+                    { "4334b84d-0162-40fe-ba16-3d133699822b", "Tất cả vị trí" }
                 });
 
             migrationBuilder.InsertData(
@@ -597,13 +597,13 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Position" },
                 values: new object[,]
                 {
-                    { "40383783-7105-4b06-a2ba-1d712d12510b", "Quản lí / Giám sát" },
-                    { "6407467b-1763-400b-98d6-90ff4391f282", "Tất cả vị trí" },
-                    { "78a99036-ee33-42c8-bac4-f1c846d71d0a", "Thực tập sinh" },
-                    { "8d425f14-7524-4ec9-a761-6e167b5ca445", "Trưởng nhóm" },
-                    { "a5360fff-66a9-4731-874c-08387b893064", "Nhân viên" },
-                    { "c873b724-f489-4e22-9135-b8b0378f8bd9", "Trưởng chi nhánh" },
-                    { "e4228cfa-1a63-4bf4-8c0a-a760eb83f6fa", "Giám đốc" }
+                    { "61f14337-17c1-4f07-9e0d-4b7f6a5870c1", "Nhân viên" },
+                    { "68867e2a-db59-4d15-9d57-fcd662426e25", "Trưởng chi nhánh" },
+                    { "6edc81cf-e83c-4bf1-bb40-6381f211fb72", "Phó giám đốc" },
+                    { "75091f63-8615-44d5-996b-53205c3f6197", "Trưởng nhóm" },
+                    { "81e46379-27e3-4e86-9018-e91e33f6851e", "Thực tập sinh" },
+                    { "897d813d-d035-4f05-8fd2-ea099444cb2f", "Trưởng / Phó phòng" },
+                    { "8e25da0e-7226-455e-a4ed-3362fc114460", "Giám đốc" }
                 });
 
             migrationBuilder.InsertData(
@@ -611,41 +611,41 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { "0a44d94d-5126-497a-9a15-1b9eb7ae4033", "Hải Phòng" },
-                    { "0e377b15-5634-4b17-9949-5dac34527752", "Yên Bái" },
-                    { "0e3f219e-0571-44d5-b310-de0911297702", "Quảng Nam" },
-                    { "1614c8c7-80c7-4898-9c34-580faabefb11", "Tuyên Quang" },
-                    { "18469721-1713-485c-b72b-17d59e3d5ce8", "Sơn La" },
-                    { "1cf0162a-7c84-45a9-883b-40a0887f7d2b", "Quảng Ninh" },
-                    { "1f779bd3-33a2-4f5d-900d-789040e9c0a8", "Điện Biên" },
-                    { "295cf0d7-88bf-43b2-9e0d-00c5379d1bc6", "Đắk Lắk" },
-                    { "336a8fef-8473-4cf1-aa17-b005c01a951c", "Hà Tĩnh" },
-                    { "3494621d-3ffe-4176-89a0-8fe48744d743", "Bà Rịa-Vũng Tàu" },
-                    { "34ab2b90-630e-49ce-8631-a9ba6dafa55c", "Kiên Giang" },
-                    { "360532ba-0360-479c-8610-3fa340edd9ff", "Hà Giang" },
-                    { "3666c38e-b9c3-4958-b1e0-3de2ed665acd", "Bình Dương" },
-                    { "36c36160-8e85-4059-a8dc-550c4b315fad", "Đồng Tháp" },
-                    { "37a37d85-dca7-4990-ae28-f126ad048f86", "Lâm Đồng" },
-                    { "3be0d3b7-6ba7-4db5-b049-d83b3c950703", "Hòa Bình" },
-                    { "40d97793-1280-4ff4-af42-dbaa63bbb78a", "Cần Thơ" },
-                    { "4128facf-b9ef-4357-b4af-bcecfafb6f72", "Quảng Ngãi" },
-                    { "4fb8b7e8-c2eb-4486-9beb-5b1c2b406211", "Tây Ninh" },
-                    { "50b7248e-84b5-4940-889d-7b842149b5ca", "Lào Cai" },
-                    { "57b0eeeb-16e6-4dfa-b435-6d8c51796499", "Hải Dương" },
-                    { "585f1549-b5c4-4688-8465-2f319c212e7f", "Phú Yên" },
-                    { "65d2392f-6f7e-4711-a741-bd6d30ff0eb3", "Quảng Trị" },
-                    { "6a7ace3f-5043-4e42-95bd-d9e1ea8dc012", "Quảng Bình" },
-                    { "6f41745b-b2be-4ca7-818a-fa4551d355c3", "Tất cả tỉnh thành" },
-                    { "7030c390-78eb-4fb0-85e4-78f72a8a4942", "Hưng Yên" },
-                    { "709eb242-f707-4599-bd61-a634fe224eb3", "Hồ Chí Minh" },
-                    { "773a8556-d411-4606-9fd5-abbf1f575700", "Bình Định" },
-                    { "78352aab-f2bc-4b22-aebd-78de7e183fd5", "Lai Châu" },
-                    { "7ce3f655-95eb-434c-8a5f-4782f4fce8d4", "Khánh Hòa" },
-                    { "7cf61ec2-4222-4bbd-86e3-88ce3309cea0", "Hậu Giang" },
-                    { "7d86e9c9-50f9-4e41-8204-11324399b439", "Lạng Sơn" },
-                    { "7e1a444a-495e-4c7b-a059-b1a2e5576b79", "Phú Thọ" },
-                    { "804d883c-e47e-4b99-9957-28d4cf8301b5", "Kon Tum" },
-                    { "84558f82-4228-40c6-95cf-8fe498e97e24", "Ninh Bình" }
+                    { "01a69359-d6fc-4116-bbd0-d127fe6d0774", "Hưng Yên" },
+                    { "01d597dc-e64c-41ff-b74e-0bb051f6f6bb", "Trà Vinh" },
+                    { "096bf491-05f4-488e-8eb8-d04a3d1844ef", "Vĩnh Long" },
+                    { "0f825303-629c-485a-b9ed-c4d209fce825", "Hà Nội" },
+                    { "0f90dffb-8722-42a6-8fac-70a972aada4f", "Bắc Kạn" },
+                    { "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed", "Cần Thơ" },
+                    { "116bacfc-2a58-43fa-abfe-7ec2b4bd0def", "Hồ Chí Minh" },
+                    { "1335a90f-4387-41a8-9b27-d6cef6ca864e", "Tuyên Quang" },
+                    { "16d55e02-180f-4808-a0fb-eecd8c9739ac", "Lạng Sơn" },
+                    { "16fa33a9-7a9e-4b2d-a72e-db9db299cba8", "Bắc Giang" },
+                    { "19384841-22be-42ba-a526-7669bca8c69e", "Bà Rịa-Vũng Tàu" },
+                    { "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8", "Đà Nẵng" },
+                    { "2212bede-4ec7-41a7-8fc0-444561de9c6e", "Thừa Thiên Huế" },
+                    { "26fcc20d-7719-405b-963e-9b68fa39f239", "Hải Phòng" },
+                    { "27e931df-094d-41e7-be5d-e28b0ffacb07", "Thái Nguyên" },
+                    { "2a0750ec-c52f-4ec6-b2b4-23b9a82a0f63", "Nam Định" },
+                    { "313f1e85-9967-4a19-9f77-e193e9b49a9b", "Sóc Trăng" },
+                    { "328620ac-f228-4bf9-94ff-29710e3d88ed", "Bạc Liêu" },
+                    { "32c8209e-e4ae-4fa1-86b3-08869ed92dd3", "Bắc Ninh" },
+                    { "364c33ef-efa4-43a8-90ed-7f6709472fef", "Bình Dương" },
+                    { "3c4b533b-8349-4054-9c3d-2b9fe6008387", "Hà Tĩnh" },
+                    { "41d96a52-0dd5-4706-a827-c600d3e7dd97", "Lâm Đồng" },
+                    { "48b05fb9-f523-4491-a302-5f6028b5ba02", "Điện Biên" },
+                    { "4a7eccb3-ff28-439c-a5f0-7f0bf5ae376d", "Tây Ninh" },
+                    { "4f324bea-20dc-468b-8ddc-964221892b1a", "Long An" },
+                    { "510ea70f-e4fb-432e-ab13-3cf1147f2f85", "Hòa Bình" },
+                    { "57f95061-b1a1-47e2-8a3a-21d7384145ee", "Cao Bằng" },
+                    { "58b13a5e-09ec-4ace-ab89-4649b71805f4", "Quảng Nam" },
+                    { "58da4453-4b58-4559-8b01-426a28c87106", "Vĩnh Phúc" },
+                    { "5a2702f4-9456-40c9-b652-a762dc2d59c5", "Quảng Ngãi" },
+                    { "5c96ae8f-c0ab-4193-a1eb-322ed21bf651", "Hà Giang" },
+                    { "65d572ba-4999-409e-8a6b-b6aaf4d33cb8", "Hải Dương" },
+                    { "678a39a3-5424-4ad2-9faa-eabdfb84be06", "Phú Yên" },
+                    { "6843ab81-a062-4703-9bf6-c827dbcec017", "Đồng Nai" },
+                    { "6fa92a53-6351-4789-a41d-7b28eb6bad4e", "Hậu Giang" }
                 });
 
             migrationBuilder.InsertData(
@@ -653,35 +653,35 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { "845a84cd-8948-40d5-9a4b-d8dd4215032d", "Trà Vinh" },
-                    { "95bb8e7b-2d8e-44ec-90ac-e3de5cad5295", "Sóc Trăng" },
-                    { "9c41f9c3-c12d-4fb2-a35a-9e715dec71b9", "Nghệ An" },
-                    { "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7", "Hà Nội" },
-                    { "a5ebf213-a7c8-441b-9eea-06c66de51948", "Thừa Thiên Huế" },
-                    { "a60ecf15-df05-4643-844b-dc9362807cc7", "Bạc Liêu" },
-                    { "a649e66b-62c3-47e8-86e9-908a7cf7fd90", "Bình Thuận" },
-                    { "b407eb9c-b5cb-457d-85b7-619c03bd990e", "Long An" },
-                    { "ba58e344-4d96-4b01-ac55-01d0cd3064c8", "Đà Nẵng" },
-                    { "bebd7034-5e85-4d44-9094-1e75c7ddba50", "Bắc Giang" },
-                    { "c144a8da-1d8e-4380-b75b-e6e7d3b78853", "Hà Nam" },
-                    { "c220a857-b2d2-45b6-9c1b-64847c076c4e", "Cà Mau" },
-                    { "c2faf2dc-1c33-4fc2-afff-c1719fd92855", "Bến Tre" },
-                    { "c88dddba-d1e5-4487-a295-d1836480d737", "An Giang" },
-                    { "cd9fff15-971a-46a9-8bbc-e1e54512d076", "Thái Bình" },
-                    { "d09f859f-f70f-4a42-87e6-0ac50119aa47", "Đắk Nông" },
-                    { "d579a785-c892-432c-9b69-b13c80476b4d", "Cao Bằng" },
-                    { "da65b920-0d53-469b-91c7-04dc98400f41", "Nam Định" },
-                    { "db9136d2-a760-44b0-97a1-5e6f650baa18", "Vĩnh Phúc" },
-                    { "e3c99ee6-d007-4557-8182-517040cc149c", "Bắc Ninh" },
-                    { "e629b288-a63a-4987-bd0d-83efaaf2a273", "Vĩnh Long" },
-                    { "e62d5fda-8c56-404a-b7bf-e33588dbc437", "Bắc Kạn" },
-                    { "ea602b11-0724-4475-9102-92d186e1c100", "Thanh Hóa" },
-                    { "ee8cd878-e9c6-45d3-b82f-0622805f0ea6", "Thái Nguyên" },
-                    { "f5903892-dc9e-4130-af11-988fcbf1b1ab", "Ninh Thuận" },
-                    { "f68fb9ce-dec0-4c34-8e5c-6961f4ba6390", "Bình Phước" },
-                    { "f6da29e8-b36f-43d0-a5bd-3091111b6650", "Tiền Giang" },
-                    { "f7442689-88c8-4e2d-b089-189bfac7d6d9", "Gia Lai" },
-                    { "f8356977-7bf8-4fe5-9b07-894982e7153d", "Đồng Nai" }
+                    { "7178d910-25d6-45a4-bc20-abdae916580d", "An Giang" },
+                    { "72c0c4e2-dd6f-473a-8d42-5a266f9064f0", "Thái Bình" },
+                    { "752dea7f-c234-4aaf-94bd-a246ac516c90", "Yên Bái" },
+                    { "7713b5b2-75b7-4093-a792-4f85e21b71b9", "Phú Thọ" },
+                    { "857a5b58-2ea0-4e6f-a006-67c60491eb3d", "Thanh Hóa" },
+                    { "8a00a655-8443-49d0-99f2-655016a9f7a5", "Cà Mau" },
+                    { "8be2e72b-ca5c-4d95-b064-48ed62f1d4d9", "Đắk Lắk" },
+                    { "8d7d0fde-e647-4c65-9e4a-eb40005f92e6", "Bình Thuận" },
+                    { "94f88325-e241-4bd8-9440-98f5e7cae041", "Quảng Bình" },
+                    { "97faeafb-e21a-4dcc-b85b-0cee98f6f65a", "Bình Định" },
+                    { "993f4aaa-2f09-4ad5-ad7e-1395b341729c", "Ninh Thuận" },
+                    { "9f46e276-41db-42be-9370-d851669a8dcf", "Hà Nam" },
+                    { "9ffb694b-415f-4dfd-b2aa-bbdd81ac4c22", "Nghệ An" },
+                    { "a0e41235-c992-422d-8581-cc1a4e53e3fa", "Tiền Giang" },
+                    { "a1a42b85-1cec-463a-91c2-84110e16e001", "Kiên Giang" },
+                    { "a4b5a777-8639-4fb7-aee6-05a7ad86facd", "Đồng Tháp" },
+                    { "ac3297e5-712f-4543-8ee4-599911993a70", "Đắk Nông" },
+                    { "ac43fce2-d6d1-4b23-a54c-1822ea29da82", "Bến Tre" },
+                    { "ae841211-472c-4565-a03e-772ce0d52ca2", "Kon Tum" },
+                    { "b1bb3a0c-d7b6-4745-b5c3-85f5c488b921", "Lào Cai" },
+                    { "b6596132-9b08-407b-8255-c78917f62562", "Quảng Trị" },
+                    { "c7a3343b-1627-4809-8d94-8456702bd3b0", "Quảng Ninh" },
+                    { "d0d623b7-9298-4040-a438-9697cb939b0b", "Bình Phước" },
+                    { "daab2516-e67b-4b8d-95ca-5af15c8a8989", "Tất cả tỉnh thành" },
+                    { "de275984-9f99-4469-961f-47b3e31ad204", "Gia Lai" },
+                    { "ef6f4256-16d4-43c4-ae0c-75349a6cbc78", "Ninh Bình" },
+                    { "efe903ab-0cf8-49db-b6d3-8c1c9177e2ce", "Sơn La" },
+                    { "f33318f5-084a-4712-9294-cc8d41cad626", "Khánh Hòa" },
+                    { "fe6f1826-142a-43a2-88e4-9c2513e27e80", "Lai Châu" }
                 });
 
             migrationBuilder.InsertData(
@@ -689,34 +689,34 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "RoleName" },
                 values: new object[,]
                 {
-                    { "48f576de-5eef-456a-b5fe-69ac4f92554c", "Admin" },
-                    { "b9cfceac-2ad8-4ec1-be6d-f918581c0fd2", "Employer" },
-                    { "c9444742-e347-41e1-9ae4-8f48a6b14c57", "Candidate" }
+                    { "a0408ef1-b79a-4bb2-b4bd-d0995e215126", "Admin" },
+                    { "c2747ae0-6246-47a3-9c63-950ebd356415", "Employer" },
+                    { "e3b83463-1367-4405-8dc0-8176fb5a566b", "Candidate" }
                 });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "Avatar", "DateOfBirth", "Discriminator", "Email", "PhoneNumber", "Username" },
-                values: new object[] { "4e7ae74e-c16a-416e-84eb-fc5e4ea56e99", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Candidate", "cvlookup.sgu.2023_candidate@gmail.com", null, "Candidate Admin" });
+                values: new object[] { "e0c47a58-7731-4f26-8ff9-2b899b3019bc", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Candidate", "cvlookup.sgu.2023_candidate@gmail.com", null, "Candidate Admin" });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "Address", "Avatar", "Description", "Discriminator", "Email", "PhoneNumber", "Username", "Website" },
-                values: new object[] { "c77e84e2-5825-4331-bcc3-ae9d07a9c936", "Admin", null, "Admin", "Employer", "cvlookup.sgu.2023_employer@gmail.com", null, "Employer Admin", null });
+                values: new object[] { "f4c6aaf7-efd3-4905-859b-cb2f33c2e476", "Admin", null, "Admin", "Employer", "cvlookup.sgu.2023_employer@gmail.com", null, "Employer Admin", null });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "Avatar", "Discriminator", "Email", "PhoneNumber", "Username" },
-                values: new object[] { "6d74548c-27df-47ae-a4dc-d09be267528d", null, "User", "cvlookup.sgu.2023@gmail.com", null, "General Admin" });
+                values: new object[] { "a668be26-29c9-4653-a601-5faf023b5d73", null, "User", "cvlookup.sgu.2023@gmail.com", null, "General Admin" });
 
             migrationBuilder.InsertData(
                 table: "AccountUser",
                 columns: new[] { "AccountId", "UserId" },
                 values: new object[,]
                 {
-                    { "65d8823a-500d-4fb5-a11e-74d18c1b9835", "c77e84e2-5825-4331-bcc3-ae9d07a9c936" },
-                    { "6950c3a7-bdaf-4707-b82e-3552e49b8873", "6d74548c-27df-47ae-a4dc-d09be267528d" },
-                    { "88a493ac-8476-428f-a215-4fcadc579562", "4e7ae74e-c16a-416e-84eb-fc5e4ea56e99" }
+                    { "a58fa60e-2978-49c7-926d-c62fa9dabb1b", "f4c6aaf7-efd3-4905-859b-cb2f33c2e476" },
+                    { "cf10c7b2-13a3-4307-875e-bb3d901bee9d", "e0c47a58-7731-4f26-8ff9-2b899b3019bc" },
+                    { "f2c45b04-9bec-4296-b76c-7d15bd5b45a9", "a668be26-29c9-4653-a601-5faf023b5d73" }
                 });
 
             migrationBuilder.InsertData(
@@ -724,45 +724,45 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Name", "ProvinceId" },
                 values: new object[,]
                 {
-                    { "06cbb69f-847b-4979-adf2-f85511ad1963", "Quận Hồng Bàng", "0a44d94d-5126-497a-9a15-1b9eb7ae4033" },
-                    { "0ee40390-6191-4262-929e-91bd9445559c", "Quận 8", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "1274daca-4414-4e9f-88fe-c2e6f8014bc3", "Quận Nam Từ Liêm", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "1662b0cf-4b29-44c7-b856-57ff183db8cc", "Quận Cẩm Lệ", "ba58e344-4d96-4b01-ac55-01d0cd3064c8" },
-                    { "172973d3-5fca-46a3-82a1-e1019a79520b", "Quận Tân Phú", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "187795cd-7117-44fe-ae9e-afa3b5089bcf", "Quận Ngô Quyền", "0a44d94d-5126-497a-9a15-1b9eb7ae4033" },
-                    { "25106b52-cdc0-43d7-8f91-07f94ad6b887", "Quận 11", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "2d82c9ae-f102-427a-a898-af7e75b023e4", "Quận Hoàng Mai", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "33b2f8c5-e593-4f05-9e2f-40ad12c468d8", "Quận Đống Đa", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "35941f6e-230a-4f34-9e36-45ef26be30d6", "Quận Cầu Giấy", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "3a28c0f1-3854-416d-a41d-1fa1276e0aa8", "Quận Ba Đình", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "3e419b48-2e64-4516-a088-966d183e8ddf", "Quận Liên Chiểu", "ba58e344-4d96-4b01-ac55-01d0cd3064c8" },
-                    { "424b6f28-9f94-49dc-9908-9fe52d86680a", "Quận Phú Nhuận", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "47830223-36e0-4999-9a36-ebd2eec959ec", "Quận Tây Hồ", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "4b3173b1-a58a-42c4-bffc-1539a174c49e", "Quận Sơn Trà", "ba58e344-4d96-4b01-ac55-01d0cd3064c8" },
-                    { "4cce3222-b952-4775-8ff9-961742e9b5a3", "Quận 1", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "52d62e00-fdbc-4164-a012-368aa53db41d", "Quận Thanh Khê", "ba58e344-4d96-4b01-ac55-01d0cd3064c8" },
-                    { "573245d4-ce6f-446e-87e7-3fb3bfd102ac", "Quận 6", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "598f78a0-f41a-4b37-a78c-45443942f3e9", "Quận Ô Môn", "40d97793-1280-4ff4-af42-dbaa63bbb78a" },
-                    { "60e1acae-918d-42d3-91a4-2e6a02345ff2", "Quận Đồ Sơn", "0a44d94d-5126-497a-9a15-1b9eb7ae4033" },
-                    { "6f0a8319-667b-46fc-8fc2-551b383812d8", "Quận Hoàn Kiếm", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "76557cb9-7512-4f6a-8a4b-46abe9a8b9ed", "Quận Thốt Nốt", "40d97793-1280-4ff4-af42-dbaa63bbb78a" },
-                    { "84d3dc8e-d792-4b36-a633-9eb3c752afa3", "Quận Dương Kinh", "0a44d94d-5126-497a-9a15-1b9eb7ae4033" },
-                    { "944094a6-09ae-4513-822b-77888d462b32", "Quận 12", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "99ebdbfc-4d00-4266-9105-2250258b9f44", "Quận Hải Châu", "ba58e344-4d96-4b01-ac55-01d0cd3064c8" },
-                    { "a2818a80-d0f6-4ce8-8b9c-4802792da894", "Quận Ngũ Hành Sơn", "ba58e344-4d96-4b01-ac55-01d0cd3064c8" },
-                    { "a84e2384-b60f-4459-b879-9738f0a5c1dd", "Quận 5", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "a905ae7c-d447-448e-8994-cd0c181dfeb0", "Quận Hai Bà Trưng", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "aa84de82-69d1-4110-9f31-3aca2ea7fa20", "Quận 4", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "ae05b599-0a86-42f5-a5d8-7eedda10996f", "Quận 2", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "b1b208d9-25e2-4590-8b46-2959f610543d", "Quận Kiến An", "0a44d94d-5126-497a-9a15-1b9eb7ae4033" },
-                    { "b4c9b166-8e4a-47f3-91af-67a188ac72e5", "Quận Hà Đông", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "b6ef886e-c1de-4d72-a2c8-589f38c70cf2", "Quận Thủ Đức", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "bc671699-552d-4993-8ee6-1502fc7d194a", "Quận Tân Bình", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "bf2cb4b2-0849-437d-a4b5-9279e8c39c17", "Quận 9", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "bf5f3ac9-c1c9-417b-ab55-796ca667da50", "Quận Lê Chân", "0a44d94d-5126-497a-9a15-1b9eb7ae4033" },
-                    { "c0c9f5e2-065a-430d-8828-a2db70374b8e", "Quận Bắc Từ Liêm", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "c21c5301-aeac-4972-9f83-95fbfd517f5c", "Quận Bình Thạnh", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "c3abdd90-5ede-4c7b-9443-033be674e156", "Quận Cái Răng", "40d97793-1280-4ff4-af42-dbaa63bbb78a" }
+                    { "026a6f54-f106-4501-bac7-80737ae1d4c5", "Quận Tây Hồ", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "0c0a725d-1f40-4949-bb10-7322649c7791", "Quận Hoàng Mai", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "0f2ac003-70dd-447e-aeb3-32caf5152f20", "Quận Cầu Giấy", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "1b896913-5e7d-4375-8c81-49e8086f53df", "Quận 10", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "21a5c094-8784-4d24-a971-7680ca5d7b25", "Quận Bắc Từ Liêm", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "23410ceb-bc05-48c3-9ac4-ba4cefa35632", "Quận Nam Từ Liêm", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "2407872f-d053-4802-9dca-a251995748ab", "Quận 12", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "25f0ae60-aefe-4f7a-b8ef-84c5e0f1b41f", "Quận Bình Tân", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "3606ff8d-f9dd-44ac-845c-0c5a8292a8a8", "Quận Kiến An", "26fcc20d-7719-405b-963e-9b68fa39f239" },
+                    { "3729cdb9-2361-4b55-a8f7-f9c1288c85c1", "Quận Liên Chiểu", "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8" },
+                    { "37dc9eb7-6400-4e8f-8f13-aa982fa97f27", "Quận 6", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "474e5b08-48eb-48bf-bae7-3c212da730f4", "Tất cả", "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed" },
+                    { "5f7e7425-482b-4b67-9498-1633f1f7b27b", "Quận Ngũ Hành Sơn", "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8" },
+                    { "61d0fad5-4b42-4344-9ad8-8fd7e0f53b97", "Quận 7", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "6291821c-b8b8-44d7-bc05-c1f76250a45a", "Tất cả", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "76ff1ef9-f688-491d-aa4a-a1e800de92b2", "Quận Lê Chân", "26fcc20d-7719-405b-963e-9b68fa39f239" },
+                    { "771d2328-956e-48af-bb23-3df216e50d54", "Quận Thanh Khê", "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8" },
+                    { "77dd1540-84fa-4275-8016-353df65f5889", "Quận Tân Phú", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "7a637600-1295-4964-a042-59b0efa67f90", "Quận Ninh Kiều", "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed" },
+                    { "7b97df54-b2a0-48e0-a93b-d6407bf19cb0", "Quận Sơn Trà", "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8" },
+                    { "7ca7140a-7410-4f86-b8f5-1a5e940bca9c", "Quận Hải An", "26fcc20d-7719-405b-963e-9b68fa39f239" },
+                    { "8355d50d-9201-4b00-87d3-2067154714e3", "Quận Phú Nhuận", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "84c1fcd2-c60d-462d-92f7-2dc85ace5e0c", "Quận Ngô Quyền", "26fcc20d-7719-405b-963e-9b68fa39f239" },
+                    { "8ae94861-ba01-4285-8ac4-ebd8fd68eae3", "Quận 5", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "8c5aeaf6-1842-4a73-ad33-f6a6794696ec", "Quận Hà Đông", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "95464e1a-fe23-4d92-9b60-9927c4da1826", "Quận 11", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "9781e632-6fd7-415f-b4e7-0a34a1d37372", "Tất cả", "26fcc20d-7719-405b-963e-9b68fa39f239" },
+                    { "97a3e7a2-ea86-4f30-8484-8e61ea147cca", "Quận Thủ Đức", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "9e0b36f4-41aa-495f-8d74-8ac6e4117beb", "Quận 1", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "a048e95f-0363-42eb-974e-0294a30341d6", "Quận Thanh Xuân", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "a05cb0cb-d331-47ad-9450-5fe37e327103", "Quận Tân Bình", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "a06e16e3-e294-4a97-b4a5-8cab03f36ea9", "Quận Hoàn Kiếm", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "a2a34d97-41ba-4a51-bc91-418c72742079", "Quận Gò Vấp", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "a5b7ff19-f454-4b2a-b5a7-669359745029", "Quận Hồng Bàng", "26fcc20d-7719-405b-963e-9b68fa39f239" },
+                    { "b8bcf9aa-5900-4294-ac6a-8c1654118152", "Quận Bình Thạnh", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "ba1c0460-bf4e-44be-be13-a93c0b63bb5a", "Quận Hai Bà Trưng", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "bd1882f7-ab0a-4d48-8579-62d6d143de98", "Quận 4", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "c153c81c-f254-438c-83be-7c87d7f4c700", "Quận Bình Thuỷ", "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed" },
+                    { "c311b47d-251a-4047-80be-f3be75312826", "Quận Ba Đình", "0f825303-629c-485a-b9ed-c4d209fce825" }
                 });
 
             migrationBuilder.InsertData(
@@ -770,16 +770,21 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "Id", "Name", "ProvinceId" },
                 values: new object[,]
                 {
-                    { "c4c23c39-f67c-4e0d-9d37-3907f78bdeb9", "Quận Long Biên", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "c9f4e662-217f-4b65-b5e7-8b96497bd4c3", "Quận Bình Tân", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "cd64d2d7-3614-4739-a699-b52d718e890b", "Quận 7", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "d895c801-3950-4ef6-ac68-83bfae778227", "Quận Gò Vấp", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "e53d7fd2-8ac5-4101-b3fc-c23631e23632", "Quận Thanh Xuân", "9f3c6d42-5e6c-4f72-8c3f-cfbf172ff8e7" },
-                    { "e8e9c40b-c646-4976-8786-ec7751d5b250", "Quận 3", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "ea6dad65-26cf-4972-9f1a-cc0e8e204723", "Quận Ninh Kiều", "40d97793-1280-4ff4-af42-dbaa63bbb78a" },
-                    { "ebc3a288-92a7-4338-aa6e-5d8a0736ce1b", "Quận Bình Thuỷ", "40d97793-1280-4ff4-af42-dbaa63bbb78a" },
-                    { "f08968ca-979d-48c6-bf29-8c381bbf1a07", "Quận 10", "709eb242-f707-4599-bd61-a634fe224eb3" },
-                    { "fa0454dd-1bd2-4a5a-95b2-b72d809b4fb2", "Quận Hải An", "0a44d94d-5126-497a-9a15-1b9eb7ae4033" }
+                    { "c3cbffa1-fb88-4761-9688-6102d37cd014", "Quận 9", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "c4556d30-01a7-4c23-b93e-4b37373e289a", "Quận Thốt Nốt", "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed" },
+                    { "c8456d7c-62e9-464c-83a6-b76a60e7fc86", "Quận Long Biên", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "cb153c34-7edb-4419-bb5f-8c9805c4070e", "Quận 2", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "cfd87279-7a51-4741-9da5-7370913efe11", "Quận Đống Đa", "0f825303-629c-485a-b9ed-c4d209fce825" },
+                    { "d817db7e-0e5b-49d3-a55c-d31a1095d6c1", "Quận Cái Răng", "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed" },
+                    { "db9ca9f8-6325-48d2-97c2-5a38c5e8eb6b", "Quận Ô Môn", "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed" },
+                    { "dfebbafd-a2f4-49c4-928f-f7900dc5329a", "Tất cả", "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8" },
+                    { "e56f31e5-76d6-4a3b-bd96-4dc189b7c8e7", "Quận Hải Châu", "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8" },
+                    { "ea055f4b-4a85-4c3a-a801-db50b18b6d11", "Quận 8", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "eb55a600-539a-42ba-a139-6c89442fe89e", "Quận Cẩm Lệ", "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8" },
+                    { "ec543696-b991-4bdc-8dc8-be84885fce1f", "Quận 3", "116bacfc-2a58-43fa-abfe-7ec2b4bd0def" },
+                    { "ef419af0-ee2d-494d-89cc-8846f53121fd", "Quận Dương Kinh", "26fcc20d-7719-405b-963e-9b68fa39f239" },
+                    { "f7eaff30-d110-4ebb-907e-05bf8497c5c2", "Quận Đồ Sơn", "26fcc20d-7719-405b-963e-9b68fa39f239" },
+                    { "ff0a0d98-c392-4c04-ac0d-cb313f84569a", "Tất cả", "0f825303-629c-485a-b9ed-c4d209fce825" }
                 });
 
             migrationBuilder.InsertData(
@@ -787,9 +792,9 @@ namespace CVLookup_WebAPI.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "48f576de-5eef-456a-b5fe-69ac4f92554c", "6d74548c-27df-47ae-a4dc-d09be267528d" },
-                    { "b9cfceac-2ad8-4ec1-be6d-f918581c0fd2", "c77e84e2-5825-4331-bcc3-ae9d07a9c936" },
-                    { "c9444742-e347-41e1-9ae4-8f48a6b14c57", "4e7ae74e-c16a-416e-84eb-fc5e4ea56e99" }
+                    { "a0408ef1-b79a-4bb2-b4bd-d0995e215126", "a668be26-29c9-4653-a601-5faf023b5d73" },
+                    { "c2747ae0-6246-47a3-9c63-950ebd356415", "f4c6aaf7-efd3-4905-859b-cb2f33c2e476" },
+                    { "e3b83463-1367-4405-8dc0-8176fb5a566b", "e0c47a58-7731-4f26-8ff9-2b899b3019bc" }
                 });
 
             migrationBuilder.CreateIndex(
