@@ -104,48 +104,48 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                 #region Filter
                 if (!string.IsNullOrEmpty(filter.Keyword))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobTitle.Contains(filter.Keyword, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.JobTitle.Contains(filter.Keyword));
                 }
 
                 if (!string.IsNullOrEmpty(filter.Province))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobAddress.Province.Name.Equals(filter.Province, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.JobAddress.Province.Name.Equals(filter.Province));
 
                 }
 
                 if (!string.IsNullOrEmpty(filter.District))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobAddress.District.Equals(filter.District, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.JobAddress.District.Equals(filter.District));
                 }
 
                 if (!string.IsNullOrEmpty(filter.Career))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobCareer.Career.Equals(filter.Career, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.JobCareer.Career.Equals(filter.Career));
                 }
 
                 if (!string.IsNullOrEmpty(filter.UserId))
                 {
-                    recruitments = recruitments.Where(prop => prop.Employer.Id.Equals(filter.UserId, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.Employer.Id.Equals(filter.UserId));
                 }
 
                 if (!string.IsNullOrEmpty(filter.JobField))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobField.Field.Equals(filter.JobField, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.JobField.Field.Equals(filter.JobField));
                 }
 
                 if (!string.IsNullOrEmpty(filter.JobForm))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobForm.Form.Equals(filter.JobForm, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.JobForm.Form.Equals(filter.JobForm));
                 }
 
                 if (!string.IsNullOrEmpty(filter.Experience))
                 {
-                    recruitments = recruitments.Where(prop => prop.Experience.Exp.Equals(filter.Experience, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.Experience.Exp.Equals(filter.Experience));
                 }
 
-                if (!string.IsNullOrEmpty(filter.JobPosition))
+                if (!string.IsNullOrEmpty(filter.Position))
                 {
-                    recruitments = recruitments.Where(prop => prop.JobPosition.Position.Equals(filter.JobPosition, StringComparison.OrdinalIgnoreCase));
+                    recruitments = recruitments.Where(prop => prop.JobPosition.Position.Equals(filter.Position));
                 }
                 #endregion
 
@@ -189,6 +189,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                     },
                     JobAddress = new
                     {
+                        prop.JobAddress.AddressDetail,
                         Province = prop.JobAddress.Province.Name,
                         prop.JobAddress.District
                     },

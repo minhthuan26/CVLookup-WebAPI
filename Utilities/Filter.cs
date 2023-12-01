@@ -14,7 +14,7 @@ namespace CVLookup_WebAPI.Utilities
 		public string? JobField { get; set; }
 		public string? JobForm { get; set; }
 		public string? Experience { get; set; }
-		public string? JobPosition { get; set; }
+		public string? Position { get; set; }
 		public string? SortBy { get; set; }
 	}
 }
