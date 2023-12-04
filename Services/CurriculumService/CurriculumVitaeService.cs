@@ -40,7 +40,7 @@ namespace CVLookup_WebAPI.Services.CurriculumService
 				curriculumVitae.User = user;
 				string filePath = await _fileService.UploadFile(curriculumVitaeVM.CVFile, uploadPath);
 
-				curriculumVitae.CVPath = filePath;
+                curriculumVitae.CVPath = filePath;
 
 				var result = await _dbContext.CurriculumVitae.AddAsync(curriculumVitae);
 				if (result.State.ToString() == "Added")

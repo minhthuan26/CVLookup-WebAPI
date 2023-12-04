@@ -3,6 +3,7 @@ using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace CVLookup_WebAPI.Models.Mapper
 {
@@ -47,7 +48,9 @@ namespace CVLookup_WebAPI.Models.Mapper
 			{
 				try
 				{
-					var recruitment = _dbContext.Recruitment.Where(prop => prop.Id == source.RecruitmentId).FirstOrDefault();
+					var recruitment = _dbContext.Recruitment
+						.Include(prop => prop.Employer)
+						.Where(prop => prop.Id == source.RecruitmentId).FirstOrDefault();
 
 					if (recruitment == null)
 					{

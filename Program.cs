@@ -14,6 +14,7 @@ using CVLookup_WebAPI.Services.JobFormService;
 using CVLookup_WebAPI.Services.JobPositionService;
 using CVLookup_WebAPI.Services.JwtService;
 using CVLookup_WebAPI.Services.MailService;
+using CVLookup_WebAPI.Services.NotificationService;
 using CVLookup_WebAPI.Services.RecruitmentCVService;
 using CVLookup_WebAPI.Services.RecruitmentService;
 using CVLookup_WebAPI.Services.RefreshTokenService;
@@ -62,7 +63,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
-//builder.Services.AddScoped<NotificationHub>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<NotificationHub>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR(options =>

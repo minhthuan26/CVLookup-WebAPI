@@ -3,44 +3,56 @@ using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AuthService;
 using CVLookup_WebAPI.Services.CurriculumService;
+using CVLookup_WebAPI.Services.NotificationService;
 using CVLookup_WebAPI.Services.RecruitmentService;
+using CVLookup_WebAPI.Services.SignalRService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Runtime.InteropServices;
 
 namespace CVLookup_WebAPI.Services.RecruitmentCVService
 {
-	public class RecruitmentCVService : IRecruitmentCVService
-	{
-		private readonly AppDBContext _dbContext;
-		private readonly IMapper _mapper;
-		private readonly IRecruitmentService _recruitmentService;
-		private readonly ICurriculumViateService _curriculumViateService;
-		private readonly IAuthService _authService;
+    public class RecruitmentCVService : IRecruitmentCVService
+    {
+        private readonly AppDBContext _dbContext;
+        private readonly IMapper _mapper;
+        private readonly IRecruitmentService _recruitmentService;
+        private readonly ICurriculumViateService _curriculumViateService;
+        private readonly IAuthService _authService;
+        private readonly INotificationService _notificationService;
+        private readonly NotificationHub _notificationHub;
 
-		public RecruitmentCVService(AppDBContext dbContext, IMapper mapper, IRecruitmentService recruitmentService, ICurriculumViateService curriculumViateService, IAuthService authService)
-		{
-			_dbContext = dbContext;
-			_mapper = mapper;
-			_recruitmentService = recruitmentService;
-			_curriculumViateService = curriculumViateService;
-			_authService = authService;
-		}
+        public RecruitmentCVService(
+            AppDBContext dbContext,
+            IMapper mapper,
+            IRecruitmentService recruitmentService,
+            ICurriculumViateService curriculumViateService,
+            IAuthService authService,
+            INotificationService notificationService,
+            NotificationHub notificationHub)
+        {
+            _dbContext = dbContext;
+            _mapper = mapper;
+            _recruitmentService = recruitmentService;
+            _curriculumViateService = curriculumViateService;
+            _authService = authService;
+            _notificationService = notificationService;
+            _notificationHub = notificationHub;
+        }
 
-		public async Task<object> ApplyToRecruitment(RecruitmentCVVM recruitmentCVVM)
-		{
-			try
-			{
-				var currentUser = await _authService.GetCurrentLoginUser();
-				var recruitmentCV = _mapper.Map<RecruitmentCV>(recruitmentCVVM);
+        public async Task<object> ApplyToRecruitment(RecruitmentCVVM recruitmentCVVM)
+        {
+            IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                var currentUser = await _authService.GetCurrentLoginUser();
+                var recruitmentCV = _mapper.Map<RecruitmentCV>(recruitmentCVVM);
 
-				if (currentUser != recruitmentCV.CurriculumVitae.User)
-				{
-					throw new ExceptionModel(400, "Thất bại. Bạn không có quyền truy cập CV này");
-				}
+                if (currentUser != recruitmentCV.CurriculumVitae.User)
+                {
+                    throw new ExceptionModel(400, "Thất bại. Bạn không có quyền truy cập CV này");
+                }
 
 				var result = await _dbContext.RecruitmentCV.AddAsync(recruitmentCV);
 				if (result.State.ToString() == "Added")
