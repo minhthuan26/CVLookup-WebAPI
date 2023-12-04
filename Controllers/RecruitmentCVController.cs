@@ -68,27 +68,29 @@ namespace CVLookup_WebAPI.Controllers
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="recruitmentId"></param>
-        /// <returns></returns>
-		[HttpGet("get-by-user-and-recruitment-id")]
-		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-		[AuthorizationAttribute("Admin", "Candidate")]
-		public async Task<IActionResult> GetRecruitmentCVBy_UserId_And_RecruitmentId([FromQuery] string userId, [FromQuery] string recruitmentId)
-		{
-			var recruitmentCV = await _recruitmentCVService.GetRecruitmentBy_UserId_And_RecruitmentId(userId, recruitmentId);
-			return Ok(new ApiResponse
-			{
-				Success = true,
-				Code = StatusCodes.Status200OK,
-				Message = "Hoàn thành",
-				Data = recruitmentCV
-			});
-		}
 
+
+        /// <summary>
+        /// Lấy thông tin RecruitmentCV theo CurriculumVitaeId
+        /// </summary>
+        /// <param name="id">ID của CurriculumVitae</param>
+        /// <returns>Thông tin RecruitmentCV</returns>
+        [HttpGet("get-by-isPass")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [AuthorizationAttribute("Admin", "Employer")]
+        public async Task<IActionResult> GetCVBy_IsPass([FromQuery] string id)
+        {
+            var recruitmentCV = await _recruitmentCVService.GetRecruitmentCVByIsPass(id);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = recruitmentCV
+            });
+        }
+
+     
 		/// <summary>
 		/// Nộp CV ứng tuyển
 		/// </summary>
@@ -209,5 +211,7 @@ namespace CVLookup_WebAPI.Controllers
                 Data = deletedRecruitmentCV 
             });
         }
+
+    
     }
 }

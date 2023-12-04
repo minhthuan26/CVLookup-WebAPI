@@ -118,7 +118,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 			{
 				var result = await _dbContext.RecruitmentCV.Where(prop => prop.RecruitmentId == id)
 					.Include(prop => prop.CurriculumVitae)
-					.Include(prop => prop.Recruitment)
+					.Include(prop => prop.Recruitment).OrderBy(prop=>prop.AppliedAt)
 					.ToListAsync();
 
 				if (result.Count == 0)
@@ -134,6 +134,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 
 				return new
 				{
+					IsPass = result[0].IsPass,
 					Recruitment = result[0].Recruitment,
 					CurriculumVitaes = cvList
 				};
@@ -143,8 +144,42 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 				throw new ExceptionModel(e.Code, e.Message);
 			}
 		}
+        public async Task<object> GetRecruitmentCVByIsPass(string id)
+        {
+            try
+            {
+                var result = await _dbContext.RecruitmentCV.Where(prop => prop.RecruitmentId == id && prop.IsPass == true)
+                    .Include(prop => prop.CurriculumVitae)
+                    .Include(prop => prop.Recruitment).OrderBy(prop => prop.AppliedAt)
+                    .ToListAsync();
 
-		public async Task<object> GetRecruitmentCVBy_CVId(string id)
+                if (result.Count == 0)
+                {
+                    return result;
+                }
+
+                List<CurriculumVitae> cvList = new();
+                foreach (var row in result)
+                {
+                    cvList.Add(row.CurriculumVitae);
+                }
+
+                return new
+                {
+                    IsPass = result[0].IsPass,
+
+                    Recruitment = result[0].Recruitment,
+                    CurriculumVitaes = cvList
+                };
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+
+        public async Task<object> GetRecruitmentCVBy_CVId(string id)
 		{
 			try
 			{
@@ -179,10 +214,10 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 					.FirstOrDefaultAsync();
 
 				var isRecruitmentBelongToUser = await _dbContext.Recruitment.FirstOrDefaultAsync(prop => prop.Employer.Id == currentUser.Id);
-				if (role?.RoleName != "Admin" && isRecruitmentBelongToUser == null)
-				{
-					throw new ExceptionModel(400, "Thất bại. Truy cập bị từ chối");
-				}
+				//if (role?.RoleName != "Admin" && isRecruitmentBelongToUser == null)
+				//{
+				//	throw new ExceptionModel(400, "Thất bại. Truy cập bị từ chối");
+				//}
 				var result = await _dbContext.RecruitmentCV
 					.Include(prop => prop.CurriculumVitae)
 					.ThenInclude(prop => prop.User)
@@ -279,6 +314,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 			try
 			{
 				var recruitmentCV = (RecruitmentCV)await this.GetRecruitmentCVBy_CVId(id);
+				recruitmentCV.IsView = true;
 				recruitmentCV.IsPass = !recruitmentCV.IsPass;
 				var result = _dbContext.RecruitmentCV.Update(recruitmentCV);
 				if (result.State.ToString() == "Modified")
@@ -301,38 +337,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 				throw new ExceptionModel(e.Code, e.Message);
 			}
 
-		}
-
-		public async Task<object> GetRecruitmentBy_UserId_And_RecruitmentId(string userId, string recruitmentId)
-		{
-			try
-			{
-				var result = await _dbContext.RecruitmentCV
-					.Include(props => props.CurriculumVitae)
-					.ThenInclude(prop => prop.User)
-					.Where(prop => prop.CurriculumVitae.User.Id == userId && prop.RecruitmentId == recruitmentId).FirstOrDefaultAsync();
-
-				if (result == null)
-				{
-					return result;
-				}
-				else
-				{
-					return new
-					{
-						result.RecruitmentId,
-						result.CurriculumVitaeId,
-						result.IsPass,
-						result.IsView,
-						result.AppliedAt
-					};
-				}
-
-			}
-			catch (ExceptionModel e)
-			{
-				throw new ExceptionModel(e.Code, e.Message);
-			}
 		}
 	}
 }
