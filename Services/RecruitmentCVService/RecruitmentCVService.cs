@@ -252,17 +252,31 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 
                 var cv = await _dbContext.CurriculumVitae.FirstOrDefaultAsync(prop => prop.Id == cvId);
 
-                var oldNotification = await _dbContext.Notification
+                var employerNotification = await _dbContext.Notification
                                     .FirstOrDefaultAsync(prop => prop.UserId == recruitmentCv.Recruitment.Employer.Id
                                     && prop.SenderId == userId 
                                     && prop.RecruitmentCV.RecruitmentId == recruitmentId);
 
-                if (recruitmentCv == null || cv == null || oldNotification == null)
+                if (recruitmentCv == null || cv == null || employerNotification == null)
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
 
-                await _notificationService.DeleteNotification(oldNotification.Id);
+                //if(recruitmentCv.IsView)
+                //{
+                //    var candidateNotification = await _dbContext.Notification
+                //                    .FirstOrDefaultAsync(prop => prop.UserId == userId
+                //                    && prop.SenderId == recruitmentCv.Recruitment.Employer.Id
+                //                    && prop.RecruitmentCV.RecruitmentId == recruitmentId);
+
+                //    if (candidateNotification == null)
+                //    {
+                //        throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                //    }
+                //    await _notificationService.DeleteNotification(candidateNotification.Id);
+                //}
+
+                await _notificationService.DeleteNotification(employerNotification.Id);
                 var result = _dbContext.RecruitmentCV.Remove(recruitmentCv);
                 if (result.State.ToString() == "Deleted")
                 {
@@ -292,12 +306,21 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
             }
         }
 
-        public async Task<RecruitmentCV> UpdateIsView(string id)
+        public async Task<RecruitmentCV> UpdateIsView(string cvId, string recruitmentId)
         {
             IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                var recruitmentCV = (RecruitmentCV)await GetRecruitmentCVBy_CVId(id);
+                var recruitmentCV =  await _dbContext.RecruitmentCV
+                    .Include(prop => prop.Recruitment)
+                    .ThenInclude(prop => prop.Employer)
+                    .Include(props => props.CurriculumVitae)
+                    .ThenInclude(prop => prop.User)
+                    .Where(prop => prop.CurriculumVitae.Id == cvId && prop.RecruitmentId == recruitmentId).FirstOrDefaultAsync();
+                if (recruitmentCV == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
                 if (!recruitmentCV.IsView)
                 {
                     recruitmentCV.IsView = true;
@@ -338,11 +361,20 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 
         }
 
-        public async Task<RecruitmentCV> ToggleIsPass(string id)
+        public async Task<RecruitmentCV> ToggleIsPass(string cvId, string recruitmentId)
         {
             try
             {
-                var recruitmentCV = (RecruitmentCV)await this.GetRecruitmentCVBy_CVId(id);
+                var recruitmentCV = await _dbContext.RecruitmentCV
+                    .Include(prop => prop.Recruitment)
+                    .ThenInclude(prop => prop.Employer)
+                    .Include(props => props.CurriculumVitae)
+                    .ThenInclude(prop => prop.User)
+                    .Where(prop => prop.CurriculumVitae.Id == cvId && prop.RecruitmentId == recruitmentId).FirstOrDefaultAsync();
+                if (recruitmentCV == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
                 recruitmentCV.IsPass = !recruitmentCV.IsPass;
                 var result = _dbContext.RecruitmentCV.Update(recruitmentCV);
                 if (result.State.ToString() == "Modified")
@@ -372,6 +404,12 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
             {
                 var result = await _dbContext.RecruitmentCV
                     .Include(prop => prop.Recruitment)
+                    .Include(prop => prop.Recruitment.JobAddress)
+                    .Include(prop => prop.Recruitment.JobCareer)
+                    .Include(prop => prop.Recruitment.JobField)
+                    .Include(prop => prop.Recruitment.Experience)
+                    .Include(prop => prop.Recruitment.JobForm)
+                    .Include(prop => prop.Recruitment.JobPosition)
                     .Include(props => props.CurriculumVitae)
                     .ThenInclude(prop => prop.User)
                     .Where(prop => prop.CurriculumVitae.Id == cvId && prop.RecruitmentId == recruitmentId).FirstOrDefaultAsync();

@@ -219,6 +219,42 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                     throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
+                var updateExpired = await _dbContext.Recruitment.Where(prop => prop.Id == id)
+                    .Include(prop => prop.JobAddress)
+                    .Include(prop => prop.JobAddress.Province)
+                    .Include(prop => prop.JobPosition)
+                    .Include(prop => prop.JobForm)
+                    .Include(prop => prop.JobField)
+                    .Include(prop => prop.Experience)
+                    .Include(prop => prop.JobCareer)
+                    .Include(prop => prop.Employer)
+                    .FirstOrDefaultAsync();
+
+                if (updateExpired == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+
+                var isExpired = updateExpired.ApplicationDeadline < DateTime.Now;
+
+                if(isExpired)
+                {
+                    updateExpired.IsExpired = true;
+                    var update = _dbContext.Recruitment.Update(updateExpired);
+                    if (update.State.ToString() == "Modified")
+                    {
+                        int saveState = await _dbContext.SaveChangesAsync();
+                        if (saveState <= 0)
+                        {
+                            throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                        }
+                    }
+                    else
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình cập nhật dữ liệu");
+                    }
+                }
+
                 var result = await _dbContext.Recruitment.Where(prop => prop.Id == id)
                     .Include(prop => prop.JobAddress)
                     .Include(prop => prop.JobAddress.Province)
@@ -258,13 +294,16 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                         prop.Benefit,
                         prop.JobDescription,
                         prop.JobRequirement,
-                        prop.ApplicationDeadline
+                        prop.ApplicationDeadline,
+                        prop.IsExpired
                     })
                     .FirstOrDefaultAsync();
+
                 if (result == null)
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
+
                 return result;
             }
             catch (ExceptionModel e)
@@ -336,8 +375,8 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
-            var newrecruitment = _mapper.Map<Recruitment>(newRecruitmentVM);
-                newrecruitment.Employer = (Employer)user;
+                var newrecruitment = _mapper.Map<Recruitment>(newRecruitmentVM);
+                newrecruitment.Employer = (Employer) user;
                 newrecruitment.CreatedAt = DateTime.Now;
                 newrecruitment.IsExpired = newrecruitment.CreatedAt > newrecruitment.ApplicationDeadline;
                 //recruitment = newRecuitment;
@@ -362,6 +401,11 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
             {
                 throw new ExceptionModel(e.Code, e.Message);
             }
+        }
+
+        public Task<object> UpdateIsExpired(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
