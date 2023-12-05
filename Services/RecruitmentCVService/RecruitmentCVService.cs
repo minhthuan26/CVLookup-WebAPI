@@ -366,11 +366,45 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
             }
 
         }
+        public async Task<object> GetRecruitmentBy_CvId_And_RecruitmentId(string cvId, string recruitmentId)
+        {
+            try
+            {
+                var result = await _dbContext.RecruitmentCV
+                    .Include(prop => prop.Recruitment)
+                    .Include(props => props.CurriculumVitae)
+                    .ThenInclude(prop => prop.User)
+                    .Where(prop => prop.CurriculumVitae.Id == cvId && prop.RecruitmentId == recruitmentId).FirstOrDefaultAsync();
+
+                if (result == null)
+                {
+                    return result;
+                }
+                else
+                {
+                    return new
+                    {
+                        result.Recruitment,
+                        result.CurriculumVitae,
+                        result.IsPass,
+                        result.IsView,
+                        AppliedAt = result.AppliedAt.AsTimeAgo()
+                    };
+                }
+
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
         public async Task<object> GetRecruitmentBy_UserId_And_RecruitmentId(string userId, string recruitmentId)
         {
             try
             {
                 var result = await _dbContext.RecruitmentCV
+                    .Include(prop => prop.Recruitment)
                     .Include(props => props.CurriculumVitae)
                     .ThenInclude(prop => prop.User)
                     .Where(prop => prop.CurriculumVitae.User.Id == userId && prop.RecruitmentId == recruitmentId).FirstOrDefaultAsync();
