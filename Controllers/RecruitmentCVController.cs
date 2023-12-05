@@ -71,15 +71,15 @@ namespace CVLookup_WebAPI.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="cvId"></param>
         /// <param name="recruitmentId"></param>
         /// <returns></returns>
-		[HttpGet("get-by-user-and-recruitment-id")]
+		[HttpGet("get-by-cv-and-recruitment-id")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-		[AuthorizationAttribute("Admin", "Candidate")]
-		public async Task<IActionResult> GetRecruitmentCVBy_UserId_And_RecruitmentId([FromQuery] string userId, [FromQuery] string recruitmentId)
+		[AuthorizationAttribute("Admin", "Employer")]
+		public async Task<IActionResult> GetRecruitmentCVBy_CvId_And_RecruitmentId([FromQuery] string cvId, [FromQuery] string recruitmentId)
 		{
-			var recruitmentCV = await _recruitmentCVService.GetRecruitmentBy_UserId_And_RecruitmentId(userId, recruitmentId);
+			var recruitmentCV = await _recruitmentCVService.GetRecruitmentBy_CvId_And_RecruitmentId(cvId, recruitmentId);
 			return Ok(new ApiResponse
 			{
 				Success = true,
@@ -89,12 +89,33 @@ namespace CVLookup_WebAPI.Controllers
 			});
 		}
 
-		/// <summary>
-		/// Nộp CV ứng tuyển
-		/// </summary>
-		/// <param name="recruitmentCVVM"></param>
-		/// <returns></returns>
-		[HttpPost("apply-to-recruitment")]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cvId"></param>
+        /// <param name="recruitmentId"></param>
+        /// <returns></returns>
+		[HttpGet("get-by-user-and-recruitment-id")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [AuthorizationAttribute("Admin", "Candidate")]
+        public async Task<IActionResult> GetRecruitmentCVBy_UserId_And_RecruitmentId([FromQuery] string userId, [FromQuery] string recruitmentId)
+        {
+            var recruitmentCV = await _recruitmentCVService.GetRecruitmentBy_UserId_And_RecruitmentId(userId, recruitmentId);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = recruitmentCV
+            });
+        }
+
+        /// <summary>
+        /// Nộp CV ứng tuyển
+        /// </summary>
+        /// <param name="recruitmentCVVM"></param>
+        /// <returns></returns>
+        [HttpPost("apply-to-recruitment")]
 		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
 		[AuthorizationAttribute("Admin", "Candidate")]
 		public async Task<IActionResult> ApplyToRecruitment([FromBody] RecruitmentCVVM recruitmentCVVM)
@@ -110,16 +131,17 @@ namespace CVLookup_WebAPI.Controllers
         }
 
         /// <summary>
-        /// CẬp nhật trạng thái xem CV
+        /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="cvId"></param>
+        /// <param name="recruitmentId"></param>
         /// <returns></returns>
         [HttpPatch("update-isView")]
         [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
         [AuthorizationAttribute("Admin", "Employer")]
-        public async Task<IActionResult> UpdateIsView([FromQuery] string id)
+        public async Task<IActionResult> UpdateIsView([FromQuery] string cvId, [FromQuery] string recruitmentId)
         {
-            var newRecruitmentCV = await _recruitmentCVService.UpdateIsView(id);
+            var newRecruitmentCV = await _recruitmentCVService.UpdateIsView(cvId, recruitmentId);
             return Ok(new ApiResponse
             {
                 Success = true,
@@ -130,16 +152,17 @@ namespace CVLookup_WebAPI.Controllers
         }
 
         /// <summary>
-        /// Api dùng để chuyển đỗi trạng thái isPass
+        /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="cvId"></param>
+        /// <param name="recruitmentId"></param>
         /// <returns></returns>
         [HttpPatch("toggle-isPass")]
         [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
         [AuthorizationAttribute("Admin", "Employer")]
-        public async Task<IActionResult> ToggleIsPass([FromQuery] string id)
+        public async Task<IActionResult> ToggleIsPass([FromQuery] string cvId, [FromQuery] string recruitmentId)
         {
-            var newRecruitmentCV = await _recruitmentCVService.ToggleIsPass(id);
+            var newRecruitmentCV = await _recruitmentCVService.ToggleIsPass(cvId, recruitmentId);
             return Ok(new ApiResponse
             {
                 Success = true,
