@@ -15,5 +15,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
         public Task<Recruitment> Update(string Id, RecruitmentVM newRecruitment);
         public Task<Recruitment> Delete(string Id);
         public Task<object> UpdateIsExpired(string id);
+        public Task<List<Recruitment>> GetAllByEmployer();
     }
 }

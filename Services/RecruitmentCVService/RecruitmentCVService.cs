@@ -145,7 +145,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
             {
                 var result = await _dbContext.RecruitmentCV.Where(prop => prop.RecruitmentId == id)
                     .Include(prop => prop.CurriculumVitae)
-                    .Include(prop => prop.Recruitment)
+                    .Include(prop => prop.Recruitment).OrderBy(prop => prop.AppliedAt)
                     .ToListAsync();
 
                 if (result.Count == 0)
@@ -161,7 +161,8 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 
                 return new
                 {
-                    Recruitment = result[0].Recruitment,
+                    result[0].IsPass,
+                    result[0].Recruitment,
                     CurriculumVitaes = cvList
                 };
             }

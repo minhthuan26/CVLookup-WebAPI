@@ -147,5 +147,23 @@ namespace CVLookup_WebAPI.Controllers
             });
         }
 
+        /// <summary>
+        /// Lấy tất cả đơn tuyển dụng công việc theo nhà tuyển dụng
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get-all-recruitment-by-employer")]
+        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+        [AuthorizationAttribute("Admin", "Employer")]
+        public async Task<IActionResult> GetAllRecruitmentByEmployer()
+        {
+            var result = await _recruimentService.GetAllByEmployer();
+            return Ok(new ApiResponse
+            {
+                Code = StatusCodes.Status200OK,
+                Success = true,
+                Data = result,
+                Message = "Hoàn thành"
+            });
+        }
     }
 }
