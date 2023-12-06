@@ -3,14 +3,12 @@ using CVLookup_WebAPI.Middleware;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.RecruitmentService;
 using CVLookup_WebAPI.Utilities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
-    [AllowAnonymous]
     public class RecruitmentController : ControllerBase
     {
         private readonly IRecruitmentService _recruimentService;
@@ -29,25 +27,6 @@ namespace CVLookup_WebAPI.Controllers
         public async Task<IActionResult> GetAllRecruitment()
         {
             var result = await _recruimentService.RecruitmentList();
-            return Ok(new ApiResponse
-            {
-                Code = StatusCodes.Status200OK,
-                Success = true,
-                Data = result,
-                Message = "Hoàn thành"
-            });
-        }
-
-        /// <summary>
-        /// Lấy tất cả đơn tuyển dụng công việc theo nhà tuyển dụng
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("get-all-recruitment-by-employer")]
-        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-        [AuthorizationAttribute("Admin", "Employer")]
-        public async Task<IActionResult> GetAllRecruitmentByEmployer()
-        {
-            var result = await _recruimentService.GetAllByEmployer();
             return Ok(new ApiResponse
             {
                 Code = StatusCodes.Status200OK,
