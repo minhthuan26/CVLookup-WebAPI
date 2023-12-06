@@ -68,7 +68,11 @@ namespace CVLookup_WebAPI.Services.SignalRService
                     ConnectionId = connectionId,
                     UserId = userId
                 };
-
+                var oldConnection = await _dbContext.HubConnection.Where(prop => prop.UserId == userId).ToListAsync();
+                if (oldConnection.Count != 0)
+                {
+                    _dbContext.HubConnection.RemoveRange(oldConnection);
+                }
                 var result = await _dbContext.HubConnection.AddAsync(hubConnection);
                 if (result.State.ToString() == "Added")
                 {
