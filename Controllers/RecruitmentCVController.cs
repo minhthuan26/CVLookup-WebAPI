@@ -68,28 +68,9 @@ namespace CVLookup_WebAPI.Controllers
         }
 
 
-
-
         /// <summary>
-        /// Lấy thông tin RecruitmentCV theo CurriculumVitaeId
-        /// </summary>\
-        /// <param name="id">ID của CurriculumVitae</param>
-        /// <returns>Thông tin RecruitmentCV</returns>
-        [HttpGet("get-by-isPass")]
-        [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-        [AuthorizationAttribute("Admin", "Employer")]
-        public async Task<IActionResult> GetCVBy_IsPass([FromQuery] string id)
-        {
-            var recruitmentCV = await _recruitmentCVService.GetRecruitmentCVByIsPass(id);
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Code = StatusCodes.Status200OK,
-                Message = "Hoàn thành",
-                Data = recruitmentCV
-            });
-        }
-        
+        /// 
+        /// </summary>
         /// <param name="cvId"></param>
         /// <param name="recruitmentId"></param>
         /// <returns></returns>
@@ -251,7 +232,5 @@ namespace CVLookup_WebAPI.Controllers
                 Data = deletedRecruitmentCV 
             });
         }
-
-    
     }
 }
