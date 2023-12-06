@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
-using CVLookup_WebAPI.Services.AuthService;
 using CVLookup_WebAPI.Services.FileService;
-using CVLookup_WebAPI.Services.JwtService;
-using CVLookup_WebAPI.Services.RoleService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Specialized;
 
 namespace CVLookup_WebAPI.Services.UserService
 {
@@ -199,7 +195,7 @@ namespace CVLookup_WebAPI.Services.UserService
             }
         }
 
-        public async Task<User> GetUserById(string id)
+        public async Task<object> GetUserById(string id)
         {
             try
             {
