@@ -161,7 +161,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 
                 return new
                 {
-                    result[0].IsPass,
                     result[0].Recruitment,
                     CurriculumVitaes = cvList
                 };
@@ -464,6 +463,38 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
                     };
                 }
 
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+        public async Task<object> GetRecruitmentCVByIsPass(string id)
+        {
+            try
+            {
+                var result = await _dbContext.RecruitmentCV.Where(prop => prop.RecruitmentId == id && prop.IsPass == true)
+                    .Include(prop => prop.CurriculumVitae)
+                    .Include(prop => prop.Recruitment).OrderBy(prop => prop.AppliedAt)
+                    .ToListAsync();
+
+                if (result.Count == 0)
+                {
+                    return result;
+                }
+
+                List<CurriculumVitae> cvList = new();
+                foreach (var row in result)
+                {
+                    cvList.Add(row.CurriculumVitae);
+                }
+
+                return new
+                {
+                    result[0].Recruitment,
+                    CurriculumVitaes = cvList
+                };
             }
             catch (ExceptionModel e)
             {
