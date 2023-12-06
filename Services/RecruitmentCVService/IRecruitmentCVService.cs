@@ -14,6 +14,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 
         public Task<object> ReApplyCV(string recruitmentId, string userId, string cvId);
         public Task<RecruitmentCV> Delete(string recruitmentId, string curriculumVitaeId);
+        public Task<object> GetRecruitmentCVByIsPass(string id);
         public Task<object> GetRecruitmentBy_CvId_And_RecruitmentId (string cvId, string recruitmentId);
         public Task<object> GetRecruitmentBy_UserId_And_RecruitmentId(string userId, string recruitmentId);
     }

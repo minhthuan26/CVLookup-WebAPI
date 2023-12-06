@@ -33,6 +33,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                 recruitment.Employer = (Employer)user;
                 recruitment.CreatedAt = DateTime.Now;
                 recruitment.IsExpired = recruitment.CreatedAt > recruitment.ApplicationDeadline;
+                recruitment.ApplicationDeadline = recruitment.ApplicationDeadline.AddDays(1);
                 var result = await _dbContext.Recruitment.AddAsync(recruitment);
                 if (result.State.ToString() == "Added")
                 {
@@ -339,6 +340,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
         {
             try
             {
+                User currentUser = await _authService.GetCurrentLoginUser();
                 var recruitmentList = await _dbContext.Recruitment.Include(prop => prop.JobAddress)
                     .Include(prop => prop.JobAddress.Province)
                     .Include(prop => prop.JobPosition)
@@ -347,6 +349,26 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                     .Include(prop => prop.Experience)
                     .Include(prop => prop.JobCareer)
                     .Include(prop => prop.Employer).ToListAsync();
+                return recruitmentList;
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(500, e.Message);
+            }
+        }
+        public async Task<List<Recruitment>> GetAllByEmployer()
+        {
+            try
+            {
+                User currentUser = await _authService.GetCurrentLoginUser();
+                var recruitmentList = await _dbContext.Recruitment.Include(prop => prop.JobAddress)
+                    .Include(prop => prop.JobAddress.Province)
+                    .Include(prop => prop.JobPosition)
+                    .Include(prop => prop.JobForm)
+                    .Include(prop => prop.JobField)
+                    .Include(prop => prop.Experience)
+                    .Include(prop => prop.JobCareer)
+                    .Include(prop => prop.Employer).Where(prop => prop.Employer == currentUser).ToListAsync();
                 return recruitmentList;
             }
             catch (ExceptionModel e)
