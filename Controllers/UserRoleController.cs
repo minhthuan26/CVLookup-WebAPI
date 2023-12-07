@@ -28,6 +28,23 @@ namespace CVLookup_WebAPI.Controllers
             _userRoleService = userRoleService;
             _logger = logger;
         }
+        /// <summary>
+        /// Lấy thông tin UserRole theo role name
+        /// </summary>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
+        [HttpGet("get-by-role-name")]
+        public async Task<IActionResult> GetUserRoleByRoleName([FromQuery] string roleName)
+        {
+            var userRole = await _userRoleService.GetByRoleName(roleName);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = userRole
+            });
+        }
 
         /// <summary>
         /// Lấy thông tin UserRole theo UserId
@@ -101,5 +118,7 @@ namespace CVLookup_WebAPI.Controllers
                 Data = deletedUserRole
             });
         }
+
+       
     }
 }

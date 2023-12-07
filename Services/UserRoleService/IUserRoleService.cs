@@ -11,5 +11,7 @@ namespace CVLookup_WebAPI.Services.UserRoleService
         public Task<UserRole> Add(UserRoleVM userRole);
         public Task<UserRole> Update(string Id, UserRoleVM newUserRole);
         public Task<UserRole> Delete(string userId, string roleId);
+        public Task<List<UserRole>> GetByRoleName(string roleName);
+
     }
 }

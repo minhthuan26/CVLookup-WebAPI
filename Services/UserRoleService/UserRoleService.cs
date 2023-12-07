@@ -7,20 +7,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CVLookup_WebAPI.Services.UserRoleService
 {
-	public class UserRoleService : IUserRoleService
-	{
-		private readonly AppDBContext _dbContext;
+    public class UserRoleService : IUserRoleService
+    {
+        private readonly AppDBContext _dbContext;
         private readonly IMapper _mapper;
 
         public UserRoleService(AppDBContext dbContext, IMapper mapper)
         {
-			_dbContext = dbContext; 
+            _dbContext = dbContext;
             _mapper = mapper;
 
         }
 
         public async Task<UserRole> Add(UserRoleVM userRoleVM)
-		{
+        {
             try
             {
                 var userRole = _mapper.Map<UserRole>(userRoleVM);
@@ -46,16 +46,16 @@ namespace CVLookup_WebAPI.Services.UserRoleService
             }
         }
 
-		public async Task<UserRole> Delete(string roleId, string userId)
-		{
+        public async Task<UserRole> Delete(string roleId, string userId)
+        {
             try
             {
-                if (roleId == null || userId==null)
+                if (roleId == null || userId == null)
                 {
                     throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
                 }
 
-                var userRole = await _dbContext.UserRole.Where(prop => prop.UserId == userId && prop.RoleId==roleId).FirstOrDefaultAsync();
+                var userRole = await _dbContext.UserRole.Where(prop => prop.UserId == userId && prop.RoleId == roleId).FirstOrDefaultAsync();
                 if (userRole == null)
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
@@ -83,51 +83,73 @@ namespace CVLookup_WebAPI.Services.UserRoleService
             }
         }
 
-		public async Task<UserRole> GetByUserId(string userId)
-		{
-			try
-			{
-				var result = await _dbContext.UserRole.Where(prop => prop.UserId == userId)
-					.Include(prop => prop.User)
+        public async Task<UserRole> GetByUserId(string userId)
+        {
+            try
+            {
+                var result = await _dbContext.UserRole.Where(prop => prop.UserId == userId)
+                    .Include(prop => prop.User)
                     .Include(prop => prop.Role)
                     .FirstOrDefaultAsync();
-				if (result == null)
-				{
-					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
-				}
-				return result;
-			}
-			catch (ExceptionModel e)
-			{
-				throw new ExceptionModel(e.Code, e.Message);
-			}
-		}
+                if (result == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                return result;
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
 
-		public async Task<UserRole> GetByRoleId(string roleId)
-		{
-			try
-			{
-				var result = await _dbContext.UserRole.Where(prop => prop.RoleId == roleId).Include(prop => prop.User).FirstOrDefaultAsync();
-				if (result == null)
-				{
-					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
-				}
-				return result;
-			}
-			catch (ExceptionModel e)
-			{
-				throw new ExceptionModel(e.Code, e.Message);
-			}
-		}
+        public async Task<UserRole> GetByRoleId(string roleId)
+        {
+            try
+            {
+                var result = await _dbContext.UserRole.Where(prop => prop.RoleId == roleId).Include(prop => prop.User).FirstOrDefaultAsync();
+                if (result == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                return result;
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
 
-		public Task<UserRole> Update(string Id, UserRoleVM newUserRole)
-		{
-			throw new NotImplementedException();
-		}
 
-		public Task<List<UserRole>> UserRoleList()
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public async Task<List<UserRole>> GetByRoleName(string roleName)
+        {
+            try
+            {
+                var result = await _dbContext.UserRole.Where(prop => prop.Role.RoleName == roleName)
+                    .Include(prop => prop.User)
+                    .Include(prop => prop.Role)
+                    .ToListAsync();
+                if (result == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                return result;
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+
+        public Task<UserRole> Update(string Id, UserRoleVM newUserRole)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<UserRole>> UserRoleList()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

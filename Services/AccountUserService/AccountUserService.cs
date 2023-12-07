@@ -2,6 +2,7 @@
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AccountService;
+using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Services.UserService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
@@ -12,12 +13,22 @@ namespace CVLookup_WebAPI.Services.AccountUserService
     public class AccountUserService : IAccountUserService
     {
         private readonly AppDBContext _dbContext;
+        private readonly IUserRoleService _userRoleService;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly IAccountService _accountService;
 
-        public AccountUserService(AppDBContext dbContext, IMapper mapper)
+        public AccountUserService(AppDBContext dbContext,
+                                    IMapper mapper,
+                                    IUserRoleService userRoleService,
+                                    IUserService userService,
+                                    IAccountService accountService)
         {
             _dbContext = dbContext;
+            _userRoleService = userRoleService;
             _mapper = mapper;
+            _userService = userService;
+            _accountService = accountService;
         }
 
         public async Task<List<AccountUser>> AccountUserList()
@@ -39,6 +50,41 @@ namespace CVLookup_WebAPI.Services.AccountUserService
                 throw new ExceptionModel(e.Code, e.Message);
             }
         }
+        public async Task<List<AccountUser>> GetAccountUser_By_RoleName(string roleName)
+        {
+            try
+            {
+                var userRoles = await _userRoleService.GetByRoleName(roleName);
+
+                var allAccountUsers = await _dbContext.AccountUser
+                    .Include(au => au.Account)
+                    .Include(au => au.User)
+                    .ToListAsync();
+
+                var filteredAccountUsers = allAccountUsers
+                    .Where(au => userRoles.Any(ur => ur.UserId == au.UserId))
+                    .ToList();
+
+                if (filteredAccountUsers == null || filteredAccountUsers.Count == 0)
+                {
+                    throw new ExceptionModel(404, "Không tìm thấy dữ liệu.");
+                }
+                foreach (var accountUser in filteredAccountUsers)
+                {
+                    if (accountUser.User != null && accountUser.User.Avatar != null)
+                    {
+                        accountUser.User.Avatar = Convert.ToBase64String(File.ReadAllBytes(accountUser.User.Avatar));
+                    }
+                }
+                return filteredAccountUsers;
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
+
+
 
         public async Task<AccountUser> Add(AccountUserVM accountUserVM)
         {
@@ -90,6 +136,7 @@ namespace CVLookup_WebAPI.Services.AccountUserService
                 }
 
                 var result = _dbContext.AccountUser.Remove(accountUser);
+
                 if (result.State.ToString() == "Deleted")
                 {
                     var saveState = await _dbContext.SaveChangesAsync();
@@ -97,6 +144,8 @@ namespace CVLookup_WebAPI.Services.AccountUserService
                     {
                         throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
                     }
+                    await _userService.Delete(userId);
+                    await _accountService.Delete(accountId);
                     return accountUser;
                 }
                 else
@@ -132,7 +181,19 @@ namespace CVLookup_WebAPI.Services.AccountUserService
         {
             try
             {
-                var result = await _dbContext.AccountUser.Where(prop => prop.UserId == userId).FirstOrDefaultAsync();
+                if (userId==null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                var result = await _dbContext.AccountUser.Include(prop=>prop.User)
+                                                        .Include(prop=>prop.Account)                 
+                                                        .Where(prop => prop.UserId == userId).FirstOrDefaultAsync();
+
+                if (result.User.Avatar!=null)
+                {
+                    result.User.Avatar = Convert.ToBase64String(File.ReadAllBytes(result?.User?.Avatar));
+
+                }
                 if (result == null)
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
