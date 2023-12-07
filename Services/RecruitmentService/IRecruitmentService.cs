@@ -7,8 +7,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
     public interface IRecruitmentService
     {
         public Task<List<Recruitment>> RecruitmentList();
-        public Task<List<Recruitment>> GetAllByEmployer();
-
         public Task<object> GetRecruitment(Filter filter);
 		public Task<object> GetRecruitmentById(string id);
 		public Task<List<Recruitment>> GetRecruitmentsByTitle(string title);
@@ -17,5 +15,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
         public Task<Recruitment> Update(string Id, RecruitmentVM newRecruitment);
         public Task<Recruitment> Delete(string Id);
         public Task<object> UpdateIsExpired(string id);
+        public Task<List<Recruitment>> GetAllByEmployer();
     }
 }
