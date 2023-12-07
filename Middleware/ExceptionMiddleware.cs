@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using CVLookup_WebAPI.Utilities;
-using Org.BouncyCastle.Asn1.X509.Qualified;
-using System;
-using System.Data;
+﻿using CVLookup_WebAPI.Utilities;
+
 
 namespace CVLookup_WebAPI.Middleware
 {
