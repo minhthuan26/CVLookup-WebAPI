@@ -305,7 +305,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
         {
             try
             {
-                User currentUser = await _authService.GetCurrentLoginUser();
                 var recruitmentList = await _dbContext.Recruitment.Include(prop => prop.JobAddress)
                     .Include(prop => prop.JobAddress.Province)
                     .Include(prop => prop.JobPosition)
@@ -314,6 +313,22 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                     .Include(prop => prop.Experience)
                     .Include(prop => prop.JobCareer)
                     .Include(prop => prop.Employer).ToListAsync();
+
+                var employerAvatarConverted = new Dictionary<string, bool>();
+
+                foreach (var recruitment in recruitmentList)
+                {
+                    if (recruitment.Employer != null && recruitment.Employer.Avatar != null)
+                    {
+                        if (!employerAvatarConverted.ContainsKey(recruitment.Employer.Id) || !employerAvatarConverted[recruitment.Employer.Id])
+                        {
+                            recruitment.Employer.Avatar = Convert.ToBase64String(File.ReadAllBytes(recruitment.Employer.Avatar));
+
+                            employerAvatarConverted[recruitment.Employer.Id] = true;
+                        }
+                    }
+                }
+
                 return recruitmentList;
             }
             catch (ExceptionModel e)

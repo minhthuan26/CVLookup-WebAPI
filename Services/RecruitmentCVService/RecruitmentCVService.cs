@@ -254,9 +254,9 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 			}
 		}
 
-		public async Task<object> ReAppplyCV(string recruitmentId, string userId, string cvId)
-		{
-			IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
+        public async Task<object> ReApplyCV(string recruitmentId, string userId, string cvId)
+        {
+            IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
 			try
 			{
 				var recruitment = await _dbContext.RecruitmentCV
@@ -350,6 +350,7 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
 			}
 
 		}
-	}
+
+    }
 }
 
