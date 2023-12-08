@@ -10,8 +10,6 @@ namespace CVLookup_WebAPI.Controllers
 {
     [Route("api/v1/[controller]/")]
     [ApiController]
-    [MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
-    [AuthorizationAttribute("Admin")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -173,7 +171,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="candidate"></param>
         /// <returns></returns>
         [HttpPatch("update-candidate")]
-        public async Task<IActionResult> UpdateCandidate([FromQuery] string id, [FromBody] CandidateVM candidate)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin", "Candidate")]
+		public async Task<IActionResult> UpdateCandidate([FromQuery] string id, [FromForm] CandidateVM candidate)
         {
             var result = await _userService.UpdateCandidate(id, candidate);
             return Ok(new ApiResponse
@@ -192,7 +192,9 @@ namespace CVLookup_WebAPI.Controllers
         /// <param name="employer"></param>
         /// <returns></returns>
         [HttpPatch("update-employer")]
-        public async Task<IActionResult> UpdateEmployer([FromQuery] string id, [FromBody] EmployerVM employer)
+		[MiddlewareFilter(typeof(AuthMiddlewareBuilder))]
+		[AuthorizationAttribute("Admin", "Employer")]
+		public async Task<IActionResult> UpdateEmployer([FromQuery] string id, [FromForm] EmployerVM employer)
         {
             var result = await _userService.UpdateEmployer(id, employer);
             return Ok(new ApiResponse

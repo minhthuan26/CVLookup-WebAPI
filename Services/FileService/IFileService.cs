@@ -7,5 +7,6 @@ namespace CVLookup_WebAPI.Services.FileService
     {
         public Task<string> UploadFile(IFormFile file, string uploadPath);
         public Task<FileDownload> DownloadFile(string filename);
+        public Task DeleteFile(string filePath);
     }
 }

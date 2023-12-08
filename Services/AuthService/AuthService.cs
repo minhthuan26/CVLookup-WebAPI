@@ -99,12 +99,13 @@ namespace CVLookup_WebAPI.Services.AuthService
 						var currentUser = await _userService.GetUserById(accountUser.UserId);
 						var authReturn = new
 						{
-							accessToken = accessToken,
-							refreshToken = refreshToken,
+							accessToken,
+							refreshToken,
 							user = currentUser,
 							accountId = account.Id,
-							role = userRole.Role.RoleName
-						};
+							role = userRole.Role.RoleName,
+							avatarBase64 = ((User)currentUser).Avatar != null ? Convert.ToBase64String(File.ReadAllBytes(((User)currentUser).Avatar)) : null
+                        };
 
 						var oldRefreshInDB = await _tokenService.GetTokenById(userRole.UserId, accountUser.AccountId);
 
@@ -480,7 +481,7 @@ namespace CVLookup_WebAPI.Services.AuthService
 				}
 				var user = await _userService.GetUserById((string)claims["userId"]);
 
-				return user;
+				return (User)user;
 			}
 			catch (ExceptionModel e)
 			{

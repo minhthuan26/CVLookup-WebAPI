@@ -6,6 +6,21 @@ namespace CVLookup_WebAPI.Services.FileService
 {
 	public class FileService : IFileService
 	{
+		public async Task DeleteFile(string filePath)
+		{
+			try
+			{
+				if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), filePath)))
+				{
+					File.Delete(Path.Combine(Directory.GetCurrentDirectory(), filePath));
+				}
+				
+			} catch(ExceptionModel e)
+			{
+				throw new ExceptionModel(e.Code, e.Message);
+			}
+		}
+
 		public async Task<FileDownload> DownloadFile(string filePath)
 		{
 			try
