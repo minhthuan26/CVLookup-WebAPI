@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVLookup_WebAPI.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20231129101413_InitDB_and_SeedData")]
+    [Migration("20231208104050_InitDB_and_SeedData")]
     partial class InitDB_and_SeedData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,31 +59,31 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f2c45b04-9bec-4296-b76c-7d15bd5b45a9",
+                            Id = "2bb35655-1118-477e-b4c0-64263fe98e47",
                             Actived = true,
                             ActivedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "cvlookup.sgu.2023@gmail.com",
-                            IssuedAt = new DateTime(2023, 11, 29, 17, 14, 12, 887, DateTimeKind.Local).AddTicks(7527),
+                            IssuedAt = new DateTime(2023, 12, 8, 17, 40, 48, 518, DateTimeKind.Local).AddTicks(5779),
                             Password = "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = "a58fa60e-2978-49c7-926d-c62fa9dabb1b",
+                            Id = "07b60274-35f5-4179-8e06-4132cc4fe1bf",
                             Actived = true,
                             ActivedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "cvlookup.sgu.2023_employer@gmail.com",
-                            IssuedAt = new DateTime(2023, 11, 29, 17, 14, 12, 887, DateTimeKind.Local).AddTicks(7540),
+                            IssuedAt = new DateTime(2023, 12, 8, 17, 40, 48, 518, DateTimeKind.Local).AddTicks(5847),
                             Password = "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = "cf10c7b2-13a3-4307-875e-bb3d901bee9d",
+                            Id = "4d2df3b3-b06e-4a8e-a84a-d2e6515d0d2a",
                             Actived = true,
                             ActivedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "cvlookup.sgu.2023_candidate@gmail.com",
-                            IssuedAt = new DateTime(2023, 11, 29, 17, 14, 12, 887, DateTimeKind.Local).AddTicks(7547),
+                            IssuedAt = new DateTime(2023, 12, 8, 17, 40, 48, 518, DateTimeKind.Local).AddTicks(5863),
                             Password = "4EvS5r40usEAzXH5nw6YyjfVVpQdHt7K+e7DBWXhKPKdrduCQ6W3M3Ala03/Tw8kFhLEGxHwealuxejQLZqg0y4nsngohze7rnldfpPHQ1Y=",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -106,18 +106,18 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            AccountId = "f2c45b04-9bec-4296-b76c-7d15bd5b45a9",
-                            UserId = "a668be26-29c9-4653-a601-5faf023b5d73"
+                            AccountId = "2bb35655-1118-477e-b4c0-64263fe98e47",
+                            UserId = "39a29e9f-5c55-4c19-bc37-d9558dc353c7"
                         },
                         new
                         {
-                            AccountId = "a58fa60e-2978-49c7-926d-c62fa9dabb1b",
-                            UserId = "f4c6aaf7-efd3-4905-859b-cb2f33c2e476"
+                            AccountId = "07b60274-35f5-4179-8e06-4132cc4fe1bf",
+                            UserId = "f600fa3f-a9af-4995-9d31-4f4646e636a4"
                         },
                         new
                         {
-                            AccountId = "cf10c7b2-13a3-4307-875e-bb3d901bee9d",
-                            UserId = "e0c47a58-7731-4f26-8ff9-2b899b3019bc"
+                            AccountId = "4d2df3b3-b06e-4a8e-a84a-d2e6515d0d2a",
+                            UserId = "85bf9cae-46cd-41d8-b545-8da6f9dd8f9a"
                         });
                 });
 
@@ -181,327 +181,327 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "474e5b08-48eb-48bf-bae7-3c212da730f4",
+                            Id = "a781ccac-c68a-4618-90a8-4a0b5c6506b3",
                             Name = "Tất cả",
-                            ProvinceId = "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed"
+                            ProvinceId = "a3d31502-7b6c-4b94-bdc6-19aba96e36ec"
                         },
                         new
                         {
-                            Id = "7a637600-1295-4964-a042-59b0efa67f90",
+                            Id = "7813c8f6-253c-42e9-b013-c0b3ce32f929",
                             Name = "Quận Ninh Kiều",
-                            ProvinceId = "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed"
+                            ProvinceId = "a3d31502-7b6c-4b94-bdc6-19aba96e36ec"
                         },
                         new
                         {
-                            Id = "c153c81c-f254-438c-83be-7c87d7f4c700",
+                            Id = "bfda2a34-81da-440f-ad4a-e85e57dd4450",
                             Name = "Quận Bình Thuỷ",
-                            ProvinceId = "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed"
+                            ProvinceId = "a3d31502-7b6c-4b94-bdc6-19aba96e36ec"
                         },
                         new
                         {
-                            Id = "d817db7e-0e5b-49d3-a55c-d31a1095d6c1",
+                            Id = "ae339b02-af8c-42bf-afd1-e31e9cadc325",
                             Name = "Quận Cái Răng",
-                            ProvinceId = "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed"
+                            ProvinceId = "a3d31502-7b6c-4b94-bdc6-19aba96e36ec"
                         },
                         new
                         {
-                            Id = "c4556d30-01a7-4c23-b93e-4b37373e289a",
+                            Id = "3b7444da-aa9c-4bca-95df-966f54bf8512",
                             Name = "Quận Thốt Nốt",
-                            ProvinceId = "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed"
+                            ProvinceId = "a3d31502-7b6c-4b94-bdc6-19aba96e36ec"
                         },
                         new
                         {
-                            Id = "db9ca9f8-6325-48d2-97c2-5a38c5e8eb6b",
+                            Id = "bfa3923e-bb28-4947-93b5-d12a76baea29",
                             Name = "Quận Ô Môn",
-                            ProvinceId = "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed"
+                            ProvinceId = "a3d31502-7b6c-4b94-bdc6-19aba96e36ec"
                         },
                         new
                         {
-                            Id = "dfebbafd-a2f4-49c4-928f-f7900dc5329a",
+                            Id = "0fe79213-80c4-4afc-b1b6-27fd96aab468",
                             Name = "Tất cả",
-                            ProvinceId = "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8"
+                            ProvinceId = "783e6571-3c77-4d8f-a1c1-8bc6b4559213"
                         },
                         new
                         {
-                            Id = "3729cdb9-2361-4b55-a8f7-f9c1288c85c1",
+                            Id = "cf7626cd-a1cb-4e01-a3f5-4753c01a6e4d",
                             Name = "Quận Liên Chiểu",
-                            ProvinceId = "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8"
+                            ProvinceId = "783e6571-3c77-4d8f-a1c1-8bc6b4559213"
                         },
                         new
                         {
-                            Id = "771d2328-956e-48af-bb23-3df216e50d54",
+                            Id = "6353c89e-ecb2-4c5c-8e76-d60553e7016d",
                             Name = "Quận Thanh Khê",
-                            ProvinceId = "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8"
+                            ProvinceId = "783e6571-3c77-4d8f-a1c1-8bc6b4559213"
                         },
                         new
                         {
-                            Id = "e56f31e5-76d6-4a3b-bd96-4dc189b7c8e7",
+                            Id = "5b820163-8fe1-4f3b-9775-bcdd08fac856",
                             Name = "Quận Hải Châu",
-                            ProvinceId = "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8"
+                            ProvinceId = "783e6571-3c77-4d8f-a1c1-8bc6b4559213"
                         },
                         new
                         {
-                            Id = "7b97df54-b2a0-48e0-a93b-d6407bf19cb0",
+                            Id = "ca3bc354-c2c2-4f19-9c56-81a55adec6b2",
                             Name = "Quận Sơn Trà",
-                            ProvinceId = "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8"
+                            ProvinceId = "783e6571-3c77-4d8f-a1c1-8bc6b4559213"
                         },
                         new
                         {
-                            Id = "5f7e7425-482b-4b67-9498-1633f1f7b27b",
+                            Id = "081025ad-7622-4186-bf19-2673048d9adc",
                             Name = "Quận Ngũ Hành Sơn",
-                            ProvinceId = "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8"
+                            ProvinceId = "783e6571-3c77-4d8f-a1c1-8bc6b4559213"
                         },
                         new
                         {
-                            Id = "eb55a600-539a-42ba-a139-6c89442fe89e",
+                            Id = "d91bfb69-3482-4068-9284-11dd0a514091",
                             Name = "Quận Cẩm Lệ",
-                            ProvinceId = "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8"
+                            ProvinceId = "783e6571-3c77-4d8f-a1c1-8bc6b4559213"
                         },
                         new
                         {
-                            Id = "ff0a0d98-c392-4c04-ac0d-cb313f84569a",
+                            Id = "35273eaf-dc1d-47b9-8aed-19164b3b9b98",
                             Name = "Tất cả",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "c311b47d-251a-4047-80be-f3be75312826",
+                            Id = "dbccfcc8-6267-43ef-921a-a05ebd75c124",
                             Name = "Quận Ba Đình",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "a06e16e3-e294-4a97-b4a5-8cab03f36ea9",
+                            Id = "6901a1f9-ade1-431e-9516-4840c1bfdfa4",
                             Name = "Quận Hoàn Kiếm",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "026a6f54-f106-4501-bac7-80737ae1d4c5",
+                            Id = "2d9aa52d-616a-4a32-86cc-a4e366469ab5",
                             Name = "Quận Tây Hồ",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "c8456d7c-62e9-464c-83a6-b76a60e7fc86",
+                            Id = "3acd89b7-1129-4d81-b5dc-1588ed6e06c5",
                             Name = "Quận Long Biên",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "0f2ac003-70dd-447e-aeb3-32caf5152f20",
+                            Id = "59523a8a-7436-495d-8022-e2febca1f02a",
                             Name = "Quận Cầu Giấy",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "cfd87279-7a51-4741-9da5-7370913efe11",
+                            Id = "455b03d7-a24a-447d-a371-8900841954ed",
                             Name = "Quận Đống Đa",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "ba1c0460-bf4e-44be-be13-a93c0b63bb5a",
+                            Id = "73420251-f1ee-467d-b068-6d30ef9a96ef",
                             Name = "Quận Hai Bà Trưng",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "0c0a725d-1f40-4949-bb10-7322649c7791",
+                            Id = "709f8eaa-6384-4e9a-9a79-a1ca8875a45e",
                             Name = "Quận Hoàng Mai",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "a048e95f-0363-42eb-974e-0294a30341d6",
+                            Id = "992cd3b8-841c-40cd-87f4-a20d3f8a9186",
                             Name = "Quận Thanh Xuân",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "23410ceb-bc05-48c3-9ac4-ba4cefa35632",
+                            Id = "126fd77e-4945-4dc1-ab1b-8ef4cee29286",
                             Name = "Quận Nam Từ Liêm",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "21a5c094-8784-4d24-a971-7680ca5d7b25",
+                            Id = "f30f87c5-fda4-4e52-8233-fdf77fb03d23",
                             Name = "Quận Bắc Từ Liêm",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "8c5aeaf6-1842-4a73-ad33-f6a6794696ec",
+                            Id = "2409cb96-3dc1-46da-a6c1-f9b28f73078c",
                             Name = "Quận Hà Đông",
-                            ProvinceId = "0f825303-629c-485a-b9ed-c4d209fce825"
+                            ProvinceId = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c"
                         },
                         new
                         {
-                            Id = "9781e632-6fd7-415f-b4e7-0a34a1d37372",
+                            Id = "68a7178e-e826-42cb-ac76-16bd9446f5bc",
                             Name = "Tất cả",
-                            ProvinceId = "26fcc20d-7719-405b-963e-9b68fa39f239"
+                            ProvinceId = "0221d295-c1e7-4a68-9f27-6d221d11e719"
                         },
                         new
                         {
-                            Id = "a5b7ff19-f454-4b2a-b5a7-669359745029",
+                            Id = "964d82c1-9249-4e6b-9692-0aa959d371c2",
                             Name = "Quận Hồng Bàng",
-                            ProvinceId = "26fcc20d-7719-405b-963e-9b68fa39f239"
+                            ProvinceId = "0221d295-c1e7-4a68-9f27-6d221d11e719"
                         },
                         new
                         {
-                            Id = "84c1fcd2-c60d-462d-92f7-2dc85ace5e0c",
+                            Id = "7afa6954-4bf6-4ab7-815c-13d3c973c777",
                             Name = "Quận Ngô Quyền",
-                            ProvinceId = "26fcc20d-7719-405b-963e-9b68fa39f239"
+                            ProvinceId = "0221d295-c1e7-4a68-9f27-6d221d11e719"
                         },
                         new
                         {
-                            Id = "76ff1ef9-f688-491d-aa4a-a1e800de92b2",
+                            Id = "75efcc57-23a7-4ebf-9bb1-e6647fdfe2a8",
                             Name = "Quận Lê Chân",
-                            ProvinceId = "26fcc20d-7719-405b-963e-9b68fa39f239"
+                            ProvinceId = "0221d295-c1e7-4a68-9f27-6d221d11e719"
                         },
                         new
                         {
-                            Id = "7ca7140a-7410-4f86-b8f5-1a5e940bca9c",
+                            Id = "6a70ea64-0d72-4b57-9cc0-db61701d793e",
                             Name = "Quận Hải An",
-                            ProvinceId = "26fcc20d-7719-405b-963e-9b68fa39f239"
+                            ProvinceId = "0221d295-c1e7-4a68-9f27-6d221d11e719"
                         },
                         new
                         {
-                            Id = "3606ff8d-f9dd-44ac-845c-0c5a8292a8a8",
+                            Id = "0ef9c822-219c-4f50-a7c9-f1d3c3954316",
                             Name = "Quận Kiến An",
-                            ProvinceId = "26fcc20d-7719-405b-963e-9b68fa39f239"
+                            ProvinceId = "0221d295-c1e7-4a68-9f27-6d221d11e719"
                         },
                         new
                         {
-                            Id = "f7eaff30-d110-4ebb-907e-05bf8497c5c2",
+                            Id = "12bd7b26-5b0c-40a0-b34f-a5188617c98a",
                             Name = "Quận Đồ Sơn",
-                            ProvinceId = "26fcc20d-7719-405b-963e-9b68fa39f239"
+                            ProvinceId = "0221d295-c1e7-4a68-9f27-6d221d11e719"
                         },
                         new
                         {
-                            Id = "ef419af0-ee2d-494d-89cc-8846f53121fd",
+                            Id = "53060f9c-a3ad-4b56-a50c-891350d6d17e",
                             Name = "Quận Dương Kinh",
-                            ProvinceId = "26fcc20d-7719-405b-963e-9b68fa39f239"
+                            ProvinceId = "0221d295-c1e7-4a68-9f27-6d221d11e719"
                         },
                         new
                         {
-                            Id = "6291821c-b8b8-44d7-bc05-c1f76250a45a",
+                            Id = "48102b36-e5e4-4879-85f6-968eba74bb9e",
                             Name = "Tất cả",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "9e0b36f4-41aa-495f-8d74-8ac6e4117beb",
+                            Id = "a33c2465-dddc-4aca-a3c0-022f6bcec02b",
                             Name = "Quận 1",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "cb153c34-7edb-4419-bb5f-8c9805c4070e",
+                            Id = "2c8dc9d5-2016-4018-8ba0-4bfb7190196a",
                             Name = "Quận 2",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "ec543696-b991-4bdc-8dc8-be84885fce1f",
+                            Id = "2c9126e4-02de-4f35-a83e-7857b245c222",
                             Name = "Quận 3",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "bd1882f7-ab0a-4d48-8579-62d6d143de98",
+                            Id = "60224ffd-850d-4ce5-b25e-45666b2486d1",
                             Name = "Quận 4",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "8ae94861-ba01-4285-8ac4-ebd8fd68eae3",
+                            Id = "07c15a3e-390c-453d-8d1e-b218b7c532d7",
                             Name = "Quận 5",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "37dc9eb7-6400-4e8f-8f13-aa982fa97f27",
+                            Id = "cbda43a3-0c08-4c35-b5ff-92c1bdb51483",
                             Name = "Quận 6",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "61d0fad5-4b42-4344-9ad8-8fd7e0f53b97",
+                            Id = "80f830c1-f32c-4fbe-b275-e8a82ec54def",
                             Name = "Quận 7",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "ea055f4b-4a85-4c3a-a801-db50b18b6d11",
+                            Id = "042346ed-8df3-40e9-9056-444ac0a9659f",
                             Name = "Quận 8",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "c3cbffa1-fb88-4761-9688-6102d37cd014",
+                            Id = "573d4775-0db0-4089-98bd-92883a0815c0",
                             Name = "Quận 9",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "1b896913-5e7d-4375-8c81-49e8086f53df",
+                            Id = "dacb65dd-8f38-4b28-aa15-53b382f9b345",
                             Name = "Quận 10",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "95464e1a-fe23-4d92-9b60-9927c4da1826",
+                            Id = "0f0f4b59-6557-4785-8d8c-e1353a417a41",
                             Name = "Quận 11",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "2407872f-d053-4802-9dca-a251995748ab",
+                            Id = "63a3fc70-5b78-46cc-911c-87ec462ea7f2",
                             Name = "Quận 12",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "a2a34d97-41ba-4a51-bc91-418c72742079",
+                            Id = "811932e1-86af-425c-ae10-d2797e8ab2df",
                             Name = "Quận Gò Vấp",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "b8bcf9aa-5900-4294-ac6a-8c1654118152",
+                            Id = "54d0b3f0-61c4-4ffa-9558-a88378a73787",
                             Name = "Quận Bình Thạnh",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "a05cb0cb-d331-47ad-9450-5fe37e327103",
+                            Id = "ec5b5301-0d26-4220-a89f-eb386001d006",
                             Name = "Quận Tân Bình",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "77dd1540-84fa-4275-8016-353df65f5889",
+                            Id = "61e7f591-9148-4bf9-a410-76bb07274206",
                             Name = "Quận Tân Phú",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "8355d50d-9201-4b00-87d3-2067154714e3",
+                            Id = "1ad35006-aae4-4760-9ce9-7b637da3437c",
                             Name = "Quận Phú Nhuận",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "97a3e7a2-ea86-4f30-8484-8e61ea147cca",
+                            Id = "9bc3a50d-d7e7-4b1f-8a4b-7164fa570d1c",
                             Name = "Quận Thủ Đức",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         },
                         new
                         {
-                            Id = "25f0ae60-aefe-4f7a-b8ef-84c5e0f1b41f",
+                            Id = "43ca3397-5123-489e-b703-79095979a0a8",
                             Name = "Quận Bình Tân",
-                            ProvinceId = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def"
+                            ProvinceId = "c3fb6918-ee12-4ba4-8299-74674fe59b19"
                         });
                 });
 
@@ -521,42 +521,42 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "21db5902-23c1-4c88-aee8-7aeecd49696e",
+                            Id = "3b61250c-2259-4fbe-841b-9d45811a3cdb",
                             Exp = "Tất cả kinh nghiệm"
                         },
                         new
                         {
-                            Id = "a69c815b-c4f9-4e12-8a01-53211d453bbd",
+                            Id = "5ff176ac-abab-47e6-ac59-5da28984ccd7",
                             Exp = "Chưa có kinh nghiệm"
                         },
                         new
                         {
-                            Id = "5c4369e8-15ed-44c2-9b92-5bec15544433",
+                            Id = "2a24408b-6a0b-4afa-8b30-d9d0d4d4017b",
                             Exp = "Dưới 1 năm"
                         },
                         new
                         {
-                            Id = "7d9f3311-f959-4c5f-9f6b-feeafee3258a",
+                            Id = "bc687070-a77d-4017-8495-ed8f5a30d59e",
                             Exp = "Từ 1-2 năm"
                         },
                         new
                         {
-                            Id = "4fe1041c-c8a2-4b40-905f-3d3940d9465a",
+                            Id = "1f5b6a87-4283-4739-995e-2a42d65dfed1",
                             Exp = "Từ 2-3 năm"
                         },
                         new
                         {
-                            Id = "ab639afd-5def-4fc4-af63-a29bfbc177f7",
+                            Id = "3d766ce7-6ca5-48b3-bb8b-05d92a0ebdfc",
                             Exp = "Từ 3-5 năm"
                         },
                         new
                         {
-                            Id = "13ca4404-dd37-47a4-b075-eae11cb93181",
+                            Id = "7ef908dd-7ba8-4394-8da0-abfe29c8cc6c",
                             Exp = "Từ 5-10 năm"
                         },
                         new
                         {
-                            Id = "38615614-adf1-413e-9c7c-4c20b3040a83",
+                            Id = "8c882c4b-231c-428b-a667-48785db74829",
                             Exp = "Trên 10 năm"
                         });
                 });
@@ -618,342 +618,342 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2050e3fc-13ce-4169-942d-d9f34925aa45",
+                            Id = "b16f3be3-7af6-486d-85f0-915e03237939",
                             Career = "Tất cả ngành nghề"
                         },
                         new
                         {
-                            Id = "29db79be-f4a7-4799-86bd-a5c7daa8579c",
+                            Id = "01eac1fa-c305-42b4-9767-15eb5dbfda3a",
                             Career = "An toàn lao động"
                         },
                         new
                         {
-                            Id = "0b114a6f-fd79-46c0-8e41-4fe1e8ca871f",
+                            Id = "c388ce85-d270-4974-b24c-cf2ef9e613cb",
                             Career = "Bán hàng kỹ thuật"
                         },
                         new
                         {
-                            Id = "ab2c4fd1-7c89-4c34-8c7f-48c5f0474d10",
+                            Id = "1f427985-1449-4e84-9714-cb7cf9de5a94",
                             Career = "Bán lẻ / bán sỉ"
                         },
                         new
                         {
-                            Id = "e1581172-2e95-4325-90db-e1c8a0669210",
+                            Id = "a41d2bdf-2b64-4b67-a525-bd5bda88f100",
                             Career = "Báo chí / Truyền hình"
                         },
                         new
                         {
-                            Id = "c2412b77-d502-42fb-8f41-eed263b10f59",
+                            Id = "a5632a7e-9239-4fd4-9f25-13391f5554b3",
                             Career = "Bảo hiểm"
                         },
                         new
                         {
-                            Id = "fa85df17-53dd-492b-acae-92f0c072d7e0",
+                            Id = "68f2ae11-d991-4d6f-8ed0-0d7a00181dab",
                             Career = "Bảo trì / Sửa chữa"
                         },
                         new
                         {
-                            Id = "5f3ba493-2ee0-44cc-ab87-2bc24f96e2d4",
+                            Id = "a67e0f1d-b7b5-473b-9b68-defba36c55d2",
                             Career = "Bất động sản"
                         },
                         new
                         {
-                            Id = "e75d5445-1db1-440f-b566-9d86a2aae56c",
+                            Id = "1c0ce586-90be-4df3-b062-32a2831108c0",
                             Career = "Biên / Phiên dịch"
                         },
                         new
                         {
-                            Id = "24bbf0d2-739c-44be-b15b-7fd007f27345",
+                            Id = "9e245442-30b4-478e-a639-d95fb11579e9",
                             Career = "Bưu chính - Viễn thông"
                         },
                         new
                         {
-                            Id = "785e793b-173a-4b66-9280-75efda5a9521",
+                            Id = "0f321f7e-c229-489b-a859-efb1daab4b85",
                             Career = "Chứng khoán / Vàng / Ngoại tệ"
                         },
                         new
                         {
-                            Id = "738713cc-8656-435e-bf6d-63084ab5ac4a",
+                            Id = "3bcad873-f4ed-422b-b85a-a3828ccd2002",
                             Career = "Cơ khí / Chế tạo / Tự động hóa"
                         },
                         new
                         {
-                            Id = "0679ed18-12dd-4a36-ae60-3f560442810c",
+                            Id = "a67b2e98-5599-4a41-81ca-4af6175c7932",
                             Career = "Công nghệ cao"
                         },
                         new
                         {
-                            Id = "a3b3f9df-d710-46bf-8a8f-df3181eb6954",
+                            Id = "58bc6d10-6f28-423d-b5fb-8acdfd1b4612",
                             Career = "Công nghệ Ô tô"
                         },
                         new
                         {
-                            Id = "12dd0ca1-e1e1-4da1-ae8a-c0c40e279c09",
+                            Id = "b1544dbd-2acc-4f70-80fb-c6086e2df1ef",
                             Career = "Công nghệ thông tin"
                         },
                         new
                         {
-                            Id = "28720c3f-2271-42c3-91c8-9215a1faf173",
+                            Id = "4e4cc86c-e11f-4b07-a61c-8fee89d9f028",
                             Career = "Dầu khí/Hóa chất"
                         },
                         new
                         {
-                            Id = "4d911153-0fd7-48b2-a93d-043a48419bb8",
+                            Id = "4b89249d-ea53-44b9-a7ed-ef0997b1f491",
                             Career = "Dệt may / Da giày"
                         },
                         new
                         {
-                            Id = "2b826860-837a-4c75-a3d9-195176f9f40d",
+                            Id = "42f30675-f734-451b-a874-ac8afdf3f787",
                             Career = "Địa chất / Khoáng sản"
                         },
                         new
                         {
-                            Id = "979a7306-8eb4-4345-abc0-12a46426944d",
+                            Id = "2c70f344-774f-4c5b-a8b2-4d4db2390d73",
                             Career = "Dịch vụ khách hàng"
                         },
                         new
                         {
-                            Id = "2780015c-dc3d-4705-b179-eebcdcea500a",
+                            Id = "77e87e9e-de86-4d3e-be1f-4cfeba3cdf57",
                             Career = "Điện / Điện tử / Điện lạnh"
                         },
                         new
                         {
-                            Id = "992be4b0-4e06-43e0-8d87-785ec809fd07",
+                            Id = "4193d7e4-c128-4621-8433-c8def1f09b28",
                             Career = "Điện tử viễn thông"
                         },
                         new
                         {
-                            Id = "6e8d8c1d-aa36-4970-b953-e9f5c7199dc1",
+                            Id = "9379d3d1-036d-45ca-99d4-fa3893ce8226",
                             Career = "Du lịch"
                         },
                         new
                         {
-                            Id = "a0e54be7-984b-425c-a389-ea04ad87efde",
+                            Id = "4577e700-be68-4adc-85ca-8d422f06b9ec",
                             Career = "Dược phẩm / Công nghệ sinh học"
                         },
                         new
                         {
-                            Id = "57b503f2-6c44-4a9b-b978-3de22dbb1602",
+                            Id = "c5d37ef1-0169-40fa-852b-b4b8facd03a4",
                             Career = "Giáo dục / Đào tạo"
                         },
                         new
                         {
-                            Id = "e59574d0-185d-45cd-acd0-3ff9e49506e8",
+                            Id = "e03ae3d7-2014-4afb-a877-a6365d8d948d",
                             Career = "Hàng cao cấp"
                         },
                         new
                         {
-                            Id = "47cb3743-e7b0-4b63-b8e6-708029138af2",
+                            Id = "1c088f44-02e8-44d4-b143-720ce0e0e1c6",
                             Career = "Hàng gia dụng"
                         },
                         new
                         {
-                            Id = "4f419a28-25b6-424d-8d7a-975e32bddb10",
+                            Id = "e6c75381-124b-45d1-b21d-3f1275481252",
                             Career = "Hàng hải"
                         },
                         new
                         {
-                            Id = "a5508ef5-36b6-4eaf-9f2b-f7236675b897",
+                            Id = "2f608172-a42e-4cf3-ac78-e237194c2587",
                             Career = "Hàng không"
                         },
                         new
                         {
-                            Id = "89b9dbc1-ecdd-4cf3-aad2-46c0f79d1227",
+                            Id = "256c193f-e0b5-42a8-bd22-96e612543998",
                             Career = "Hàng tiêu dùng"
                         },
                         new
                         {
-                            Id = "42539ee3-e203-4d28-b368-c4fc5cafe020",
+                            Id = "53cae740-998b-413e-9d52-3ce9a8a134b6",
                             Career = "Hành chính / Văn phòng"
                         },
                         new
                         {
-                            Id = "f48ac7c9-6b80-4d2a-af8b-804365d628a4",
+                            Id = "db021c4a-b4ec-4ab3-940a-5904ff1937e7",
                             Career = "Hoá học / Sinh học"
                         },
                         new
                         {
-                            Id = "131d4659-4c23-4aa7-82cf-7c511061d8ae",
+                            Id = "d0875f8d-f90e-4235-b34a-93aac1319236",
                             Career = "Hoạch định / Dự án"
                         },
                         new
                         {
-                            Id = "815fb061-477a-408b-b1fa-1aa914925958",
+                            Id = "78dc5d3d-de16-466e-9984-b8b016a04da7",
                             Career = "In ấn / Xuất bản"
                         },
                         new
                         {
-                            Id = "39f725c4-6207-41e6-8e36-bd4e74ceadf4",
+                            Id = "8cd31b18-a203-4f49-96e6-48ffca54e86a",
                             Career = "IT Phần cứng / Mạng"
                         },
                         new
                         {
-                            Id = "54b9e09c-700c-45c6-a5e0-4aebed33f6c6",
+                            Id = "2368666b-182d-40b7-8c7b-eab3c104d9ca",
                             Career = "IT phần mềm"
                         },
                         new
                         {
-                            Id = "8f4af482-d9b7-499f-8459-8cd2eab367a0",
+                            Id = "f950cfd1-fe47-49ae-b7e8-9063093c0741",
                             Career = "Kế toán / Kiểm toán"
                         },
                         new
                         {
-                            Id = "d250c3e9-9942-4d71-b758-1b48d2b49970",
+                            Id = "242633e0-df5d-4083-b86b-3d113521df4e",
                             Career = "Khách sạn / Nhà hàng"
                         },
                         new
                         {
-                            Id = "4d527ee9-3c88-40c3-80ba-9b5401f65737",
+                            Id = "322f7c60-c680-4d16-b387-1afe88ffd499",
                             Career = "Kiến trúc"
                         },
                         new
                         {
-                            Id = "431fec55-2c2d-4a37-b801-5aa8dcb58ed7",
+                            Id = "b6129f83-0870-42a6-8c30-881cea556b6e",
                             Career = "Kinh doanh / Bán hàng"
                         },
                         new
                         {
-                            Id = "e66a6434-514e-4b49-9a9f-69ab55f13667",
+                            Id = "dcfb376c-e03c-450a-a45a-bf3462154cd7",
                             Career = "Logistics"
                         },
                         new
                         {
-                            Id = "55edb878-db14-4680-9ba4-1a3d36f03e1a",
+                            Id = "3fb8d7d9-1a99-4ce1-81e4-020cee8c3586",
                             Career = "Luật / Pháp lý"
                         },
                         new
                         {
-                            Id = "4739567a-93ae-4971-9939-95747019eff2",
+                            Id = "07e41ff7-24b9-49ba-a835-171e2fc78182",
                             Career = "Marketing / Truyền thông / Quảng cáo"
                         },
                         new
                         {
-                            Id = "5089531c-cf38-403d-9423-b9a2b9dfb5ff",
+                            Id = "24a4eab3-0966-43ec-97e9-5f70764bad8f",
                             Career = "Môi trường / Xử lý chất thải"
                         },
                         new
                         {
-                            Id = "0d7c8f00-b4df-4024-95c5-b7b37e6e05d0",
+                            Id = "fb348e44-82cc-49d9-9db7-6ed81a447748",
                             Career = "Mỹ phẩm / Trang sức"
                         },
                         new
                         {
-                            Id = "ad84eaa8-7fa5-48e7-a8c1-bb2e5c4a0be5",
+                            Id = "ec1f1145-4751-4168-a261-aa12092f063e",
                             Career = "Mỹ thuật / Nghệ thuật / Điện ảnh"
                         },
                         new
                         {
-                            Id = "dd70a86c-f0de-483a-bc3f-a91e64dca87a",
+                            Id = "ff7a86da-a6f4-4ea4-9a73-3ac1581caa90",
                             Career = "Ngân hàng / Tài chính"
                         },
                         new
                         {
-                            Id = "0e82d4f8-38c7-450f-8661-d3160bb1bbdf",
+                            Id = "62246917-7cd3-4e57-8031-5ab17dce7e12",
                             Career = "Ngành nghề khác"
                         },
                         new
                         {
-                            Id = "b9a87607-1bba-4154-8c1a-2a5a7db7bb17",
+                            Id = "94ba49b3-3e06-40dd-ab0b-17140ea7295a",
                             Career = "NGO / Phi chính phủ / Phi lợi nhuận"
                         },
                         new
                         {
-                            Id = "2de0dd31-b7c5-4859-b405-2ec0b2544bf6",
+                            Id = "9c9f6da7-b27d-478a-a47a-b78e7b931dc5",
                             Career = "Nhân sự"
                         },
                         new
                         {
-                            Id = "49ed8a35-bf53-4ab0-93d9-5e3c7a799581",
+                            Id = "f77ba53a-c9ff-4909-9bf0-0aa3ab66942b",
                             Career = "Nông / Lâm / Ngư nghiệp"
                         },
                         new
                         {
-                            Id = "96573923-452b-4ced-89e4-f2c99ebb0845",
+                            Id = "aa182277-ae76-48a0-a6a9-e8b1103503a8",
                             Career = "Phi chính phủ / Phi lợi nhuận"
                         },
                         new
                         {
-                            Id = "98971bae-c003-4797-bf3b-307096bdb7eb",
+                            Id = "cf9714db-e7c3-4e2f-943d-5c04dd8d21ca",
                             Career = "Quản lý chất lượng (QA/QC)"
                         },
                         new
                         {
-                            Id = "ca442277-68e8-4152-be6c-933fbfc89e6e",
+                            Id = "dd77d2be-ef85-45f3-8527-b4a4eb0efd2a",
                             Career = "Quản lý điều hành"
                         },
                         new
                         {
-                            Id = "9773d247-697e-4a4d-a484-b1dd5ba10aaf",
+                            Id = "f73ac9e2-0304-4ecf-81ec-e00bb6b6750d",
                             Career = "Sản phẩm công nghiệp"
                         },
                         new
                         {
-                            Id = "7055229e-150a-4141-b9fd-4de24cdd3b8b",
+                            Id = "efee39cb-42d0-4627-83b4-125d6e008bda",
                             Career = "Sản xuất"
                         },
                         new
                         {
-                            Id = "b1a4df4d-ea38-41af-8236-063488d7b72f",
+                            Id = "558d1c0b-ad11-4576-85dd-334469f3de7f",
                             Career = "Spa / Làm đẹp"
                         },
                         new
                         {
-                            Id = "56548f9d-0048-4312-b7e8-26c25194a6c1",
+                            Id = "5aed4b6b-3e43-413c-8d67-2b779ff2decd",
                             Career = "Tài chính / Đầu tư"
                         },
                         new
                         {
-                            Id = "c65c1aee-de31-4663-9eae-af1e41a1cdf6",
+                            Id = "f65c427a-80cd-4bc4-af75-d49cecb0b344",
                             Career = "Thiết kế đồ họa"
                         },
                         new
                         {
-                            Id = "17943175-5f85-4780-9a65-866f70450a2f",
+                            Id = "71e3797d-990b-4cf9-9af6-2da6e68c0b15",
                             Career = "Thiết kế nội thất"
                         },
                         new
                         {
-                            Id = "2886f60e-54a9-4cdd-a303-365799c41226",
+                            Id = "e059dc1b-ee4a-4025-88b0-8eb83ba0fef9",
                             Career = "Thời trang"
                         },
                         new
                         {
-                            Id = "0e8d1cdd-1676-4999-bbdd-3e5c37fcd72c",
+                            Id = "c8754076-f337-4197-bf21-c75d664f0d6f",
                             Career = "Thư ký / Trợ lý"
                         },
                         new
                         {
-                            Id = "36975481-2e2c-4344-8e67-07a12efd1533",
+                            Id = "52737c37-d4bf-482c-8119-87249fc26815",
                             Career = "Thực phẩm / Đồ uống"
                         },
                         new
                         {
-                            Id = "9db2d558-38ad-46f1-bf16-26bbc838226f",
+                            Id = "3e6a0bd2-423b-4a67-a15f-e58f74288b57",
                             Career = "Tổ chức sự kiện / Quà tặng"
                         },
                         new
                         {
-                            Id = "8ac18114-2f8e-4dcd-a880-9c69bf74cb52",
+                            Id = "cb80b84c-eb92-493b-b0a5-3988138da358",
                             Career = "Tư vấn"
                         },
                         new
                         {
-                            Id = "6298ac3b-d5be-40eb-be7d-50a4dc3253fd",
+                            Id = "08e24d4a-684a-4216-bad9-933d453a4ee1",
                             Career = "Vận tải / Kho vận"
                         },
                         new
                         {
-                            Id = "1f56dc4e-f834-4412-9ba4-00bce00ad09d",
+                            Id = "dabfbe1a-e790-4187-b745-523239ff1e07",
                             Career = "Xây dựng"
                         },
                         new
                         {
-                            Id = "09ccbdb4-35d5-40b8-b7c8-941542479fc5",
+                            Id = "05aed7c9-15d0-4a86-a471-afa2011088f5",
                             Career = "Xuất nhập khẩu"
                         },
                         new
                         {
-                            Id = "ea27751c-791e-4eb2-9d1a-3d46669848c4",
+                            Id = "443d95f1-3b64-489b-8ca0-40752914b877",
                             Career = "Y tế / Dược"
                         });
                 });
@@ -974,207 +974,207 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "75a98165-626c-4e75-a79e-2d8bade73e5d",
+                            Id = "9432120b-2f9d-44eb-a83e-8546a6499afe",
                             Field = "Tất cả lĩnh vực"
                         },
                         new
                         {
-                            Id = "845877e1-0d93-4f48-ba49-83df050e499c",
+                            Id = "a6b81925-b24c-45dc-b762-a83b1f3fb19e",
                             Field = "Agency (Design/Development)"
                         },
                         new
                         {
-                            Id = "232a9c0b-290a-4b09-9da4-3184a52d3c9e",
+                            Id = "b922c59e-c173-4df3-8457-05e7d2f4e291",
                             Field = "Agency (Marketing/Advertising)"
                         },
                         new
                         {
-                            Id = "989527d7-6cc7-4da2-ab59-f611749c2bfd",
+                            Id = "760fe351-b626-4045-9a34-8c067b055c1a",
                             Field = "Bán lẻ - Hàng tiêu dùng - FMCG"
                         },
                         new
                         {
-                            Id = "d4dc7f6e-d60c-41d0-8b68-250ee3dff4f5",
+                            Id = "e508d84b-6d16-49af-ae06-33dd7a4230ef",
                             Field = "Bảo hiểm"
                         },
                         new
                         {
-                            Id = "2fd2175b-d968-4b08-bbf7-365f4623215a",
+                            Id = "269d104c-d71f-4f49-ac42-91e5fa3196c6",
                             Field = "Bảo trì / Sửa chữa"
                         },
                         new
                         {
-                            Id = "71747805-71b4-42e1-9981-d954bf9000b1",
+                            Id = "c17353e1-5f04-473b-a4c0-9c365de0466d",
                             Field = "Bất động sản"
                         },
                         new
                         {
-                            Id = "b4e7e70e-078d-42ce-a0fb-b889ce09429a",
+                            Id = "762cebb3-6a64-46ce-a6ea-df810dd3cf78",
                             Field = "Chứng khoán"
                         },
                         new
                         {
-                            Id = "b91061bd-ec68-4a19-9b0e-e2ca0828e80d",
+                            Id = "9fa680e9-ed1a-4a36-acae-430bc5b1a018",
                             Field = "Cơ khí"
                         },
                         new
                         {
-                            Id = "926662c6-6531-4b2b-9a90-61bc1eec87f9",
+                            Id = "49e42e41-c491-4cdd-9159-769fc0640b1d",
                             Field = "Cơ quan nhà nước"
                         },
                         new
                         {
-                            Id = "d8f3293a-bc2a-4b5a-8ab5-2743a7c27b2f",
+                            Id = "bbd181ae-8534-4188-9174-584175b6446d",
                             Field = "Du lịch"
                         },
                         new
                         {
-                            Id = "2fe8e1e6-c22d-4e69-841e-942d3e75cd95",
+                            Id = "7e8be181-d251-4bc7-a584-725b787ba980",
                             Field = "Dược phẩm / Y tế / Công nghệ sinh học"
                         },
                         new
                         {
-                            Id = "544c4786-cf33-4fa2-8fe7-3f53ae23b543",
+                            Id = "3660af23-9b61-472b-8a20-417d6777422c",
                             Field = "Điện tử / Điện lạnh"
                         },
                         new
                         {
-                            Id = "89df358e-af38-477a-9010-2653723c217c",
+                            Id = "4aeba296-1229-45e0-83cd-98c8cde1fb68",
                             Field = "Giải trí"
                         },
                         new
                         {
-                            Id = "ad3bfd22-49a0-4b7f-b169-0f2abda59956",
+                            Id = "bff779a0-c3cd-457b-98d8-aad42a9740de",
                             Field = "Giáo dục / Đào tạo"
                         },
                         new
                         {
-                            Id = "ca4cc88b-1436-4bc6-9900-4b571cb345b5",
+                            Id = "31c1c930-3c01-45fe-b323-5375b119d68d",
                             Field = "In ấn / Xuất bản"
                         },
                         new
                         {
-                            Id = "e565f11e-3d43-4392-87a0-51bb1200d1f8",
+                            Id = "4b6f463c-2335-49f8-a241-b0d8fef999c8",
                             Field = "Internet / Online"
                         },
                         new
                         {
-                            Id = "8e25701b-fb5f-416a-98c3-137bc1af2039",
+                            Id = "062f572b-dbfe-412d-906f-63e359f709e2",
                             Field = "IT - Phần cứng"
                         },
                         new
                         {
-                            Id = "f557ab9c-2362-451c-b183-0dd4401e7da5",
+                            Id = "7fdb9fc8-5db9-4313-80ef-b2c17599f102",
                             Field = "IT - Phần mềm"
                         },
                         new
                         {
-                            Id = "3d759f31-ce81-4089-bf07-283935f0f9ea",
+                            Id = "fc7e9051-d928-492f-838f-2dbc830298e5",
                             Field = "Kế toán / Kiểm toán"
                         },
                         new
                         {
-                            Id = "fc7643c6-a75f-405f-947f-79a13b8b4699",
+                            Id = "c28e4131-6434-4378-a18f-1fb84563704d",
                             Field = "Khác"
                         },
                         new
                         {
-                            Id = "d0890914-6404-4db7-93a7-28f660f3357c",
+                            Id = "669943dc-5bcb-4629-a3d4-a9f34d9db393",
                             Field = "Logistics - Vận tải"
                         },
                         new
                         {
-                            Id = "faa5ca44-40d5-431b-82a8-51fe250db3de",
+                            Id = "a4ca0410-a9ae-468d-b2e9-b72206d3e161",
                             Field = "Luật"
                         },
                         new
                         {
-                            Id = "532b9d54-7fc9-45b6-8564-35e0234a4293",
+                            Id = "d17ba40f-ac02-4667-ad8a-6b85545dc0a3",
                             Field = "Marketing / Truyền thông / Quảng cáo"
                         },
                         new
                         {
-                            Id = "c88288cc-b0a9-4cfc-b438-dc193e725200",
+                            Id = "8cb145c9-b79d-4eb1-912a-46992bdcda29",
                             Field = "Môi trường"
                         },
                         new
                         {
-                            Id = "e91d3e2e-d133-45f9-b200-ded77edfe78c",
+                            Id = "4c2fa464-0676-45d5-bbd2-f6c2941ec6b9",
                             Field = "Năng lượng"
                         },
                         new
                         {
-                            Id = "f7ef5b80-0fb8-4c67-899d-35f0003dd20d",
+                            Id = "2664d3fe-f718-44a2-9a67-f13ae02d5b0a",
                             Field = "Ngân hàng"
                         },
                         new
                         {
-                            Id = "3c6ba32e-929c-453f-8ec4-c4ecc8dbb609",
+                            Id = "1ca9c0f2-736c-49ca-97ed-f9e774279d4e",
                             Field = "Nhà hàng / Khách sạn"
                         },
                         new
                         {
-                            Id = "7716b455-e05c-48d4-a9e7-bb8dc042a031",
+                            Id = "8521bd64-863f-4d64-8084-44552407f7d0",
                             Field = "Nhân sự"
                         },
                         new
                         {
-                            Id = "be54515d-2913-4276-9433-7e134377a241",
+                            Id = "752c53cd-5dd3-40cb-8788-ae5a5c42786b",
                             Field = "Nông Lâm Ngư nghiệp"
                         },
                         new
                         {
-                            Id = "581be607-99bd-42b1-8182-2c838c234907",
+                            Id = "3f957d0f-1853-41f5-9442-9da4ef759247",
                             Field = "Sản xuất"
                         },
                         new
                         {
-                            Id = "b14df983-83b5-49b4-ab98-01ed1fa057bd",
+                            Id = "3c8a395e-2120-448a-9d06-88dc2e0a1a32",
                             Field = "Tài chính"
                         },
                         new
                         {
-                            Id = "729447eb-420e-46d4-af1c-895992da42bd",
+                            Id = "68f0f358-b80d-4499-8873-6c5da8d5f9bc",
                             Field = "Thiết kế / kiến trúc"
                         },
                         new
                         {
-                            Id = "8df01985-67d0-452d-aef0-c48105067f4a",
+                            Id = "b32b4557-70c9-4475-a956-0bb8dcf3c023",
                             Field = "Thời trang"
                         },
                         new
                         {
-                            Id = "0e7e9ec7-d77a-46ad-a26a-45a3846670dc",
+                            Id = "f20f5fe8-1792-4271-90c7-b4dbde94c44e",
                             Field = "Thương mại điện tử"
                         },
                         new
                         {
-                            Id = "5fddf421-9720-428c-b717-66209c22873c",
+                            Id = "44524f99-0ce5-43b5-a87e-11e700712a83",
                             Field = "Tổ chức phi lợi nhuận"
                         },
                         new
                         {
-                            Id = "fc25aa4b-9a73-4c5b-9e05-d4d9eff5e1f3",
+                            Id = "19de77c0-2255-479c-9567-3e0b575d8bc5",
                             Field = "Tự động hóa"
                         },
                         new
                         {
-                            Id = "7d52d709-8221-4022-881f-eeb7ed08499b",
+                            Id = "70400bbe-b27c-44e8-af70-966026606607",
                             Field = "Tư vấn"
                         },
                         new
                         {
-                            Id = "f05fa11e-8d73-4ce5-8a4a-dba839c544a6",
+                            Id = "ff43f1ee-2dfc-4b60-a4da-49d4d9dfc8ea",
                             Field = "Viễn thông"
                         },
                         new
                         {
-                            Id = "3431ab7e-6688-4d47-94f7-7980464151af",
+                            Id = "c6bc60c9-2cf8-4d2e-ada1-28c8436fbae9",
                             Field = "Xây dựng"
                         },
                         new
                         {
-                            Id = "bc39d4e8-e7a5-4eb1-9fad-3138c4279b2b",
+                            Id = "021121a6-df38-48f9-92b7-821e4a16937d",
                             Field = "Xuất nhập khẩu"
                         });
                 });
@@ -1195,22 +1195,22 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8f626c37-8c0e-481a-a13a-cd33b33a881f",
+                            Id = "6bbb90e1-5397-486e-8457-bccf0b5e21f6",
                             Form = "Tất cả hình thức"
                         },
                         new
                         {
-                            Id = "42934a33-ad06-47fa-af1c-df3df8009022",
+                            Id = "1fd1e3e5-e11c-4d5b-b9cc-57731e29c33c",
                             Form = "Toàn thời gian"
                         },
                         new
                         {
-                            Id = "7981a9a6-9df6-4836-8a01-9e516be67a90",
+                            Id = "35604340-db69-4afb-bb5e-980dc23d58d2",
                             Form = "Bán thời gian"
                         },
                         new
                         {
-                            Id = "bef5a2b0-ae6a-4004-b2ca-af82f3e771d5",
+                            Id = "7efac69a-a3d7-4ec5-a377-cb7f9c267ad0",
                             Form = "Thực tập"
                         });
                 });
@@ -1231,47 +1231,47 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4334b84d-0162-40fe-ba16-3d133699822b",
+                            Id = "7241c7a0-b750-4a35-9b37-aba500afa4f7",
                             Position = "Tất cả vị trí"
                         },
                         new
                         {
-                            Id = "61f14337-17c1-4f07-9e0d-4b7f6a5870c1",
+                            Id = "cb0c8e1a-f6cb-44f7-81cb-f0d5d3f9a3f9",
                             Position = "Nhân viên"
                         },
                         new
                         {
-                            Id = "75091f63-8615-44d5-996b-53205c3f6197",
+                            Id = "88186bc7-47c8-4c14-9fe7-d3711ee7e787",
                             Position = "Trưởng nhóm"
                         },
                         new
                         {
-                            Id = "897d813d-d035-4f05-8fd2-ea099444cb2f",
+                            Id = "febe39be-ef64-48a1-93fa-35b9b109e8a2",
                             Position = "Trưởng / Phó phòng"
                         },
                         new
                         {
-                            Id = "0e5a73c6-931a-4e8a-a222-b58bc3d1aebb",
+                            Id = "463b1d24-8f73-484a-8e97-5b8ea16da6a8",
                             Position = "Quản lí / Giám sát"
                         },
                         new
                         {
-                            Id = "68867e2a-db59-4d15-9d57-fcd662426e25",
+                            Id = "d50bad41-dbba-4c8c-a9b3-dfa0c0d7b389",
                             Position = "Trưởng chi nhánh"
                         },
                         new
                         {
-                            Id = "6edc81cf-e83c-4bf1-bb40-6381f211fb72",
+                            Id = "a2ae8f71-40ac-46b9-9174-ce3730f33644",
                             Position = "Phó giám đốc"
                         },
                         new
                         {
-                            Id = "8e25da0e-7226-455e-a4ed-3362fc114460",
+                            Id = "da6a0c2c-1e82-4372-9068-a2bc554a8911",
                             Position = "Giám đốc"
                         },
                         new
                         {
-                            Id = "81e46379-27e3-4e86-9018-e91e33f6851e",
+                            Id = "c621a30f-2b10-4926-8bda-77dd689fe961",
                             Position = "Thực tập sinh"
                         });
                 });
@@ -1332,322 +1332,322 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "daab2516-e67b-4b8d-95ca-5af15c8a8989",
+                            Id = "88da862c-f1c7-45e8-ae25-f920b1114950",
                             Name = "Tất cả tỉnh thành"
                         },
                         new
                         {
-                            Id = "7178d910-25d6-45a4-bc20-abdae916580d",
+                            Id = "5c944d88-210d-4b5e-b2fa-66bbc0194072",
                             Name = "An Giang"
                         },
                         new
                         {
-                            Id = "19384841-22be-42ba-a526-7669bca8c69e",
+                            Id = "23eff5af-6f7e-4d23-897d-af4fdf617428",
                             Name = "Bà Rịa-Vũng Tàu"
                         },
                         new
                         {
-                            Id = "16fa33a9-7a9e-4b2d-a72e-db9db299cba8",
+                            Id = "6fd74f0e-5c8c-4cdb-bef6-bd1efc00c2db",
                             Name = "Bắc Giang"
                         },
                         new
                         {
-                            Id = "0f90dffb-8722-42a6-8fac-70a972aada4f",
+                            Id = "4439fcea-0fdb-43a9-bc9b-3a3a225e9588",
                             Name = "Bắc Kạn"
                         },
                         new
                         {
-                            Id = "328620ac-f228-4bf9-94ff-29710e3d88ed",
+                            Id = "4d3457b1-f628-4765-8737-d9e1ee4de5e5",
                             Name = "Bạc Liêu"
                         },
                         new
                         {
-                            Id = "32c8209e-e4ae-4fa1-86b3-08869ed92dd3",
+                            Id = "4322dbbc-98e7-4f66-a290-23254c224be0",
                             Name = "Bắc Ninh"
                         },
                         new
                         {
-                            Id = "ac43fce2-d6d1-4b23-a54c-1822ea29da82",
+                            Id = "8c25912d-451d-44eb-9917-1faed922a231",
                             Name = "Bến Tre"
                         },
                         new
                         {
-                            Id = "97faeafb-e21a-4dcc-b85b-0cee98f6f65a",
+                            Id = "b5557d0e-d6dc-46d6-916c-3eadfcf2e53b",
                             Name = "Bình Định"
                         },
                         new
                         {
-                            Id = "364c33ef-efa4-43a8-90ed-7f6709472fef",
+                            Id = "4e5f5f31-5fc7-40e8-a214-1b18b08e97cc",
                             Name = "Bình Dương"
                         },
                         new
                         {
-                            Id = "d0d623b7-9298-4040-a438-9697cb939b0b",
+                            Id = "9b20e40e-5786-4456-a658-02f223ff9aef",
                             Name = "Bình Phước"
                         },
                         new
                         {
-                            Id = "8d7d0fde-e647-4c65-9e4a-eb40005f92e6",
+                            Id = "feff0c28-bdc3-448b-a54e-945eb18661eb",
                             Name = "Bình Thuận"
                         },
                         new
                         {
-                            Id = "8a00a655-8443-49d0-99f2-655016a9f7a5",
+                            Id = "3521db9e-35f2-42d3-bcf1-84b3c47adeb0",
                             Name = "Cà Mau"
                         },
                         new
                         {
-                            Id = "0fe7d819-ec08-4f9e-8666-68ecd6fb6fed",
+                            Id = "a3d31502-7b6c-4b94-bdc6-19aba96e36ec",
                             Name = "Cần Thơ"
                         },
                         new
                         {
-                            Id = "57f95061-b1a1-47e2-8a3a-21d7384145ee",
+                            Id = "bab9f527-eb44-41a0-9320-9857d6d25be7",
                             Name = "Cao Bằng"
                         },
                         new
                         {
-                            Id = "1aee2487-14cb-4ce6-8c4a-4cd16f8129b8",
+                            Id = "783e6571-3c77-4d8f-a1c1-8bc6b4559213",
                             Name = "Đà Nẵng"
                         },
                         new
                         {
-                            Id = "8be2e72b-ca5c-4d95-b064-48ed62f1d4d9",
+                            Id = "38583ffd-99d4-4766-aede-a18db81f1281",
                             Name = "Đắk Lắk"
                         },
                         new
                         {
-                            Id = "ac3297e5-712f-4543-8ee4-599911993a70",
+                            Id = "1e063990-42b4-44bc-8cb9-7f3692c5477e",
                             Name = "Đắk Nông"
                         },
                         new
                         {
-                            Id = "48b05fb9-f523-4491-a302-5f6028b5ba02",
+                            Id = "0c45f09f-3376-44fd-a9bf-e1dc0366bfde",
                             Name = "Điện Biên"
                         },
                         new
                         {
-                            Id = "6843ab81-a062-4703-9bf6-c827dbcec017",
+                            Id = "f068da66-c135-4659-b37e-c10b1d8fdd45",
                             Name = "Đồng Nai"
                         },
                         new
                         {
-                            Id = "a4b5a777-8639-4fb7-aee6-05a7ad86facd",
+                            Id = "94e4e646-4048-4c12-a918-8ed3fe092a0e",
                             Name = "Đồng Tháp"
                         },
                         new
                         {
-                            Id = "de275984-9f99-4469-961f-47b3e31ad204",
+                            Id = "8ac48bab-1695-491b-a426-d11c36162d0e",
                             Name = "Gia Lai"
                         },
                         new
                         {
-                            Id = "5c96ae8f-c0ab-4193-a1eb-322ed21bf651",
+                            Id = "5746fa4e-7c8a-4803-9851-b2bac36ab71c",
                             Name = "Hà Giang"
                         },
                         new
                         {
-                            Id = "9f46e276-41db-42be-9370-d851669a8dcf",
+                            Id = "6e9d5499-16f9-4a66-9269-673588dc4ce3",
                             Name = "Hà Nam"
                         },
                         new
                         {
-                            Id = "0f825303-629c-485a-b9ed-c4d209fce825",
+                            Id = "59ca230e-9abc-4a39-9cef-5ab0dd66ed5c",
                             Name = "Hà Nội"
                         },
                         new
                         {
-                            Id = "3c4b533b-8349-4054-9c3d-2b9fe6008387",
+                            Id = "36886b16-ae74-4934-8232-b3cb7a2ab753",
                             Name = "Hà Tĩnh"
                         },
                         new
                         {
-                            Id = "65d572ba-4999-409e-8a6b-b6aaf4d33cb8",
+                            Id = "79f12a69-e1a0-487f-a0fa-979459dd0c30",
                             Name = "Hải Dương"
                         },
                         new
                         {
-                            Id = "26fcc20d-7719-405b-963e-9b68fa39f239",
+                            Id = "0221d295-c1e7-4a68-9f27-6d221d11e719",
                             Name = "Hải Phòng"
                         },
                         new
                         {
-                            Id = "6fa92a53-6351-4789-a41d-7b28eb6bad4e",
+                            Id = "4a186d7a-4121-4522-a753-baa893914e09",
                             Name = "Hậu Giang"
                         },
                         new
                         {
-                            Id = "510ea70f-e4fb-432e-ab13-3cf1147f2f85",
+                            Id = "3f22a5ef-16be-45a7-bf99-7f3991c891b1",
                             Name = "Hòa Bình"
                         },
                         new
                         {
-                            Id = "01a69359-d6fc-4116-bbd0-d127fe6d0774",
+                            Id = "09c9999a-91e6-45c4-b3d6-5929a46c9ae7",
                             Name = "Hưng Yên"
                         },
                         new
                         {
-                            Id = "f33318f5-084a-4712-9294-cc8d41cad626",
+                            Id = "d8ebd879-c29e-409b-b63d-74ed59f09f96",
                             Name = "Khánh Hòa"
                         },
                         new
                         {
-                            Id = "a1a42b85-1cec-463a-91c2-84110e16e001",
+                            Id = "3b315afe-8ed0-4cf3-9b6e-199c00396c52",
                             Name = "Kiên Giang"
                         },
                         new
                         {
-                            Id = "ae841211-472c-4565-a03e-772ce0d52ca2",
+                            Id = "3fb526d4-c3ca-455b-afdc-c1fedaf779eb",
                             Name = "Kon Tum"
                         },
                         new
                         {
-                            Id = "fe6f1826-142a-43a2-88e4-9c2513e27e80",
+                            Id = "82b6b8f5-4c44-47bb-9f54-d28cf628f796",
                             Name = "Lai Châu"
                         },
                         new
                         {
-                            Id = "41d96a52-0dd5-4706-a827-c600d3e7dd97",
+                            Id = "6fca81e9-a566-41e1-827b-68ddf10a7790",
                             Name = "Lâm Đồng"
                         },
                         new
                         {
-                            Id = "16d55e02-180f-4808-a0fb-eecd8c9739ac",
+                            Id = "25585a81-6816-4ebd-8d01-3c456784972b",
                             Name = "Lạng Sơn"
                         },
                         new
                         {
-                            Id = "b1bb3a0c-d7b6-4745-b5c3-85f5c488b921",
+                            Id = "2a113429-8fa9-49b9-8de2-e0357e5f3988",
                             Name = "Lào Cai"
                         },
                         new
                         {
-                            Id = "4f324bea-20dc-468b-8ddc-964221892b1a",
+                            Id = "b889d348-b88b-46b4-a715-2efdf4c33286",
                             Name = "Long An"
                         },
                         new
                         {
-                            Id = "2a0750ec-c52f-4ec6-b2b4-23b9a82a0f63",
+                            Id = "d7436211-66b4-4b85-b4d2-e1d9299e500c",
                             Name = "Nam Định"
                         },
                         new
                         {
-                            Id = "9ffb694b-415f-4dfd-b2aa-bbdd81ac4c22",
+                            Id = "1797cd19-35e4-4b97-b1e1-d470846762a0",
                             Name = "Nghệ An"
                         },
                         new
                         {
-                            Id = "ef6f4256-16d4-43c4-ae0c-75349a6cbc78",
+                            Id = "ff5ace69-d053-457f-ae18-443c85d7aece",
                             Name = "Ninh Bình"
                         },
                         new
                         {
-                            Id = "993f4aaa-2f09-4ad5-ad7e-1395b341729c",
+                            Id = "bef1d679-f907-4b8a-8ae0-5caeccd8dd1d",
                             Name = "Ninh Thuận"
                         },
                         new
                         {
-                            Id = "7713b5b2-75b7-4093-a792-4f85e21b71b9",
+                            Id = "8a329c39-3a43-4fa5-bd6b-9aadf24b5175",
                             Name = "Phú Thọ"
                         },
                         new
                         {
-                            Id = "678a39a3-5424-4ad2-9faa-eabdfb84be06",
+                            Id = "9f2e83b2-a709-488f-ac38-7102e857f0bf",
                             Name = "Phú Yên"
                         },
                         new
                         {
-                            Id = "94f88325-e241-4bd8-9440-98f5e7cae041",
+                            Id = "9682bf30-f4dd-418f-8051-6dfd17ff8f18",
                             Name = "Quảng Bình"
                         },
                         new
                         {
-                            Id = "58b13a5e-09ec-4ace-ab89-4649b71805f4",
+                            Id = "20719df2-6f57-48c3-9d93-b72439b8e3f5",
                             Name = "Quảng Nam"
                         },
                         new
                         {
-                            Id = "5a2702f4-9456-40c9-b652-a762dc2d59c5",
+                            Id = "250e6870-4e86-4ec5-bdf3-fd691e0bdc55",
                             Name = "Quảng Ngãi"
                         },
                         new
                         {
-                            Id = "c7a3343b-1627-4809-8d94-8456702bd3b0",
+                            Id = "48dc41bd-51eb-400f-a515-eeedbdb16cc5",
                             Name = "Quảng Ninh"
                         },
                         new
                         {
-                            Id = "b6596132-9b08-407b-8255-c78917f62562",
+                            Id = "f343edc2-2725-486e-b727-80e65d7d0b53",
                             Name = "Quảng Trị"
                         },
                         new
                         {
-                            Id = "313f1e85-9967-4a19-9f77-e193e9b49a9b",
+                            Id = "c5102340-9da7-4803-82c3-4bdeb287fcde",
                             Name = "Sóc Trăng"
                         },
                         new
                         {
-                            Id = "efe903ab-0cf8-49db-b6d3-8c1c9177e2ce",
+                            Id = "29911acf-b0e7-4f2c-aea9-0de305b01f6a",
                             Name = "Sơn La"
                         },
                         new
                         {
-                            Id = "4a7eccb3-ff28-439c-a5f0-7f0bf5ae376d",
+                            Id = "d617efa6-cb4d-4853-9f1a-0fbe125f1b66",
                             Name = "Tây Ninh"
                         },
                         new
                         {
-                            Id = "72c0c4e2-dd6f-473a-8d42-5a266f9064f0",
+                            Id = "506956d9-c2b1-4f65-88e3-614fa744b391",
                             Name = "Thái Bình"
                         },
                         new
                         {
-                            Id = "27e931df-094d-41e7-be5d-e28b0ffacb07",
+                            Id = "8a68b8a3-e1dc-4716-8c37-38637771c048",
                             Name = "Thái Nguyên"
                         },
                         new
                         {
-                            Id = "857a5b58-2ea0-4e6f-a006-67c60491eb3d",
+                            Id = "834a7595-fd35-46b6-b40b-44e5842fd5ed",
                             Name = "Thanh Hóa"
                         },
                         new
                         {
-                            Id = "2212bede-4ec7-41a7-8fc0-444561de9c6e",
+                            Id = "d7bd8102-8ff1-4ebb-abac-8a41ee252cb8",
                             Name = "Thừa Thiên Huế"
                         },
                         new
                         {
-                            Id = "a0e41235-c992-422d-8581-cc1a4e53e3fa",
+                            Id = "735f23b4-5b6c-4580-8820-1ccf926321ef",
                             Name = "Tiền Giang"
                         },
                         new
                         {
-                            Id = "116bacfc-2a58-43fa-abfe-7ec2b4bd0def",
+                            Id = "c3fb6918-ee12-4ba4-8299-74674fe59b19",
                             Name = "Hồ Chí Minh"
                         },
                         new
                         {
-                            Id = "01d597dc-e64c-41ff-b74e-0bb051f6f6bb",
+                            Id = "62cf91df-7708-434d-9007-2628e8612c97",
                             Name = "Trà Vinh"
                         },
                         new
                         {
-                            Id = "1335a90f-4387-41a8-9b27-d6cef6ca864e",
+                            Id = "16d6db15-ddf3-46e7-99a9-02f5203a75bf",
                             Name = "Tuyên Quang"
                         },
                         new
                         {
-                            Id = "096bf491-05f4-488e-8eb8-d04a3d1844ef",
+                            Id = "46ac54f1-5223-4244-8a46-c6bdc59b0eec",
                             Name = "Vĩnh Long"
                         },
                         new
                         {
-                            Id = "58da4453-4b58-4559-8b01-426a28c87106",
+                            Id = "0dcbc7b5-c435-4fe8-8c05-8b1e07e2c34d",
                             Name = "Vĩnh Phúc"
                         },
                         new
                         {
-                            Id = "752dea7f-c234-4aaf-94bd-a246ac516c90",
+                            Id = "e8319743-92d3-4592-9c45-b89aec52e9aa",
                             Name = "Yên Bái"
                         });
                 });
@@ -1777,17 +1777,17 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a0408ef1-b79a-4bb2-b4bd-d0995e215126",
+                            Id = "cf01d0d0-eb7b-44a6-8a48-b5b3868bf929",
                             RoleName = "Admin"
                         },
                         new
                         {
-                            Id = "e3b83463-1367-4405-8dc0-8176fb5a566b",
+                            Id = "8e6f7973-d40d-4cd0-a95e-ea3021180a48",
                             RoleName = "Candidate"
                         },
                         new
                         {
-                            Id = "c2747ae0-6246-47a3-9c63-950ebd356415",
+                            Id = "2f485acf-e824-431b-8867-c3b7664e90f7",
                             RoleName = "Employer"
                         });
                 });
@@ -1852,7 +1852,7 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a668be26-29c9-4653-a601-5faf023b5d73",
+                            Id = "39a29e9f-5c55-4c19-bc37-d9558dc353c7",
                             Email = "cvlookup.sgu.2023@gmail.com",
                             Username = "General Admin"
                         });
@@ -1875,18 +1875,18 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = "a0408ef1-b79a-4bb2-b4bd-d0995e215126",
-                            UserId = "a668be26-29c9-4653-a601-5faf023b5d73"
+                            RoleId = "cf01d0d0-eb7b-44a6-8a48-b5b3868bf929",
+                            UserId = "39a29e9f-5c55-4c19-bc37-d9558dc353c7"
                         },
                         new
                         {
-                            RoleId = "c2747ae0-6246-47a3-9c63-950ebd356415",
-                            UserId = "f4c6aaf7-efd3-4905-859b-cb2f33c2e476"
+                            RoleId = "2f485acf-e824-431b-8867-c3b7664e90f7",
+                            UserId = "f600fa3f-a9af-4995-9d31-4f4646e636a4"
                         },
                         new
                         {
-                            RoleId = "e3b83463-1367-4405-8dc0-8176fb5a566b",
-                            UserId = "e0c47a58-7731-4f26-8ff9-2b899b3019bc"
+                            RoleId = "8e6f7973-d40d-4cd0-a95e-ea3021180a48",
+                            UserId = "85bf9cae-46cd-41d8-b545-8da6f9dd8f9a"
                         });
                 });
 
@@ -1902,10 +1902,10 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e0c47a58-7731-4f26-8ff9-2b899b3019bc",
+                            Id = "85bf9cae-46cd-41d8-b545-8da6f9dd8f9a",
                             Email = "cvlookup.sgu.2023_candidate@gmail.com",
                             Username = "Candidate Admin",
-                            DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            DateOfBirth = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -1929,7 +1929,7 @@ namespace CVLookup_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f4c6aaf7-efd3-4905-859b-cb2f33c2e476",
+                            Id = "f600fa3f-a9af-4995-9d31-4f4646e636a4",
                             Email = "cvlookup.sgu.2023_employer@gmail.com",
                             Username = "Employer Admin",
                             Address = "Admin",

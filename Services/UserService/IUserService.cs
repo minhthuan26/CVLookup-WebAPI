@@ -12,8 +12,8 @@ namespace CVLookup_WebAPI.Services.UserService
 		public Task<List<Employer>> GetEmployersByName(string name);
         public Task<User> AddCandidate(CandidateVM candidateVM);
         public Task<User> AddEmployer(EmployerVM employerVM);
-        public Task<Candidate> UpdateCandidate(string id, CandidateVM newCandidateVM);
-        public Task<Employer> UpdateEmployer(string id, EmployerVM newEmployerVM);
+        public Task<object> UpdateCandidate(string id, CandidateVM newCandidateVM);
+        public Task<object> UpdateEmployer(string id, EmployerVM newEmployerVM);
         public Task<User> Delete(string Id);
     }
 }

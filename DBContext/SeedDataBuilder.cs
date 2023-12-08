@@ -41,7 +41,8 @@ namespace CVLookup_WebAPI.DBContext
             {
                 Id = Guid.NewGuid().ToString(),
                 Email = "cvlookup.sgu.2023_candidate@gmail.com",
-                Username = "Candidate Admin"
+                Username = "Candidate Admin",
+                DateOfBirth = new DateTime(2023,1,1)
             };
             modelBuilder.Entity<User>().HasData(
                 userAdmin

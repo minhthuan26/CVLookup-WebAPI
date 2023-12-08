@@ -23,9 +23,9 @@ namespace FirstWebApi.Models.Database
 
             modelBuilder.Entity<User>()
                 .HasIndex(prop => prop.Email)
-                .IsUnique();
+                .IsUnique();        
 
-            modelBuilder.Entity<UserRole>()
+			modelBuilder.Entity<UserRole>()
                 .HasKey(prop => new { prop.RoleId, prop.UserId });
 
             modelBuilder.Entity<AccountUser>()

@@ -15,6 +15,5 @@ namespace CVLookup_WebAPI.Models.Domain
 
 		[Display(Name = "Địa chỉ trang web")]
 		public string? Website { get; set; }
-
 	}
 }
