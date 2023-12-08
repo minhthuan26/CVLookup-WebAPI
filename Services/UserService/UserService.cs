@@ -4,6 +4,7 @@ using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.AuthService;
 using CVLookup_WebAPI.Services.FileService;
 using CVLookup_WebAPI.Services.JwtService;
+using CVLookup_WebAPI.Services.RecruitmentService;
 using CVLookup_WebAPI.Services.RoleService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Utilities;
@@ -117,6 +118,26 @@ namespace CVLookup_WebAPI.Services.UserService
                 if (user == null)
                 {
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                var role = await _userRoleService.GetByUserId(Id);
+                if (role?.Role?.RoleName=="Candidate")
+                {
+                    var curiculumVitaeList = await _dbContext.CurriculumVitae.Where(prop => prop.User.Id == Id).ToListAsync();
+                    _dbContext.CurriculumVitae.RemoveRange(curiculumVitaeList);
+
+                }
+                else if (role?.Role?.RoleName=="Employer")
+                {
+                    List<Recruitment> recruitmentList = await _dbContext.Recruitment.Include(prop => prop.JobAddress)
+                                           .Include(prop => prop.JobAddress.Province)
+                                           .Include(prop => prop.JobPosition)
+                                           .Include(prop => prop.JobForm)
+                                           .Include(prop => prop.JobField)
+                                           .Include(prop => prop.Experience)
+                                           .Include(prop => prop.JobCareer)
+                                           .Include(prop => prop.Employer)
+                                           .Where(prop => prop.Employer.Id == Id).ToListAsync();
+                    _dbContext.Recruitment.RemoveRange(recruitmentList);
                 }
                 var result = _dbContext.User.Remove(user);
                 if (result.State.ToString() == "Deleted")
