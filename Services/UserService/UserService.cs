@@ -2,6 +2,9 @@
 using CVLookup_WebAPI.Models.Domain;
 using CVLookup_WebAPI.Models.ViewModel;
 using CVLookup_WebAPI.Services.FileService;
+using CVLookup_WebAPI.Services.JwtService;
+using CVLookup_WebAPI.Services.RecruitmentService;
+using CVLookup_WebAPI.Services.RoleService;
 using CVLookup_WebAPI.Services.UserRoleService;
 using CVLookup_WebAPI.Utilities;
 using FirstWebApi.Models.Database;
@@ -103,40 +106,59 @@ namespace CVLookup_WebAPI.Services.UserService
 			}
 		}
 
-		public async Task<User> Delete(string Id)
-		{
-			try
-			{
-				if (Id == null)
-				{
-					throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
-				}
-				var user = await _dbContext.User.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
-				if (user == null)
-				{
-					throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
-				}
-				var result = _dbContext.User.Remove(user);
-				if (result.State.ToString() == "Deleted")
-				{
-					int saveState = await _dbContext.SaveChangesAsync();
-					if (saveState <= 0)
-					{
-						throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
-					}
-					return user;
-				}
-				else
-				{
-					throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
-				}
-			}
-			catch (ExceptionModel e)
-			{
-				throw new ExceptionModel(e.Code, e.Message);
-			}
-		}
+        public async Task<User> Delete(string Id)
+        {
+            try
+            {
+                if (Id == null)
+                {
+                    throw new ExceptionModel(400, "Thất bại. Truy vấn không hợp lệ");
+                }
+                var user = await _dbContext.User.Where(prop => prop.Id == Id).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
+                }
+                var role = await _userRoleService.GetByUserId(Id);
+                if (role?.Role?.RoleName=="Candidate")
+                {
+                    var curiculumVitaeList = await _dbContext.CurriculumVitae.Where(prop => prop.User.Id == Id).ToListAsync();
+                    _dbContext.CurriculumVitae.RemoveRange(curiculumVitaeList);
 
+                }
+                else if (role?.Role?.RoleName=="Employer")
+                {
+                    List<Recruitment> recruitmentList = await _dbContext.Recruitment.Include(prop => prop.JobAddress)
+                                           .Include(prop => prop.JobAddress.Province)
+                                           .Include(prop => prop.JobPosition)
+                                           .Include(prop => prop.JobForm)
+                                           .Include(prop => prop.JobField)
+                                           .Include(prop => prop.Experience)
+                                           .Include(prop => prop.JobCareer)
+                                           .Include(prop => prop.Employer)
+                                           .Where(prop => prop.Employer.Id == Id).ToListAsync();
+                    _dbContext.Recruitment.RemoveRange(recruitmentList);
+                }
+                var result = _dbContext.User.Remove(user);
+                if (result.State.ToString() == "Deleted")
+                {
+                    int saveState = await _dbContext.SaveChangesAsync();
+                    if (saveState <= 0)
+                    {
+                        throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình lưu dữ liệu");
+                    }
+                    return user;
+                }
+                else
+                {
+                    throw new ExceptionModel(500, "Thất bại. Có lỗi xảy ra trong quá trình xoá dữ liệu");
+                }
+            }
+            catch (ExceptionModel e)
+            {
+                throw new ExceptionModel(e.Code, e.Message);
+            }
+        }
 		public async Task<List<Candidate>> GetCandidatesByName(string name)
 		{
 			try

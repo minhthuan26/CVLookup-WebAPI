@@ -80,6 +80,22 @@ namespace CVLookup_WebAPI.Controllers
                 Data = result
             });
         }
+        /// <summary>
+        /// Lấy tất cả nhà tuyển dụng
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get-account-user-by-role-name")]
+        public async Task<IActionResult> GetAccountUserByRoleName([FromQuery] string roleName)
+        {
+            var accountUsers = await _accountUserService.GetAccountUser_By_RoleName(roleName);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Code = StatusCodes.Status200OK,
+                Message = "Hoàn thành",
+                Data = accountUsers
+            });
+        }
 
         /// <summary>
         /// Lấy tất cả thông tin tài khoản
@@ -97,5 +113,8 @@ namespace CVLookup_WebAPI.Controllers
                 Data = accountUsers
             });
         }
+
+       
+
     }
 }

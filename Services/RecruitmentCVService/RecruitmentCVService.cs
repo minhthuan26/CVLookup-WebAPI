@@ -462,7 +462,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentCVService
                         AppliedAt = result.AppliedAt.AsTimeAgo()
                     };
                 }
-
             }
             catch (ExceptionModel e)
             {
