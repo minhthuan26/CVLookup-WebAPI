@@ -376,7 +376,6 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
         {
             try
             {
-                var user = await _authService.GetCurrentLoginUser();
 
                 var recruitment = await _dbContext.Recruitment.Where(prop => prop.Id == Id)
                     .Include(prop => prop.JobAddress.Province)
@@ -393,11 +392,23 @@ namespace CVLookup_WebAPI.Services.RecruitmentService
                     throw new ExceptionModel(404, "Thất bại. Không thể tìm thấy dữ liệu");
                 }
                 var newrecruitment = _mapper.Map<Recruitment>(newRecruitmentVM);
-                newrecruitment.Employer = (Employer) user;
-                newrecruitment.CreatedAt = DateTime.Now;
                 newrecruitment.IsExpired = newrecruitment.CreatedAt > newrecruitment.ApplicationDeadline;
-                //recruitment = newRecuitment;
-                var result = _dbContext.Recruitment.Update(newrecruitment);
+
+                recruitment.ApplicationDeadline = newrecruitment.ApplicationDeadline;
+                recruitment.Benefit = newrecruitment.Benefit;
+                recruitment.Experience = newrecruitment.Experience;
+                recruitment.JobAddress = newrecruitment.JobAddress;
+                recruitment.JobCareer = newrecruitment.JobCareer;
+                recruitment.JobDescription = newrecruitment.JobDescription;
+                recruitment.JobField = newrecruitment.JobField;
+                recruitment.JobForm = newrecruitment.JobForm;
+                recruitment.JobPosition = newrecruitment.JobPosition;
+                recruitment.JobRequirement = newrecruitment.JobRequirement;
+                recruitment.JobTitle = newrecruitment.JobTitle;
+                recruitment.Quantity = newrecruitment.Quantity;
+                recruitment.Salary = newrecruitment.Salary;
+                recruitment.IsExpired = newrecruitment.IsExpired;
+                var result = _dbContext.Recruitment.Update(recruitment);
                 if (result.State.ToString() == "Modified")
                 {
                     int saveState = await _dbContext.SaveChangesAsync();
