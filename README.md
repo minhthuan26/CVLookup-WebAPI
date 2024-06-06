@@ -1,9 +1,14 @@
+> [!IMPORTANT]
+> THIS IS JUST A PROJECT FOR STUDYING PURPOSE
 # CVLookup (Self-project)
 ### Description
   - CVLookup is a website that will connect the Employers with the Candidates
   - The candidates can use it for finding the jobs that they want or consistent with them
   - The Employers can use it for finding candidates that suitable for there company
   - CVLoopup Web-API is provides Restful API service for CVLookup Website base on C#, ASP.NET core, ASP.NET WebAPI
+### Members
+  - [Le Minh Thuan](https://github.com/minhthuan26)
+  - [Trinh Nam Sieu Sao](https://github.com/Sieusao5010)
 ### Technology
   - Front-End: Javascript, ReactJs, Redux Toolkit, CSS, Bootstrap
   - Back-End: C#, ASP.NET core 6, ASP.NET WebAPI
